@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.constant.Constant;
-import com.play.robot.util.SPUtils;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.view.setting.SettingActivity;

@@ -6,20 +6,32 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line_start_40"
+        android:id="@+id/line_p5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/dp_40" />
+        app:layout_constraintGuide_percent="0.05" />
 
-    <View
-        android:id="@+id/line_center"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p70"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
 
 
     <TextView
@@ -29,8 +41,16 @@
         android:text="前置摄像头"
         android:layout_marginTop="@dimen/dp_40"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_qzsxt"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_qzsxt"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_qzsxt"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
 
     <TextView
         android:id="@+id/tv_qztz"
@@ -39,8 +59,16 @@
         android:layout_marginTop="@dimen/dp_40"
         android:text="前置+态资"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toBottomOf="@+id/tv_qzsxt" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_qztz"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_qztz"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_qztz"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
 
     <TextView
         android:id="@+id/tv_qztzmbsb"
@@ -49,8 +77,16 @@
         android:layout_marginTop="@dimen/dp_40"
         android:text="前置+态资+目标识别"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toBottomOf="@+id/tv_qztz" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_qztzmbsb"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_qztzmbsb"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_qztzmbsb"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
 
     <TextView
         android:id="@+id/tv_cssxt"
@@ -59,8 +95,16 @@
         android:text="侧视摄像头"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_center"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_cssxt"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_cssxt"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_cssxt"
+        app:layout_constraintStart_toStartOf="@+id/line_p70"/>
 
     <TextView
         android:id="@+id/tv_hssxt"
@@ -69,7 +113,16 @@
         android:text="后视摄像头"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_center"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toBottomOf="@+id/tv_cssxt" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_hssxt"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_hssxt"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_hssxt"
+        app:layout_constraintStart_toStartOf="@+id/line_p70"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

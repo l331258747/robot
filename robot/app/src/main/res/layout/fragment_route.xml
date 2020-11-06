@@ -6,20 +6,32 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line_start_40"
+        android:id="@+id/line_p5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/dp_40" />
+        app:layout_constraintGuide_percent="0.05" />
 
-    <View
-        android:id="@+id/line_center"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p70"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
 
 
     <TextView
@@ -29,8 +41,16 @@
         android:text="记录路径节点"
         android:layout_marginTop="@dimen/dp_40"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_jlljjd"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_jlljjd"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_jlljjd"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
 
     <TextView
         android:id="@+id/tv_sxfh"
@@ -39,8 +59,16 @@
         android:layout_marginTop="@dimen/dp_40"
         android:text="顺序返航"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toBottomOf="@+id/tv_jlljjd" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_sxfh"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_sxfh"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_sxfh"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
 
     <TextView
         android:id="@+id/tv_nxfh"
@@ -49,8 +77,16 @@
         android:text="逆序返航"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_center"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_nxfh"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_nxfh"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_nxfh"
+        app:layout_constraintStart_toStartOf="@+id/line_p70"/>
 
     <TextView
         android:id="@+id/tv_fslj"
@@ -59,7 +95,20 @@
         android:text="发送路径"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_center"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toBottomOf="@+id/tv_nxfh" />
+
+    <TextView
+        android:id="@+id/tv_fslj_v"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center"
+        android:text="默认"
+        android:textColor="@color/color_c3392d"
+        android:background="@drawable/shape_00_white_r40"
+        app:layout_constraintTop_toTopOf="@+id/tv_fslj"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_fslj"
+        app:layout_constraintStart_toStartOf="@+id/line_p70" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

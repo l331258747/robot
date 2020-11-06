@@ -6,20 +6,32 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line_start_40"
+        android:id="@+id/line_p5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/dp_40" />
+        app:layout_constraintGuide_percent="0.05" />
 
-    <View
-        android:id="@+id/line_center"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_p70"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
 
 
     <TextView
@@ -29,8 +41,16 @@
         android:text="低电量智能返航"
         android:layout_marginTop="@dimen/dp_40"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_ddlznfh"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintTop_toTopOf="@+id/tv_ddlznfh"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_ddlznfh"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
 
     <TextView
         android:id="@+id/tv_ddlbj"
@@ -39,7 +59,7 @@
         android:layout_marginTop="@dimen/dp_40"
         android:text="低电量报警"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toBottomOf="@+id/tv_ddlznfh" />
 
     <TextView
@@ -49,7 +69,19 @@
         android:text="运行时间"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_center"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_yxsj_v"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center"
+        android:text="00:00"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/tv_yxsj"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_yxsj"
+        app:layout_constraintStart_toStartOf="@+id/line_p70" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
