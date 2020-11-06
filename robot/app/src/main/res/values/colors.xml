@@ -3,4 +3,34 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!--    背景-->
+    <color name="color_window_background">#3f3f3f</color>
+
+<!--  字体颜色  -->
+    <color name="color_text">#323232</color>
+
+<!--    白色-->
+    <color name="white">#ffffff</color>
+<!--    透明-->
+    <color name="transparent">#00000000</color>
+
+<!--    输入框-->
+    <color name="color_eeeeed">#eeeeed</color>
+
+    <!-- 红色 -->
+    <color name="color_c3392d">#c3392d</color>
+
+<!--    状态栏头部颜色 -->
+    <color name="color_1A1919">#3A3434</color>
+
+<!--    设备状态-->
+    <color name="color_C0BBBB">#C0BBBB</color>
+
+<!--    蓝色-->
+    <color name="color_718BCC">#718BCC</color>
+
+<!--    点击效果-->
+    <color name="color_767676">#767676</color>
+
 </resources>

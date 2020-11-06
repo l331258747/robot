@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/cl_title"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/view_title"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_UGV"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:paddingStart="@dimen/dp_15"
+        android:paddingEnd="@dimen/dp_15"
+        android:text="UGV"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintStart_toStartOf="@+id/view_title"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_status"
+        android:gravity="center"
+        android:paddingStart="@dimen/dp_15"
+        android:paddingEnd="@dimen/dp_15"
+        android:text="设备未连接"
+        android:textColor="@color/color_c3392d"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintStart_toEndOf="@+id/tv_UGV"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <ImageView
+        android:id="@+id/iv_more"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_click"
+        android:src="@mipmap/ic_more"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintEnd_toEndOf="@+id/view_title"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <View
+        android:layout_width="@dimen/dp_1"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintEnd_toStartOf="@+id/iv_more"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <com.play.robot.widget.IvBattery
+        android:id="@+id/iv_battery"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:background="@drawable/bg_click"
+        app:iv_drawable="@mipmap/ic_battery_1"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintEnd_toStartOf="@+id/iv_more"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <com.play.robot.widget.IvSignal
+        android:id="@+id/iv_signal"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:background="@drawable/bg_click"
+        app:iv_drawable="@mipmap/ic_signal_1"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintEnd_toStartOf="@+id/iv_battery"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <ImageView
+        android:id="@+id/iv_route"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:background="@drawable/bg_click"
+        android:src="@mipmap/ic_route"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintEnd_toStartOf="@+id/iv_signal"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <ImageView
+        android:id="@+id/iv_camera"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:background="@drawable/bg_click"
+        android:src="@mipmap/ic_camera"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintEnd_toStartOf="@+id/iv_route"
+        app:layout_constraintTop_toTopOf="@+id/view_title" />
+
+    <com.play.robot.widget.IvShape
+        android:id="@+id/iv_shape"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:background="@drawable/bg_click"
+        app:iv_drawable="@mipmap/ic_shape_square"
+        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintEnd_toStartOf="@+id/iv_camera"
+        app:layout_constraintTop_toTopOf="@+id/view_title"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
