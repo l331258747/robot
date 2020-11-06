@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.constant.Constant;
+import com.play.robot.util.SPUtils;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.view.setting.SettingActivity;
@@ -54,6 +55,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initData() {
+
+//        SPUtils.getInstance().putBoolean(SPUtils.IS_LOGIN, true);
 
         VoteDisposable = RxBus2.getInstance().toObservable(VoteEvent.class, new Consumer<VoteEvent>() {
             @Override
