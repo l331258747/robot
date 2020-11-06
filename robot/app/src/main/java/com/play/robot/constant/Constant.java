@@ -26,4 +26,12 @@ public class Constant {
     public static final int SIGNAL_2 = 2;
     public static final int SIGNAL_3 = 3;
 
+    //
+    public static final int SETTING_CAMERA = 0;
+    public static final int SETTING_ROUTE = 1;
+    public static final int SETTING_SHAPE = 2;
+    public static final int SETTING_SIGNAL = 3;
+    public static final int SETTING_BATTERY = 4;
+    public static final int SETTING_MORE = 5;
+
 }

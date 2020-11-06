@@ -1,13 +1,16 @@
 package com.play.robot.view.home;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
+import com.play.robot.constant.Constant;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
+import com.play.robot.view.setting.SettingActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvShape;
 import com.play.robot.widget.IvSignal;
@@ -69,6 +72,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(context,SettingActivity.class);
         switch (v.getId()) {
             case R.id.tv_status:
 
@@ -88,6 +92,31 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }).start();
 
+                break;
+
+            case R.id.iv_more:
+                intent.putExtra("position", Constant.SETTING_MORE);
+                startActivity(intent);
+                break;
+            case R.id.iv_route:
+                intent.putExtra("position", Constant.SETTING_ROUTE);
+                startActivity(intent);
+                break;
+            case R.id.iv_camera:
+                intent.putExtra("position", Constant.SETTING_CAMERA);
+                startActivity(intent);
+                break;
+            case R.id.iv_battery:
+                intent.putExtra("position", Constant.SETTING_BATTERY);
+                startActivity(intent);
+                break;
+            case R.id.iv_signal:
+                intent.putExtra("position", Constant.SETTING_SIGNAL);
+                startActivity(intent);
+                break;
+            case R.id.iv_shape:
+                intent.putExtra("position", Constant.SETTING_SHAPE);
+                startActivity(intent);
                 break;
         }
     }

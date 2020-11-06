@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_start_40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/dp_40" />
+
+    <View
+        android:id="@+id/line_center"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_jlljjd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="记录路径节点"
+        android:layout_marginTop="@dimen/dp_40"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_sxfh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_40"
+        android:text="顺序返航"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/line_start_40"
+        app:layout_constraintTop_toBottomOf="@+id/tv_jlljjd" />
+
+    <TextView
+        android:id="@+id/tv_nxfh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="逆序返航"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/dp_40"
+        app:layout_constraintStart_toStartOf="@+id/line_center"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_fslj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发送路径"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/dp_40"
+        app:layout_constraintStart_toStartOf="@+id/line_center"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nxfh" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
