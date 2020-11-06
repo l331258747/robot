@@ -44,7 +44,7 @@
         app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.suke.widget.SwitchButton
+    <com.play.robot.widget.SwitchButton
         android:id="@+id/switch_qzsxt"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"
@@ -62,7 +62,7 @@
         app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toBottomOf="@+id/tv_qzsxt" />
 
-    <com.suke.widget.SwitchButton
+    <com.play.robot.widget.SwitchButton
         android:id="@+id/switch_qztz"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"
@@ -80,7 +80,7 @@
         app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toBottomOf="@+id/tv_qztz" />
 
-    <com.suke.widget.SwitchButton
+    <com.play.robot.widget.SwitchButton
         android:id="@+id/switch_qztzmbsb"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"
@@ -98,7 +98,7 @@
         app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.suke.widget.SwitchButton
+    <com.play.robot.widget.SwitchButton
         android:id="@+id/switch_cssxt"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"
@@ -116,7 +116,7 @@
         app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toBottomOf="@+id/tv_cssxt" />
 
-    <com.suke.widget.SwitchButton
+    <com.play.robot.widget.SwitchButton
         android:id="@+id/switch_hssxt"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"

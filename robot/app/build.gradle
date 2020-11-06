@@ -40,5 +40,4 @@ dependencies {
     //转换器，请求结果转换成Model
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
-    compile 'com.github.zcweng:switch-button:0.0.3@aar'
 }

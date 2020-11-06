@@ -44,7 +44,7 @@
         app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.suke.widget.SwitchButton
+    <com.play.robot.widget.SwitchButton
         android:id="@+id/switch_ddlznfh"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"
