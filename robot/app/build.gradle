@@ -40,4 +40,6 @@ dependencies {
     //转换器，请求结果转换成Model
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
+
 }

@@ -48,8 +48,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mFragments.add(CameraFragment.newInstance());
         mFragments.add(RouteFragment.newInstance());
         mFragments.add(ShapeFragment.newInstance());
-        mFragments.add(BatteryFragment.newInstance());
         mFragments.add(SignalFragment.newInstance());
+        mFragments.add(BatteryFragment.newInstance());
         mFragments.add(MoreFragment.newInstance());
 
         BaseFragmentAdapter adapter = new BaseFragmentAdapter(getSupportFragmentManager(), mFragments);
