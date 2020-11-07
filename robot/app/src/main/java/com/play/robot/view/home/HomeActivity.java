@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapView;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.constant.Constant;
@@ -14,6 +16,7 @@ import com.play.robot.view.setting.SettingActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvShape;
 import com.play.robot.widget.IvSignal;
+import com.play.robot.widget.baidu.BaiduHelper;
 import com.play.robot.widget.scale.ViewScale;
 
 import java.util.Random;
@@ -33,6 +36,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     Disposable VoteDisposable;
 
+    private MapView mMapView = null;
+    // 用于设置个性化地图的样式文件
+    BaiduHelper mBaiduHelper;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_home;
@@ -50,11 +57,20 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         view_scale = $(R.id.view_scale);
 
         setOnClick(tv_status, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_shape);
+
+        initBaiduMap();
+    }
+
+    private void initBaiduMap() {
+        mMapView = $(R.id.bmapView);
+        BaiduMap mBaiduMap = mMapView.getMap();
+        //普通地图 ,mBaiduMap是地图控制器对象
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+
     }
 
     @Override
     public void initData() {
-
 //        SPUtils.getInstance().putBoolean(SPUtils.IS_LOGIN, true);
 
         VoteDisposable = RxBus2.getInstance().toObservable(VoteEvent.class, new Consumer<VoteEvent>() {
@@ -63,6 +79,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 view_scale.setValues(voteEvent.getVote());
             }
         });
+
+        mBaiduHelper = new BaiduHelper(context,mMapView);
+        mBaiduHelper.setMapCustomStyle();
 
     }
 
@@ -128,5 +147,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         if(VoteDisposable !=null && !VoteDisposable.isDisposed())
             VoteDisposable.dispose();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mMapView.onResume();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
+        mMapView.onPause();
     }
 }
