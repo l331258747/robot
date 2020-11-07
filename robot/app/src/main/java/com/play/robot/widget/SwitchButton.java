@@ -611,6 +611,9 @@ public class SwitchButton extends View implements Checkable {
                 isTouchingDown = true;
                 isTouchingMove = false;
                 touchDownTime = System.currentTimeMillis();
+
+                animateState = ANIMATE_STATE_DRAGING;
+
                 //取消准备进入拖动状态
 //                removeCallbacks(postPendingDrag);
                 //预设100ms进入拖动状态
