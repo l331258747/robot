@@ -1,12 +1,8 @@
 package com.play.robot.view.home;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,12 +15,14 @@ import com.play.robot.base.BaseActivity;
 import com.play.robot.constant.Constant;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
+import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
+import com.play.robot.view.home.help.AnimatorHelp;
+import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.setting.SettingActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvShape;
 import com.play.robot.widget.IvSignal;
-import com.play.robot.widget.baidu.BaiduHelper;
 import com.play.robot.widget.scale.ViewScale;
 
 import java.util.Random;
@@ -39,14 +37,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     IvSignal iv_signal;
     IvShape iv_shape;
     TextView tv_status;
+    View small_view;
 
     ViewScale view_scale;
 
-    Disposable VoteDisposable;
+    Disposable VoteDisposable,animatorDisposable;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
     BaiduHelper mBaiduHelper;
+    AnimatorHelp mAnimatorHelp;
 
     SurfaceView mSurfaceView;
 
@@ -57,6 +57,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initView() {
+        small_view = $(R.id.small_view);
         tv_status = $(R.id.tv_status);
         iv_more = $(R.id.iv_more);
         iv_route = $(R.id.iv_route);
@@ -71,6 +72,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         initBaiduMap();
 
         initSurfaceView();
+
+        mSurfaceView.setPivotX(0);
+        mSurfaceView.setPivotY(0);
+
+        mMapView.setPivotX(0);
+        mMapView.setPivotY(0);
+
     }
 
     private void initSurfaceView() {
@@ -87,9 +95,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if(!isSurfaceViewCenter) return;
+                if(!mAnimatorHelp.getSurfaceViewCenter()) return;
                 LogUtil.e("mapView onClick");
-                setAnimator();
+                mAnimatorHelp.setAnimator();
             }
 
             @Override
@@ -97,6 +105,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
             }
         });
+        mMapView.setVisibility(View.GONE);
 
     }
 
@@ -111,12 +120,23 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         });
 
+        animatorDisposable = RxBus2.getInstance().toObservable(AnimatorEvent.class, new Consumer<AnimatorEvent>() {
+            @Override
+            public void accept(AnimatorEvent animatorEvent) throws Exception {
+                if(animatorEvent.isBig() && animatorEvent.isSmall()){
+                    mAnimatorHelp.setSmallAnimation();
+                }
+
+            }
+        });
+
         mBaiduHelper = new BaiduHelper(context, mMapView);
         mBaiduHelper.setMapCustomStyle();
-
-        getAnimatorParam();
+        mAnimatorHelp = new AnimatorHelp(mSurfaceView,mMapView,small_view);
+        mAnimatorHelp.getAnimatorParam();
 
     }
+
 
     public void setOnClick(View... views) {
         for (View view : views) {
@@ -146,6 +166,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }).start();
 
+
                 break;
 
             case R.id.iv_more:
@@ -174,211 +195,21 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
             case R.id.surfaceView:
-                if(isSurfaceViewCenter) return;
+                if(mAnimatorHelp.getSurfaceViewCenter()) return;
                 LogUtil.e("surfaceView onClick");
-                setAnimator();
+                mAnimatorHelp.setAnimator();
                 break;
         }
     }
 
-
-    float bigViewWidth;
-    float bigViewHeight;
-    float smallViewWidth;
-    float smallViewHeight;
-    int bigViewX, bigViewY, smallViewX, smallViewY;
-    boolean isSurfaceViewCenter = true;
-
-    //获取动画需要的参数
-    public void getAnimatorParam() {
-        ViewTreeObserver vto2 = mSurfaceView.getViewTreeObserver();
-        vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mSurfaceView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                bigViewWidth = mSurfaceView.getWidth();
-                bigViewHeight = mSurfaceView.getHeight();
-                LogUtil.e("bigViewWidth：" + bigViewWidth);
-                LogUtil.e("bigViewHeight：" + bigViewHeight);
-
-                int[] location = new int[2];
-                mSurfaceView.getLocationOnScreen(location);
-                bigViewX = location[0];
-                bigViewY = location[1];
-                LogUtil.e("bigViewX:" + bigViewX + " bigViewY:" + bigViewY);
-            }
-        });
-
-        ViewTreeObserver vto1 = mMapView.getViewTreeObserver();
-        vto1.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mSurfaceView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                smallViewWidth = mMapView.getWidth();
-                smallViewHeight = mMapView.getHeight();
-                LogUtil.e("smallViewWidth：" + smallViewWidth);
-                LogUtil.e("smallViewHeight：" + smallViewHeight);
-
-                int[] location2 = new int[2];
-                mMapView.getLocationOnScreen(location2);
-                smallViewX = location2[0];
-                smallViewY = location2[1];
-                LogUtil.e("smallViewX:" + smallViewX + " smallViewY:" + smallViewY);
-            }
-        });
-    }
-
-    //设置动画
-    public void setAnimator() {
-
-        float scaleXToSmall = smallViewWidth / bigViewWidth;
-        float scaleYToSmall = smallViewHeight / bigViewHeight;
-
-        float scaleXToBig = bigViewWidth / smallViewWidth;
-        float scaleYToBig = bigViewHeight / smallViewHeight;
-
-        float translationXToSamll = smallViewX - bigViewX;
-        float translationYToSamll = smallViewY - bigViewY;
-        float translationXToBig = bigViewX - smallViewX;
-        float translationYToBig = bigViewY - smallViewY;
-
-        mSurfaceView.setPivotX(0);
-        mSurfaceView.setPivotY(0);
-
-        mMapView.setPivotX(0);
-        mMapView.setPivotY(0);
-
-        if (isSurfaceViewCenter) {
-
-            //缩放---ofFloat用4个参数的ofFloat
-            ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(mSurfaceView, "scaleX", 1, scaleXToSmall);
-            ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(mSurfaceView, "scaleY", 1, scaleYToSmall);
-
-            // 获得当前按钮的位置
-            ObjectAnimator objectAnimator3 = ObjectAnimator.ofFloat(mSurfaceView, "translationX", 0, translationXToSamll);
-            ObjectAnimator objectAnimator4 = ObjectAnimator.ofFloat(mSurfaceView, "translationY", 0, translationYToSamll);
-
-
-            //缩放---ofFloat用4个参数的ofFloat
-            ObjectAnimator objectAnimator5 = ObjectAnimator.ofFloat(mMapView, "scaleX", 1, scaleXToBig);
-            ObjectAnimator objectAnimator6 = ObjectAnimator.ofFloat(mMapView, "scaleY", 1, scaleYToBig);
-
-            // 获得当前按钮的位置
-            ObjectAnimator objectAnimator7 = ObjectAnimator.ofFloat(mMapView, "translationX", 0, translationXToBig);
-            ObjectAnimator objectAnimator8 = ObjectAnimator.ofFloat(mMapView, "translationY", 0, translationYToBig);
-
-            //组合
-            AnimatorSet set = new AnimatorSet();
-            /**
-             * 动画执行
-             */
-            set.play(objectAnimator1)
-                    .with(objectAnimator2)
-                    .with(objectAnimator3)
-                    .with(objectAnimator4)
-                    .with(objectAnimator5)
-                    .with(objectAnimator6)
-                    .with(objectAnimator7)
-                    .with(objectAnimator8)
-            ;
-            set.setDuration(500);
-            set.start();
-
-            set.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    int[] location = new int[2];
-                    mSurfaceView.getLocationOnScreen(location);
-                    LogUtil.e("bigViewX:" + location[0] + " bigViewY:" + location[1]);
-
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-
-        } else {
-            //缩放---ofFloat用4个参数的ofFloat
-            ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(mSurfaceView, "scaleX", scaleXToSmall, 1);
-            ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(mSurfaceView, "scaleY", scaleYToSmall, 1);
-
-            // 获得当前按钮的位置
-            ObjectAnimator objectAnimator3 = ObjectAnimator.ofFloat(mSurfaceView, "translationX", translationXToSamll, 0);
-            ObjectAnimator objectAnimator4 = ObjectAnimator.ofFloat(mSurfaceView, "translationY", translationYToSamll, 0);
-
-
-            //缩放---ofFloat用4个参数的ofFloat
-            ObjectAnimator objectAnimator5 = ObjectAnimator.ofFloat(mMapView, "scaleX", scaleXToBig, 1);
-            ObjectAnimator objectAnimator6 = ObjectAnimator.ofFloat(mMapView, "scaleY", scaleYToBig, 1);
-
-            // 获得当前按钮的位置
-            ObjectAnimator objectAnimator7 = ObjectAnimator.ofFloat(mMapView, "translationX", translationXToBig, 0);
-            ObjectAnimator objectAnimator8 = ObjectAnimator.ofFloat(mMapView, "translationY", translationYToBig, 0);
-
-            //组合
-            AnimatorSet set = new AnimatorSet();
-            /**
-             * 动画执行
-             */
-            set.play(objectAnimator1)
-                    .with(objectAnimator2)
-                    .with(objectAnimator3)
-                    .with(objectAnimator4)
-                    .with(objectAnimator5)
-                    .with(objectAnimator6)
-                    .with(objectAnimator7)
-                    .with(objectAnimator8)
-            ;
-            set.setDuration(500);
-            set.start();
-
-            set.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    int[] location = new int[2];
-                    mSurfaceView.getLocationOnScreen(location);
-                    LogUtil.e("bigViewX:" + location[0] + " bigViewY:" + location[1]);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-
-        }
-
-        isSurfaceViewCenter = !isSurfaceViewCenter;
-
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (VoteDisposable != null && !VoteDisposable.isDisposed())
             VoteDisposable.dispose();
+        if (animatorDisposable != null && !animatorDisposable.isDisposed())
+            animatorDisposable.dispose();
         mMapView.onDestroy();
     }
 

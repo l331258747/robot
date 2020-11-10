@@ -1,4 +1,4 @@
-package com.play.robot.widget.baidu;
+package com.play.robot.view.home.help;
 
 import android.content.Context;
 import android.util.Log;
