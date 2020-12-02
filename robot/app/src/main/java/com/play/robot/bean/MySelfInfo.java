@@ -2,6 +2,7 @@ package com.play.robot.bean;
 
 import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.play.robot.util.GsonUtil;
 import com.play.robot.util.SPUtils;
 
@@ -27,25 +28,22 @@ public class MySelfInfo {
         return HolderClass.INSTANCE;
     }
 
+    public boolean isLogin() {
+        if (getUserId() != 0) {
+            return true;
+        }
+        return false;
+    }
+
     public void setData(LoginBean model) {
 
         SPUtils.getInstance().putInt(SPUtils.SP_USER_ID, model.getUserId());
-        SPUtils.getInstance().putInt(SPUtils.SP_DEPT_ID, model.getDeptId());
-        SPUtils.getInstance().putString(SPUtils.SP_LOGIN_NAME, model.getLoginName());
         SPUtils.getInstance().putString(SPUtils.SP_PASSWORD, model.getPassword());
         SPUtils.getInstance().putString(SPUtils.SP_USER_NAME, model.getUserName());
     }
 
     public int getUserId() {
         return SPUtils.getInstance().getInt(SPUtils.SP_USER_ID);
-    }
-
-    public int getDeptId() {
-        return SPUtils.getInstance().getInt(SPUtils.SP_DEPT_ID);
-    }
-
-    public String getLoginName() {
-        return SPUtils.getInstance().getString(SPUtils.SP_LOGIN_NAME);
     }
 
     public String getPassword() {
@@ -56,36 +54,49 @@ public class MySelfInfo {
         return SPUtils.getInstance().getString(SPUtils.SP_USER_NAME);
     }
 
-    //---------搜索 start
-    public void setSearch(List<String> lists){
-        if(lists == null) return;
-        SPUtils.getInstance().putString(SPUtils.SP_SEARCH, GsonUtil.convertVO2String(lists));
+
+    public void setDevice(List<DeviceBean> lists) {
+        if (lists == null) return;
+        SPUtils.getInstance().putString(SPUtils.SP_DEVICE, GsonUtil.convertVO2String(lists));
     }
 
-    public void addSearch(String str){
-        List<String> results = new ArrayList<>();
+    public void addDevice(DeviceBean str) {
+        List<DeviceBean> results = new ArrayList<>();
 
-        List<String> lists = getSearch();
-        for (String item : lists){
-            if(TextUtils.equals(str,item)){
+        List<DeviceBean> lists = getDevice();
+        for (DeviceBean item : lists) {
+            if (TextUtils.equals(str.getIp(), item.getIp())) {
                 lists.remove(item);
                 break;
             }
         }
 
-        while (lists.size() > 8){
+        while (lists.size() > 5) {
             lists.remove(lists.size() - 1);
         }
 
         results.add(str);
         results.addAll(lists);
-        setSearch(results);
+
+        setDevice(results);
     }
 
-    public List<String> getSearch(){
-        if(TextUtils.isEmpty(SPUtils.getInstance().getString(SPUtils.SP_SEARCH)))
+    public void removeDevice(DeviceBean str){
+        List<DeviceBean> results = getDevice();
+        for (DeviceBean item : results) {
+            if (TextUtils.equals(str.getIp(), item.getIp())) {
+                results.remove(item);
+                break;
+            }
+        }
+        setDevice(results);
+    }
+
+    public List<DeviceBean> getDevice() {
+        if (TextUtils.isEmpty(SPUtils.getInstance().getString(SPUtils.SP_DEVICE)))
             return new ArrayList<>();
-        return GsonUtil.convertJson2Array(SPUtils.getInstance().getString(SPUtils.SP_SEARCH));
+        return GsonUtil.convertString2Collection(SPUtils.getInstance().getString(SPUtils.SP_DEVICE), new TypeToken<List<DeviceBean>>() {
+        });
     }
 
 }

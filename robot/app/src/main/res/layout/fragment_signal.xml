@@ -51,7 +51,7 @@
         android:gravity="center"
         android:text="正常"
         android:textColor="@color/color_c3392d"
-        android:background="@drawable/shape_00_white_r40"
+        android:background="@drawable/btn_0_00_r40"
         app:layout_constraintTop_toTopOf="@+id/tv_txlj"
         app:layout_constraintBottom_toBottomOf="@+id/tv_txlj"
         app:layout_constraintStart_toStartOf="@+id/line_p30" />
@@ -73,7 +73,7 @@
         android:gravity="center"
         android:text="正常"
         android:textColor="@color/color_c3392d"
-        android:background="@drawable/shape_00_white_r40"
+        android:background="@drawable/btn_0_00_r40"
         app:layout_constraintTop_toTopOf="@+id/tv_zdxh"
         app:layout_constraintBottom_toBottomOf="@+id/tv_zdxh"
         app:layout_constraintStart_toStartOf="@+id/line_p30" />

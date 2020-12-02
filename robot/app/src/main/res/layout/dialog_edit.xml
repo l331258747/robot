@@ -1,72 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:id="@+id/layout_parent"
+    android:layout_width="@dimen/dp_320"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_00_664b4b4b_r5"
+    android:orientation="vertical">
 
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp_30"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center_vertical|right"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="@dimen/sp_20"
-            android:paddingStart="@dimen/dp_15"
-            android:paddingEnd="@dimen/dp_15"
-            android:src="@mipmap/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/view_pop"
-        android:layout_width="@dimen/dp_360"
-        android:layout_height="@dimen/dp_260"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:includeFontPadding="false"
-        android:text="UGV"
-        android:textSize="@dimen/sp_24"
+        android:text="添加无人车"
+        android:textSize="@dimen/sp_20"
+        android:textColor="@color/color_1e1e1e"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="@+id/view_pop"
-        app:layout_constraintRight_toRightOf="@+id/view_pop"
-        app:layout_constraintTop_toTopOf="@+id/view_pop" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view_account"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_38"
         android:layout_marginStart="@dimen/dp_40"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:layout_marginEnd="@dimen/dp_40"
-        app:layout_constraintEnd_toEndOf="@+id/view_pop"
-        app:layout_constraintStart_toStartOf="@+id/view_pop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <TextView
         android:id="@+id/tv_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="账号："
+        android:text="IP："
+        android:textColor="@color/color_1e1e1e"
         app:layout_constraintBottom_toBottomOf="@id/view_account"
         app:layout_constraintStart_toStartOf="@+id/view_account"
         app:layout_constraintTop_toTopOf="@+id/view_account" />
@@ -76,16 +49,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/shape_eeeeeed_r40"
-        android:hint="请输入帐号"
-        android:inputType="text"
-        android:maxLength="20"
+        android:hint="请输入IP"
+        android:maxLength="15"
         android:maxLines="1"
+        android:layout_marginStart="@dimen/dp_50"
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_10"
-        android:text="admin"
         app:layout_constraintBottom_toBottomOf="@+id/view_account"
         app:layout_constraintEnd_toEndOf="@+id/view_account"
-        app:layout_constraintStart_toEndOf="@+id/tv_account"
+        app:layout_constraintStart_toStartOf="@+id/view_account"
         app:layout_constraintTop_toTopOf="@+id/view_account" />
 
     <View
@@ -93,17 +65,18 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_38"
         android:layout_marginStart="@dimen/dp_40"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_15"
         android:layout_marginEnd="@dimen/dp_40"
-        app:layout_constraintEnd_toEndOf="@+id/view_pop"
-        app:layout_constraintStart_toStartOf="@+id/view_pop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_account" />
 
     <TextView
         android:id="@+id/tv_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="密码："
+        android:text="端口："
+        android:textColor="@color/color_1e1e1e"
         app:layout_constraintBottom_toBottomOf="@id/view_password"
         app:layout_constraintStart_toStartOf="@+id/view_password"
         app:layout_constraintTop_toTopOf="@+id/view_password" />
@@ -113,30 +86,35 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/shape_eeeeeed_r40"
-        android:hint="请输入密码"
-        android:inputType="textPassword"
-        android:maxLength="20"
+        android:hint="请输入端口"
+        android:inputType="number"
+        android:maxLength="6"
+        android:textColor="@color/color_1e1e1e"
+        android:layout_marginStart="@dimen/dp_50"
         android:maxLines="1"
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_10"
-        android:text="123456"
         app:layout_constraintBottom_toBottomOf="@+id/view_password"
         app:layout_constraintEnd_toEndOf="@+id/view_password"
-        app:layout_constraintStart_toEndOf="@+id/tv_password"
+        app:layout_constraintStart_toStartOf="@+id/view_password"
         app:layout_constraintTop_toTopOf="@+id/view_password" />
 
     <TextView
         android:id="@+id/tv_btn"
         android:layout_width="@dimen/dp_100"
         android:layout_height="@dimen/dp_38"
-        android:layout_marginTop="@dimen/dp_20"
-        android:background="@drawable/btn_0_00_r40"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/btn_0_1e1e1e_r40"
         android:gravity="center"
-        android:text="登录"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/view_pop"
-        app:layout_constraintStart_toStartOf="@+id/view_pop"
+        android:text="确定"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_password" />
 
+    <View
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_btn"
+        android:layout_height="@dimen/dp_15"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

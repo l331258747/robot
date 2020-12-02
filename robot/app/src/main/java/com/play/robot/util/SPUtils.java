@@ -14,18 +14,10 @@ import androidx.annotation.Nullable;
  */
 public class SPUtils {
 
-    //第一次打开进入首页 提示升级
-    public static final String FIRST_OPENED = "first_open";
-
-    //是否登录，用来判断判断是否需要登录页面
-    public static final String IS_LOGIN = "isLogin";
-
     public static final String SP_USER_ID = "sp_user_id";
-    public static final String SP_DEPT_ID = "sp_deptId";
-    public static final String SP_LOGIN_NAME = "sp_login_name";
     public static final String SP_PASSWORD = "sp_password";
     public static final String SP_USER_NAME = "sp_user_name";
-    public static final String SP_SEARCH = "sp_search";
+    public static final String SP_DEVICE = "sp_device";
 
     private static SharedPreferences mSharedPreferences;
     private static SPUtils mPreferenceUtils;

@@ -105,7 +105,7 @@
         android:gravity="center"
         android:text="默认"
         android:textColor="@color/color_c3392d"
-        android:background="@drawable/shape_00_white_r40"
+        android:background="@drawable/btn_0_00_r40"
         app:layout_constraintTop_toTopOf="@+id/tv_fslj"
         app:layout_constraintBottom_toBottomOf="@+id/tv_fslj"
         app:layout_constraintStart_toStartOf="@+id/line_p70" />

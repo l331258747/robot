@@ -3,23 +3,11 @@ package com.play.robot.bean;
 public class LoginBean {
 
     int userId;
-    int deptId;//部门id
-    String loginName;
     String password;
     String userName;
 
     public int getUserId() {
         return userId;
-    }
-
-
-    public int getDeptId() {
-        return deptId;
-    }
-
-
-    public String getLoginName() {
-        return loginName;
     }
 
 
@@ -36,13 +24,6 @@ public class LoginBean {
         this.userId = userId;
     }
 
-    public void setDeptId(int deptId) {
-        this.deptId = deptId;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
 
     public void setPassword(String password) {
         this.password = password;

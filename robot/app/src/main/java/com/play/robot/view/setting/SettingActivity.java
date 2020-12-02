@@ -17,10 +17,10 @@ import androidx.fragment.app.Fragment;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
 
-    ImageView iv_more, iv_route, iv_camera,iv_battery,iv_signal,iv_shape;
+    ImageView iv_more, iv_route, iv_camera,iv_battery,iv_signal,iv_shape,iv_close;
 
     CustomViewPager mViewPager;
-    TextView tv_title,tv_close;
+    TextView tv_title;
 
     int pos;
 
@@ -32,7 +32,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void initView() {
         tv_title = $(R.id.tv_title);
-        tv_close = $(R.id.tv_close);
+        iv_close = $(R.id.iv_close);
         mViewPager = $(R.id.viewpager);
         iv_more = $(R.id.iv_more);
         iv_route = $(R.id.iv_route);
@@ -41,7 +41,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         iv_signal = $(R.id.iv_signal);
         iv_shape = $(R.id.iv_shape);
 
-        setOnClick(tv_close, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_shape);
+        setOnClick(iv_close, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_shape);
 
 
         List<Fragment> mFragments = new ArrayList<>();
@@ -75,7 +75,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.tv_close:
+            case R.id.iv_close:
                 finish();
                 break;
             case R.id.iv_camera:

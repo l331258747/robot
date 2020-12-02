@@ -90,7 +90,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mMapView = $(R.id.bmapView);
         BaiduMap mBaiduMap = mMapView.getMap();
         //普通地图 ,mBaiduMap是地图控制器对象
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
 
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
@@ -131,7 +131,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         });
 
         mBaiduHelper = new BaiduHelper(context, mMapView);
-        mBaiduHelper.setMapCustomStyle();
+//        mBaiduHelper.setMapCustomStyle();
         mAnimatorHelp = new AnimatorHelp(mSurfaceView,mMapView,small_view);
         mAnimatorHelp.getAnimatorParam();
 

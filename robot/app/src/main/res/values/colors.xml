@@ -8,7 +8,8 @@
     <color name="color_window_background">#3f3f3f</color>
 
 <!--  字体颜色  -->
-    <color name="color_text">#323232</color>
+    <color name="color_text">#fff</color>
+    <color name="color_1e1e1e">#1e1e1e</color>
 
 <!--    白色-->
     <color name="white">#ffffff</color>
@@ -36,5 +37,8 @@
     <color name="color_blue">#1B4EE9</color>
     <color name="color_green">#41C752</color>
     <color name="color_gray">#767676</color>
+
+
+    <color name="color_4b_66">#664b4b4b</color>
 
 </resources>
