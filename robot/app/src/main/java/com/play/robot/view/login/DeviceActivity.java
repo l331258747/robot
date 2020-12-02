@@ -78,7 +78,11 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onLongClick(int position) {
-                //TODO 删除
+                if(list.get(position).getType() == 1){
+                    showShortToast("请在断开链接的时候删除");
+                    return;
+                }
+
                 new TextDialog(context).setContent("确认删除？").setSubmitListener(v -> {
                     MySelfInfo.getInstance().removeDevice(mAdapter.getData(position));
                     list.remove(position);

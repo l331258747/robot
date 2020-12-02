@@ -41,7 +41,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         if (data == null) return;
 
         holder.tv_ip.setText(data.getIp());
-        holder.iv_check.setImageResource(R.mipmap.ic_check_un);
+        holder.iv_check.setImageResource(R.mipmap.ic_check);
         holder.iv_head.setImageResource(R.mipmap.ic_device);
         holder.tv_status.setText("未连接");
         holder.tv_status.setTextColor(ContextCompat.getColor(mContext,R.color.color_text));
@@ -51,8 +51,12 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             holder.iv_check.setImageResource(R.mipmap.ic_check_in);
             holder.iv_head.setImageResource(R.mipmap.ic_device_in);
             holder.tv_status.setText("已连接");
+            holder.tv_status.setTextColor(ContextCompat.getColor(mContext,R.color.color_green));
+            holder.tv_ip.setTextColor(ContextCompat.getColor(mContext,R.color.color_green));
         }else if(data.getType() == 2){
+            holder.iv_check.setImageResource(R.mipmap.ic_check_un);
             holder.iv_head.setImageResource(R.mipmap.ic_device_un);
+            holder.tv_status.setText("未连接");
             holder.tv_status.setTextColor(ContextCompat.getColor(mContext,R.color.color_c3392d));
             holder.tv_ip.setTextColor(ContextCompat.getColor(mContext,R.color.color_c3392d));
         }
