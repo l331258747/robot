@@ -9,6 +9,7 @@ import com.play.robot.R;
 import com.play.robot.adapter.DeviceAdapter;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
+import com.play.robot.bean.MyDeviceList;
 import com.play.robot.bean.MySelfInfo;
 import com.play.robot.dialog.EditDialog;
 import com.play.robot.dialog.TextDialog;
@@ -48,6 +49,16 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void initData() {
         list = MySelfInfo.getInstance().getDevice();
+
+        for (int i = 0;i<list.size();i++){
+            for (int j=0;j<MyDeviceList.getInstance().getDeviceList().size();j++){
+                if(list.get(i).getIp().equals(MyDeviceList.getInstance().getDeviceList().get(j))){
+                    list.get(i).setType(1);
+                    continue;
+                }
+            }
+        }
+
         mAdapter.setData(list);
     }
 
@@ -63,14 +74,19 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
             public void onClick(int position) {
                 if(list.get(position).getType() == 2){//连不上
                     //TODO 重连
+                    MyDeviceList.getInstance().addDevice(list.get(position).getIp());
+
                     list.get(position).setType(1);
                     mAdapter.notifyItemChanged(position);
                 }else if(list.get(position).getType() == 1){//连上
                     //TODO 断开链接
+                    MyDeviceList.getInstance().removeDevice(list.get(position).getIp());
+
                     list.get(position).setType(0);
                     mAdapter.notifyItemChanged(position);
                 }else {//未连
                     //TODO 建立连接
+
                     list.get(position).setType(2);
                     mAdapter.notifyItemChanged(position);
                 }

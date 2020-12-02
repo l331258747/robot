@@ -7,8 +7,11 @@ import android.widget.TextView;
 
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
+import com.play.robot.bean.MyDeviceList;
 import com.play.robot.bean.MySelfInfo;
 import com.play.robot.view.home.HomeActivity;
+
+import androidx.core.content.ContextCompat;
 
 public class ModelActivity extends BaseActivity implements View.OnClickListener {
 
@@ -34,11 +37,22 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
         tv_device.setOnClickListener(this);
         iv_login.setOnClickListener(this);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         setStatusView();
     }
 
     public void setStatusView(){
         iv_login.setImageResource(MySelfInfo.getInstance().isLogin()?R.mipmap.ic_login:R.mipmap.ic_login_un);
+
+        if(MyDeviceList.getInstance().getDeviceList() == null || MyDeviceList.getInstance().getDeviceList().size() == 0){
+            tv_device.setTextColor(ContextCompat.getColor(context,R.color.color_text));
+        }else{
+            tv_device.setTextColor(ContextCompat.getColor(context,R.color.color_green));
+        }
     }
 
     @Override
@@ -55,6 +69,10 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
             case R.id.tv_single:
                 if (!MySelfInfo.getInstance().isLogin()) {
                     showShortToast("请先登录");
+                    return;
+                }
+                if(MyDeviceList.getInstance().getDeviceList() == null || MyDeviceList.getInstance().getDeviceList().size() == 0){
+                    showShortToast("请选择设备");
                     return;
                 }
 
