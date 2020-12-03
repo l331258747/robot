@@ -175,8 +175,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 //    public void test(){
 //        //发送
 //        if (mUdpClient.isConnect()) {
-//            String str = "hhhhhhhhhh";
-//            byte[] data = str.getBytes();
+//            String wSend = "hhhhhhhhhh";
+//            byte[] data = wSend.getBytes();
 //            send(mUdpClient,data);
 //        } else {
 //            showShortToast("尚未连接，请连接Socket");

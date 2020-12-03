@@ -27,6 +27,7 @@ public class UdpClient {
 
     public static final int TIME_CALL = 3 * 1000;//报警时间
     public static final int TIME_OUT = 12 * 1000;//超时时间
+    public static final String wSend = "hello";
 
     public UdpClient() {
         setOnDataReceiveListener();
@@ -190,6 +191,7 @@ public class UdpClient {
         }).start();
     }
 
+
     private class SendThread extends TimerTask {
 
         public SendThread() {
@@ -199,7 +201,7 @@ public class UdpClient {
         public void run() {
             try {
                 InetAddress ipAddress = InetAddress.getByName(ip);
-                byte[] mBuffer = new byte[]{00};
+                byte[] mBuffer = wSend.getBytes();
                 sendPacket = new DatagramPacket(mBuffer, mBuffer.length, ipAddress, port);
                 mSocket.send(sendPacket);
             } catch (IOException e) {
