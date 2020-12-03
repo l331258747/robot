@@ -2,25 +2,50 @@ package com.play.robot.util.udp;
 
 public class HexUtil {
 
-    /**
-     * 二进制byte数组转十六进制byte数组
-     * byte array to hex
-     *
-     * @param b byte array
-     * @return hex string
-     */
-    public static String byte2hex(byte[] b) {
-        StringBuilder hs = new StringBuilder();
-        String stmp;
+//    /**
+//     * 二进制byte数组转十六进制byte数组
+//     * byte array to hex
+//     *
+//     * @param b byte array
+//     * @return hex string
+//     */
+//    public static String byte2hex(byte[] b) {
+//        StringBuilder hs = new StringBuilder();
+//        String stmp;
+//        for (int i = 0; i < b.length; i++) {
+//            stmp = Integer.toHexString(b[i] & 0xFF).toUpperCase();
+//            if (stmp.length() == 1) {
+//                hs.append("0").append(stmp);
+//            } else {
+//                hs.append(stmp);
+//            }
+//        }
+//        return hs.toString();
+//    }
+
+
+    public static String bytes2HexString(byte[] b) {
+        String ret = "";
         for (int i = 0; i < b.length; i++) {
-            stmp = Integer.toHexString(b[i] & 0xFF).toUpperCase();
-            if (stmp.length() == 1) {
-                hs.append("0").append(stmp);
-            } else {
-                hs.append(stmp);
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
             }
+            ret += hex.toUpperCase();
         }
-        return hs.toString();
+        return ret;
+    }
+
+    public static String bytes2HexString(byte[] b,int len) {
+        String ret = "";
+        for (int i = 0; i < len; i++) {
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            ret += hex.toUpperCase();
+        }
+        return ret;
     }
 
     /**

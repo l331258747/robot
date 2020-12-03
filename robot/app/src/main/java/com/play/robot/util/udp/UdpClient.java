@@ -1,8 +1,5 @@
 package com.play.robot.util.udp;
 
-import android.os.Bundle;
-import android.os.Message;
-
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
@@ -94,23 +91,16 @@ public class UdpClient {
                     receivePacket = new DatagramPacket(preBuffer, preBuffer.length);
                     mSocket.receive(receivePacket);
                     if (receivePacket.getData() == null) return;
-                    size = receivePacket.getLength();     //此为获取后的有效长度，一次最多读64k，预存小的话可能分包
+                    //此为获取后的有效长度，一次最多读64k，预存小的话可能分包
+                    size = receivePacket.getLength();
                     LogUtil.e("pre data size = " + receivePacket.getData().length + ", value data size = " + size);
                     byte[] dataBuffer = Arrays.copyOf(preBuffer, size);
                     if (size > 0) {
-                        Message msg = new Message();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putByteArray("data", dataBuffer);
-                        bundle.putInt("size", size);
-                        bundle.putInt("requestCode", requestCode);
-                        msg.setData(bundle);
-
-                        onDataReceive(msg);
-
+                        String RecMsg = new String(receivePacket.getData(),0,receivePacket.getLength(),"gb2312");
+                        onDataReceive(RecMsg, requestCode);
                         onConnectSuccess();
                     }
-                    LogUtil.e("SocketThread read listening");                    //Thread.sleep(100);//log eof
+                    LogUtil.e("SocketThread read listening");
                 } catch (IOException e) {
                     onConnectFail();
                     LogUtil.e("SocketThread read io exception = " + e.getMessage());
@@ -119,6 +109,7 @@ public class UdpClient {
                 }
             }
         }
+
     }
 
     //==============================socket connect============================
@@ -229,13 +220,9 @@ public class UdpClient {
 
     }
 
-    public void onDataReceive(Message msg) {
-        Bundle bundle = msg.getData();
-        byte[] buffer = bundle.getByteArray("data");
-        int size = bundle.getInt("size");
-        int mequestCode = bundle.getInt("requestCode");
+    private void onDataReceive(String dataBuffer, int requestCode) {
         if (null != onDataReceiveListener) {
-            onDataReceiveListener.onDataReceive(buffer, size, mequestCode);
+            onDataReceiveListener.onDataReceive(dataBuffer, requestCode);
         }
     }
 
@@ -250,7 +237,7 @@ public class UdpClient {
 
         void onConnectFail();
 
-        void onDataReceive(byte[] buffer, int size, int requestCode);
+        void onDataReceive(String buffer, int requestCode);
     }
 
     public void setOnDataReceiveListener() {
@@ -268,13 +255,8 @@ public class UdpClient {
             }
 
             @Override
-            public void onDataReceive(byte[] buffer, int size, int requestCode) {            //获取有效长度的数据
-                byte[] data = new byte[size];
-                System.arraycopy(buffer, 0, data, 0, size);
-                final String oxValue = HexUtil.byte2hex(data);
-                LogUtil.e("onDataReceive requestCode = " + requestCode + ", content = " + oxValue);
-
-
+            public void onDataReceive(String buffer, int requestCode) {            //获取有效长度的数据
+                LogUtil.e("buffer" + buffer + ", requestCode = " + requestCode);
             }
         };
     }
