@@ -84,7 +84,7 @@ public class MySelfInfo {
     public void removeDevice(DeviceBean str){
         List<DeviceBean> results = getDevice();
         for (DeviceBean item : results) {
-            if (TextUtils.equals(str.getIp(), item.getIp())) {
+            if (TextUtils.equals(str.getIpPort(), item.getIpPort())) {
                 results.remove(item);
                 break;
             }

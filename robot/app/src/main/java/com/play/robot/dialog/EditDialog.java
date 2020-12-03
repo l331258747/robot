@@ -48,7 +48,7 @@ public class EditDialog extends Dialog {
                     return;
                 }
 
-                submitListener.onClick(et_account.getText().toString(), et_password.getText().toString());
+                submitListener.onClick(et_account.getText().toString(), Integer.parseInt(et_password.getText().toString()));
             }
             dismiss();
         });
@@ -56,7 +56,7 @@ public class EditDialog extends Dialog {
     }
 
     public interface OnItemClickListener {
-        void onClick(String ip, String port);
+        void onClick(String ip, int port);
     }
 
     OnItemClickListener submitListener;
