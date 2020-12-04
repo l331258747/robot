@@ -55,17 +55,18 @@ public class MySelfInfo {
     }
 
 
-    public void setDevice(List<DeviceBean> lists) {
+    public void setDevice(List<DeviceInfo> lists) {
         if (lists == null) return;
         SPUtils.getInstance().putString(SPUtils.SP_DEVICE, GsonUtil.convertVO2String(lists));
     }
 
-    public void addDevice(DeviceBean str) {
-        List<DeviceBean> results = new ArrayList<>();
+    public void addDevice(String ip, int port) {
+        String ipPort = ip + ":" + port;
+        List<DeviceInfo> results = new ArrayList<>();
 
-        List<DeviceBean> lists = getDevice();
-        for (DeviceBean item : lists) {
-            if (TextUtils.equals(str.getIp(), item.getIp())) {
+        List<DeviceInfo> lists = getDevice();
+        for (DeviceInfo item : lists) {
+            if (TextUtils.equals(ipPort, item.getIpPort())) {
                 lists.remove(item);
                 break;
             }
@@ -75,16 +76,21 @@ public class MySelfInfo {
             lists.remove(lists.size() - 1);
         }
 
-        results.add(str);
+        DeviceInfo data = new DeviceInfo();
+        data.setIp(ip);
+        data.setPort(port);
+
+        results.add(data);
         results.addAll(lists);
 
         setDevice(results);
     }
 
-    public void removeDevice(DeviceBean str){
-        List<DeviceBean> results = getDevice();
-        for (DeviceBean item : results) {
-            if (TextUtils.equals(str.getIpPort(), item.getIpPort())) {
+    public void removeDevice(String ip,int port) {
+        String ipPort = ip + ":" + port;
+        List<DeviceInfo> results = getDevice();
+        for (DeviceInfo item : results) {
+            if (TextUtils.equals(ipPort, item.getIpPort())) {
                 results.remove(item);
                 break;
             }
@@ -92,10 +98,10 @@ public class MySelfInfo {
         setDevice(results);
     }
 
-    public List<DeviceBean> getDevice() {
+    public List<DeviceInfo> getDevice() {
         if (TextUtils.isEmpty(SPUtils.getInstance().getString(SPUtils.SP_DEVICE)))
             return new ArrayList<>();
-        return GsonUtil.convertString2Collection(SPUtils.getInstance().getString(SPUtils.SP_DEVICE), new TypeToken<List<DeviceBean>>() {
+        return GsonUtil.convertString2Collection(SPUtils.getInstance().getString(SPUtils.SP_DEVICE), new TypeToken<List<DeviceInfo>>() {
         });
     }
 

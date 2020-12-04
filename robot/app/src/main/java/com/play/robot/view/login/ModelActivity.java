@@ -5,11 +5,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.play.robot.MyApplication;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.MySelfInfo;
-import com.play.robot.util.udp.ConnectionDeviceHelp;
-import com.play.robot.util.udp.UdpClient;
 import com.play.robot.view.home.SingleActivity;
 
 import androidx.core.content.ContextCompat;
@@ -48,7 +47,7 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
     public void setStatusView() {
         iv_login.setImageResource(MySelfInfo.getInstance().isLogin() ? R.mipmap.ic_login : R.mipmap.ic_login_un);
 
-        if (ConnectionDeviceHelp.getInstance().getDeviceList() == null || ConnectionDeviceHelp.getInstance().getDeviceList().size() == 0) {
+        if (MyApplication.getInstance().getConnectionNum() <= 0) {
             tv_device.setTextColor(ContextCompat.getColor(context, R.color.color_text));
             iv_status.setImageResource(R.mipmap.ic_link_un);
         } else {
@@ -57,16 +56,10 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-    UdpClient mUdpClient;
-    UdpClient mUdpClient2;
     @Override
     public void initData() {
-        mUdpClient = new UdpClient();
-        mUdpClient2 = new UdpClient();
 
     }
-
-
 
     @Override
     public void onClick(View v) {
@@ -79,13 +72,19 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                     showShortToast("请先登录");
                     return;
                 }
-                if (ConnectionDeviceHelp.getInstance().getDeviceList() == null || ConnectionDeviceHelp.getInstance().getDeviceList().size() == 0) {
+
+                if (MyApplication.getInstance().getConnectionNum() < 1) {
                     showShortToast("请选择设备");
                     return;
                 }
+                if (MyApplication.getInstance().getConnectionNum() > 1) {
+                    showShortToast("只有在连接一台机器的时候才能进行单机操作模式");
+                    return;
+                }
+
                 intent = new Intent(context, SingleActivity.class);
-                intent.putExtra("ip",ConnectionDeviceHelp.getInstance().getSingleBean().getIp());
-                intent.putExtra("port",ConnectionDeviceHelp.getInstance().getSingleBean().getPort());
+                intent.putExtra("ip",MyApplication.getInstance().getSingleDevice().getIp());
+                intent.putExtra("port",MyApplication.getInstance().getSingleDevice().getPort());
                 startActivity(intent);
 
                 break;

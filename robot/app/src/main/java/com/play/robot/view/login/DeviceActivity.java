@@ -5,16 +5,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.play.robot.MyApplication;
 import com.play.robot.R;
 import com.play.robot.adapter.DeviceAdapter;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
-import com.play.robot.bean.MySelfInfo;
 import com.play.robot.dialog.EditDialog;
 import com.play.robot.dialog.TextDialog;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
-import com.play.robot.util.udp.ConnectionDeviceHelp;
 import com.play.robot.util.udp.UdpClient;
 
 import java.util.ArrayList;
@@ -54,17 +53,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
-        list = MySelfInfo.getInstance().getDevice();
-
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < ConnectionDeviceHelp.getInstance().getDeviceList().size(); j++) {
-                if (list.get(i).getIpPort().equals(ConnectionDeviceHelp.getInstance().getDeviceList().get(j).getIpPort())) {
-                    list.get(i).setType(1);
-                    continue;
-                }
-            }
-        }
-
+        list = MyApplication.getInstance().getDevices();
         mAdapter.setData(list);
 
         disposable = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
@@ -73,14 +62,6 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
                     list.get(i).setType(event.getType() == 1 ? 1 : 2);
                     mAdapter.notifyItemChanged(i);
-
-                    if(event.getType() == -1){
-                        ConnectionDeviceHelp.getInstance().removeDevice(event.getIp(), event.getPort());
-                    }
-
-                    list.get(i).setType(event.getType() == 1 ? 1 : 2);
-                    mAdapter.notifyItemChanged(i);
-                    break;
                 }
             }
         });
@@ -97,25 +78,22 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onClick(int position) {
                 if (list.get(position).getType() == 2) {//连不上
-                    UdpClient mUdpClient = new UdpClient();
-                    mUdpClient.connect(list.get(position).getIp(), list.get(position).getPort());
+                    MyApplication.getInstance().setDeviceType(1,list.get(position).getIp(),list.get(position).getPort());
 
-                    ConnectionDeviceHelp.getInstance().addDevice(mUdpClient, list.get(position).getIp(), list.get(position).getPort());
-
-                    list.get(position).setType(1);
+//                    list.get(position).setType(1);
                     mAdapter.notifyItemChanged(position);
                 } else if (list.get(position).getType() == 1) {//连上
-                    ConnectionDeviceHelp.getInstance().removeDevice(list.get(position).getIp(), list.get(position).getPort());
+                    MyApplication.getInstance().setDeviceType(0,list.get(position).getIp(),list.get(position).getPort());
 
-                    list.get(position).setType(0);
+//                    list.get(position).setType(0);
                     mAdapter.notifyItemChanged(position);
                 } else {//未连:连接，加入全局，显示变化
                     UdpClient mUdpClient = new UdpClient();
                     mUdpClient.connect(list.get(position).getIp(), list.get(position).getPort());
 
-                    ConnectionDeviceHelp.getInstance().addDevice(mUdpClient, list.get(position).getIp(), list.get(position).getPort());
+                    MyApplication.getInstance().setDeviceType(1,list.get(position).getIp(),list.get(position).getPort());
 
-                    list.get(position).setType(1);
+//                    list.get(position).setType(1);
                     mAdapter.notifyItemChanged(position);
                 }
             }
@@ -128,8 +106,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 }
 
                 new TextDialog(context).setContent("确认删除？").setSubmitListener(v -> {
-                    MySelfInfo.getInstance().removeDevice(mAdapter.getData(position));
-                    list.remove(position);
+                    MyApplication.getInstance().removeDevice(mAdapter.getData(position));
+//                    list.remove(position);
                     mAdapter.setData(list);
                 }).show();
             }
@@ -144,7 +122,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 finish();
                 break;
             case R.id.tv_btn:
-                if (MySelfInfo.getInstance().getDevice().size() >= 5) {
+                if (MyApplication.getInstance().getDevices().size() >= 5) {
                     showShortToast("最多添加5条");
                     return;
                 }
@@ -155,7 +133,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     item.setPort(port);
                     item.setType(0);
 
-                    List<DeviceBean> lists = MySelfInfo.getInstance().getDevice();
+                    List<DeviceBean> lists = MyApplication.getInstance().getDevices();
                     for (DeviceBean bean : lists) {
                         if (TextUtils.equals(item.getIpPort(), bean.getIpPort())) {
                             showShortToast("添加的ip相同");
@@ -163,8 +141,9 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
 
-                    MySelfInfo.getInstance().addDevice(item);
-                    list.add(item);
+                    MyApplication.getInstance().addDevice(item);
+//                    MySelfInfo.getInstance().addDevice(item);
+//                    list.add(item);
                     mAdapter.setData(list);
                 }).show();
                 break;

@@ -40,7 +40,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         final DeviceBean data = datas.get(position);
         if (data == null) return;
 
-        holder.tv_ip.setText(data.getIp());
+        holder.tv_ip.setText(data.getIpPort());
         holder.iv_check.setImageResource(R.mipmap.ic_check);
         holder.iv_head.setImageResource(R.mipmap.ic_device);
         holder.tv_status.setText("未连接");

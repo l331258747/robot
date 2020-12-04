@@ -5,9 +5,19 @@ import android.content.Context;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
+import com.play.robot.bean.DeviceBean;
+import com.play.robot.bean.MySelfInfo;
 import com.play.robot.util.AppUtils;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.SPUtils;
+import com.play.robot.util.rxbus.RxBus2;
+import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
+import com.play.robot.util.udp.UdpClient;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 public class MyApplication extends Application {
 
@@ -20,6 +30,8 @@ public class MyApplication extends Application {
      */
     public static int displayWidth = 0;
     public static int displayHeight = 0;
+
+    List<DeviceBean> mDeviceBeans;
 
     public static MyApplication getInstance() {
         return instance;
@@ -40,13 +52,16 @@ public class MyApplication extends Application {
             displayHeight = getResources().getDisplayMetrics().heightPixels;
         }
 
-        initBaiduMap();
+
         SPUtils.init(context);
         AppUtils.init(this);
         LogUtil.setShowLog(true);
 
+        initBaiduMap();
 
+        initDeviceConnection();
     }
+
 
     private void initBaiduMap() {
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
@@ -54,6 +69,87 @@ public class MyApplication extends Application {
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
+    }
+
+
+    Disposable disposable;
+
+    public void initDeviceConnection() {
+        mDeviceBeans = new ArrayList<>();
+        for (int i = 0; i < MySelfInfo.getInstance().getDevice().size(); i++) {
+            DeviceBean item = new DeviceBean();
+            item.setIp(MySelfInfo.getInstance().getDevice().get(i).getIp());
+            item.setPort(MySelfInfo.getInstance().getDevice().get(i).getPort());
+            item.setType(0);
+            mDeviceBeans.add(item);
+        }
+
+        disposable = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
+            for (int i = 0; i < mDeviceBeans.size(); i++) {
+                if (mDeviceBeans.get(i).getIpPort().equals(event.getIpPort())) {
+                    if (event.getType() == -1) {
+                        setDeviceType(2, event.getIp(),event.getPort());
+                    }
+                }
+            }
+        });
+    }
+
+    public void addDevice(DeviceBean item) {
+        mDeviceBeans.add(item);
+        MySelfInfo.getInstance().addDevice(item.getIp(),item.getPort());
+    }
+
+    public void removeDevice(DeviceBean item) {
+        for (int i = 0; i < mDeviceBeans.size(); i++) {
+            if (mDeviceBeans.get(i).getIpPort().equals(item.getIpPort())) {
+                mDeviceBeans.remove(i);
+                MySelfInfo.getInstance().removeDevice(item.getIp(),item.getPort());
+            }
+
+        }
+    }
+
+    public void setDeviceType(int type, String ip, int port) {//0正常，1连接，2断连
+        String ipPort = ip + ":" + port;
+        for (int i = 0; i < mDeviceBeans.size(); i++) {
+            if (mDeviceBeans.get(i).getIpPort().equals(ipPort)) {
+                mDeviceBeans.get(i).setType(type);
+
+                if (type == 2) {
+                    mDeviceBeans.get(i).getUdpClient().disconnect();
+                } else if (type == 1) {
+                    UdpClient mUdpClient = new UdpClient();
+                    mUdpClient.connect(ip, port);
+                    mDeviceBeans.get(i).setUdpClient(mUdpClient);
+                }
+
+                return;
+            }
+        }
+    }
+
+    public List<DeviceBean> getDevices() {
+        return mDeviceBeans;
+    }
+
+    public int getConnectionNum() {
+        int num = 0;
+        for (int i = 0; i < mDeviceBeans.size(); i++) {
+            if (mDeviceBeans.get(i).getType() == 1) {
+                num++;
+            }
+        }
+        return num;
+    }
+
+    public DeviceBean getSingleDevice() {
+        for (int i = 0; i < mDeviceBeans.size(); i++) {
+            if (mDeviceBeans.get(i).getType() == 1) {
+                return mDeviceBeans.get(i);
+            }
+        }
+        return null;
     }
 
 }

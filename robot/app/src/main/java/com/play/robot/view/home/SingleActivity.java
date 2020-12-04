@@ -17,7 +17,6 @@ import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
-import com.play.robot.util.udp.ConnectionDeviceHelp;
 import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.setting.SettingActivity;
@@ -136,7 +135,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         disposableDevice = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
             if (event.getIpPort().equals(ipPort)){
                 if (event.getType() == -1) {
-                    ConnectionDeviceHelp.getInstance().removeDevice(event.getIp(), event.getPort());
                     setStatus(false);
                 }
             }

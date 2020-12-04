@@ -17,7 +17,7 @@ public class SPUtils {
     public static final String SP_USER_ID = "sp_user_id";
     public static final String SP_PASSWORD = "sp_password";
     public static final String SP_USER_NAME = "sp_user_name";
-    public static final String SP_DEVICE = "sp_device";
+    public static final String SP_DEVICE = "sp_device_1";
 
     private static SharedPreferences mSharedPreferences;
     private static SPUtils mPreferenceUtils;
