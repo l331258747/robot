@@ -59,7 +59,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
             DeviceBean item = new DeviceBean();
             item.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
             item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
-            item.setType(0);
+            item.setType(MyApplication.getInstance().getDevices().get(i).getType());
             list.add(item);
         }
         mAdapter.setData(list);

@@ -90,6 +90,7 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                 intent = new Intent(context, SingleActivity.class);
                 intent.putExtra("ip",MyApplication.getInstance().getSingleDevice().getIp());
                 intent.putExtra("port",MyApplication.getInstance().getSingleDevice().getPort());
+                intent.putExtra("type",MyApplication.getInstance().getSingleDevice().getType());
                 startActivity(intent);
 
                 break;

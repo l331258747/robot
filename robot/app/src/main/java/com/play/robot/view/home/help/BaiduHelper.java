@@ -2,6 +2,9 @@ package com.play.robot.view.home.help;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ZoomControls;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
@@ -39,9 +42,15 @@ public class BaiduHelper {
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
 
-        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         mBaiduMap.setMapStatus(mMapStatusUpdate);
+
+        // 隐藏logo
+        View child = mMapView.getChildAt(1);
+        if (child != null && (child instanceof ImageView || child instanceof ZoomControls)){
+            child.setVisibility(View.INVISIBLE);
+        }
     }
 
     //设置已定义地图样式

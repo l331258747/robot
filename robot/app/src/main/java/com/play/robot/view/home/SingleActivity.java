@@ -11,6 +11,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
+import com.play.robot.bean.DeviceBean;
 import com.play.robot.constant.Constant;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
@@ -44,9 +45,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     SurfaceView mSurfaceView;
 
-    String ip;
-    int port;
-    String ipPort;
+    DeviceBean mDevice;
 
     @Override
     public int getLayoutId() {
@@ -55,9 +54,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initView() {
-        ip = intent.getStringExtra("ip");
-        port = intent.getIntExtra("port", 0);
-        ipPort = ip + ":" + port;
+        mDevice = new DeviceBean();
+        mDevice.setIp(intent.getStringExtra("ip"));
+        mDevice.setPort(intent.getIntExtra("port", 0));
+        mDevice.setType(intent.getIntExtra("type", 0));
 
         small_view = $(R.id.small_view);
         iv_status = $(R.id.iv_status);
@@ -80,14 +80,16 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mMapView.setPivotX(0);
         mMapView.setPivotY(0);
 
-        setStatus(true);
+        setStatus();
     }
 
+    //初始化视频SurfaceView控件
     private void initSurfaceView() {
         mSurfaceView = $(R.id.surfaceView);
         mSurfaceView.setOnClickListener(this);
     }
 
+    //初始化地图控件
     private void initBaiduMap() {
         mMapView = $(R.id.bmapView);
         BaiduMap mBaiduMap = mMapView.getMap();
@@ -98,9 +100,15 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if (!mAnimatorHelp.getSurfaceViewCenter()) return;
-                LogUtil.e("mapView onClick");
-                mAnimatorHelp.setAnimator();
+                if (mAnimatorHelp.getSurfaceViewCenter()) {
+                    //放大视图
+                    LogUtil.e("mapView onClick");
+                    mAnimatorHelp.setAnimator();
+                } else {
+                    //设置途经点
+
+                }
+
             }
 
             @Override
@@ -112,13 +120,14 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    public void setStatus(boolean isConnection){
-        iv_status.setImageResource(isConnection?R.mipmap.ic_ugv_in :R.mipmap.ic_ugv_un);
+    //设置状态
+    public void setStatus() {
+        iv_status.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_ugv_in : R.mipmap.ic_ugv_un);
     }
 
     @Override
     public void initData() {
-//        SPUtils.getInstance().putBoolean(SPUtils.IS_LOGIN, true);
+
 
         //游标
         disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
@@ -133,46 +142,35 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         //链接状态
         disposableDevice = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
-            if (event.getIpPort().equals(ipPort)){
+            if (event.getIpPort().equals(mDevice.getIpPort())) {
                 if (event.getType() == -1) {
-                    setStatus(false);
+                    setStatus();
                 }
             }
         });
 
+        //------------------地图 start----------
         mBaiduHelper = new BaiduHelper(context, mMapView);
-//        mBaiduHelper.setMapCustomStyle();
         mBaiduHelper.initMap();
+
+        //------------------地图 end----------
+
+
+        //------------------动画 start----------
         mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view);
         mAnimatorHelp.getAnimatorParam();
+
+        //------------------动画 end----------
 
     }
 
 
+    //点击事件设置
     public void setOnClick(View... views) {
         for (View view : views) {
             view.setOnClickListener(this);
         }
     }
-
-    /*
-    移动尺标
-    new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Random r = new Random();
-                        for (int i = 0; i < 10; i++) {
-                            int i1 = r.nextInt(360);
-                            RxBus2.getInstance().post(new VoteEvent(i1));
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }).start();
-     */
 
     @Override
     public void onClick(View v) {
@@ -232,4 +230,25 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
     }
+
+
+
+    /*
+    移动尺标
+    new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Random r = new Random();
+                        for (int i = 0; i < 10; i++) {
+                            int i1 = r.nextInt(360);
+                            RxBus2.getInstance().post(new VoteEvent(i1));
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }).start();
+     */
 }

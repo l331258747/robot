@@ -110,7 +110,6 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initData() {
-//        SPUtils.getInstance().putBoolean(SPUtils.IS_LOGIN, true);
 
         VoteDisposable = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
 
