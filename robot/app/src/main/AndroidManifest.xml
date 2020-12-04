@@ -28,7 +28,7 @@
             android:name=".view.login.LoginActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".view.home.HomeActivity"
+            android:name=".view.home.SingleActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
         <activity

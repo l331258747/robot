@@ -14,7 +14,6 @@ import android.view.View;
 import com.play.robot.R;
 import com.play.robot.util.StatusBarUtil;
 import com.play.robot.util.ToastUtil;
-import com.play.robot.view.home.HomeActivity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,13 +69,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     private long mExitTime;
     @Override
     public void onBackPressed() {
-        if(activity instanceof HomeActivity){
-            if ((System.currentTimeMillis() - mExitTime) > 2000) {
-                showLongToast("再按一次退出系统");
-                mExitTime = System.currentTimeMillis();
-                return;
-            }
-        }
+//        if(activity instanceof SingleActivity){
+//            if ((System.currentTimeMillis() - mExitTime) > 2000) {
+//                showLongToast("再按一次退出系统");
+//                mExitTime = System.currentTimeMillis();
+//                return;
+//            }
+//        }
         super.onBackPressed();
     }
 

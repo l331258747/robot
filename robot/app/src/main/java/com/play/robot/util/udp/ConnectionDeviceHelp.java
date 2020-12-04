@@ -53,4 +53,11 @@ public class ConnectionDeviceHelp {
         }
     }
 
+    public ConnectionBean getSingleBean(){
+        if(getDeviceList() == null || getDeviceList().size() == 0){
+            return null;
+        }
+        return getDeviceList().get(0);
+    }
+
 }

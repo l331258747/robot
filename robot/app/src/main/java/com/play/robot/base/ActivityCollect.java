@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
-import com.play.robot.view.home.HomeActivity;
+import com.play.robot.view.home.SingleActivity;
 
 import java.util.List;
 import java.util.Stack;
@@ -59,7 +59,7 @@ public class ActivityCollect {
      */
     public void finishAllNotHome() {
         for (Activity activity : activityStack) {
-            if (!activity.getClass().equals(HomeActivity.class)) {
+            if (!activity.getClass().equals(SingleActivity.class)) {
                 activity.finish();
             }
         }

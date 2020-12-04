@@ -3,7 +3,12 @@ package com.play.robot.view.home.help;
 import android.content.Context;
 import android.util.Log;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.model.LatLng;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,14 +19,32 @@ public class BaiduHelper {
 
     Context context;
     MapView mMapView;
+    BaiduMap mBaiduMap;
 
     private static final String CUSTOM_FILE_NAME_CX = "22935e6550b6085cda2643a668d11e8b.sty";
 
     public BaiduHelper(Context context, MapView mapView) {
         this.context = context;
         mMapView = mapView;
+        mBaiduMap = mMapView.getMap();
     }
 
+
+    public void initMap(){
+        LatLng cenpt = new LatLng(29.806651,121.606983);
+        //定义地图状态
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(cenpt)
+                .zoom(18)
+                .build();
+        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        //改变地图状态
+        mBaiduMap.setMapStatus(mMapStatusUpdate);
+    }
+
+    //设置已定义地图样式
     public void setMapCustomStyle(){
         // 获取.sty文件路径 22935e6550b6085cda2643a668d11e8b.sty
         String customStyleFilePath = getCustomStyleFilePath(context, CUSTOM_FILE_NAME_CX);

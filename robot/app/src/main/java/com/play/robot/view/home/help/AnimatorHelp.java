@@ -42,14 +42,11 @@ public class AnimatorHelp {
                 mSurfaceView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 bigViewWidth = mSurfaceView.getWidth();
                 bigViewHeight = mSurfaceView.getHeight();
-//                LogUtil.e("bigViewWidth：" + bigViewWidth);
-//                LogUtil.e("bigViewHeight：" + bigViewHeight);
 
                 int[] location = new int[2];
                 mSurfaceView.getLocationOnScreen(location);
                 bigViewX = location[0];
                 bigViewY = location[1];
-//                LogUtil.e("bigViewX:" + bigViewX + " bigViewY:" + bigViewY);
 
                 mAnimatorEvent.setBig(true);
                 RxBus2.getInstance().post(mAnimatorEvent);
@@ -63,14 +60,11 @@ public class AnimatorHelp {
                 small_view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 smallViewWidth = small_view.getWidth();
                 smallViewHeight = small_view.getHeight();
-//                LogUtil.e("smallViewWidth：" + smallViewWidth);
-//                LogUtil.e("smallViewHeight：" + smallViewHeight);
 
                 int[] location2 = new int[2];
                 small_view.getLocationOnScreen(location2);
                 smallViewX = location2[0];
                 smallViewY = location2[1];
-//                LogUtil.e("smallViewX:" + smallViewX + " smallViewY:" + smallViewY);
 
                 mAnimatorEvent.setSmall(true);
                 RxBus2.getInstance().post(mAnimatorEvent);

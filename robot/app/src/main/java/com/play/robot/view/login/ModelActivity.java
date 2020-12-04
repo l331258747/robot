@@ -10,7 +10,7 @@ import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.MySelfInfo;
 import com.play.robot.util.udp.ConnectionDeviceHelp;
 import com.play.robot.util.udp.UdpClient;
-import com.play.robot.view.home.HomeActivity;
+import com.play.robot.view.home.SingleActivity;
 
 import androidx.core.content.ContextCompat;
 
@@ -83,9 +83,10 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                     showShortToast("请选择设备");
                     return;
                 }
-
-                startActivity(new Intent(context, HomeActivity.class));
-                finish();
+                intent = new Intent(context, SingleActivity.class);
+                intent.putExtra("ip",ConnectionDeviceHelp.getInstance().getSingleBean().getIp());
+                intent.putExtra("port",ConnectionDeviceHelp.getInstance().getSingleBean().getPort());
+                startActivity(intent);
 
                 break;
             case R.id.tv_many:

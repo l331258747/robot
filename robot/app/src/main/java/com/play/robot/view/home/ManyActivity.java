@@ -28,9 +28,8 @@ import com.play.robot.widget.scale.ViewScale;
 import java.util.Random;
 
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     ImageView iv_more, iv_route, iv_camera;
     IvBattery iv_battery;
@@ -52,7 +51,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_home;
+        return R.layout.activity_many;
     }
 
     @Override
@@ -113,24 +112,17 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     public void initData() {
 //        SPUtils.getInstance().putBoolean(SPUtils.IS_LOGIN, true);
 
-        VoteDisposable = RxBus2.getInstance().toObservable(VoteEvent.class, new Consumer<VoteEvent>() {
-            @Override
-            public void accept(VoteEvent voteEvent) throws Exception {
-                view_scale.setValues(voteEvent.getVote());
-            }
-        });
+        VoteDisposable = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
 
-        animatorDisposable = RxBus2.getInstance().toObservable(AnimatorEvent.class, new Consumer<AnimatorEvent>() {
-            @Override
-            public void accept(AnimatorEvent animatorEvent) throws Exception {
-                if(animatorEvent.isBig() && animatorEvent.isSmall()){
-                    mAnimatorHelp.setSmallAnimation();
-                }
-
+        animatorDisposable = RxBus2.getInstance().toObservable(AnimatorEvent.class, animatorEvent -> {
+            if(animatorEvent.isBig() && animatorEvent.isSmall()){
+                mAnimatorHelp.setSmallAnimation();
             }
+
         });
 
         mBaiduHelper = new BaiduHelper(context, mMapView);
+        mBaiduHelper.initMap();
 //        mBaiduHelper.setMapCustomStyle();
         mAnimatorHelp = new AnimatorHelp(mSurfaceView,mMapView,small_view);
         mAnimatorHelp.getAnimatorParam();
@@ -226,4 +218,5 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
     }
+
 }
