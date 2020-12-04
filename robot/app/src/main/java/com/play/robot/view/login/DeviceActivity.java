@@ -14,7 +14,6 @@ import com.play.robot.dialog.EditDialog;
 import com.play.robot.dialog.TextDialog;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
-import com.play.robot.util.udp.UdpClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +52,19 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
-        list = MyApplication.getInstance().getDevices();
+        //一个个插入，是因为如果直接引用全局，会导致操作混乱，因为是引用对象
+        //这样可以页面数据和控制对象分开控制。
+        list = new ArrayList<>();
+        for (int i = 0; i < MyApplication.getInstance().getDevices().size(); i++) {
+            DeviceBean item = new DeviceBean();
+            item.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
+            item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
+            item.setType(0);
+            list.add(item);
+        }
         mAdapter.setData(list);
 
+        //如果断连，修改状态
         disposable = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).getIpPort().equals(event.getIpPort())) {
@@ -79,21 +88,15 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
             public void onClick(int position) {
                 if (list.get(position).getType() == 2) {//连不上
                     MyApplication.getInstance().setDeviceType(1,list.get(position).getIp(),list.get(position).getPort());
-
-//                    list.get(position).setType(1);
+                    list.get(position).setType(1);
                     mAdapter.notifyItemChanged(position);
                 } else if (list.get(position).getType() == 1) {//连上
                     MyApplication.getInstance().setDeviceType(0,list.get(position).getIp(),list.get(position).getPort());
-
-//                    list.get(position).setType(0);
+                    list.get(position).setType(0);
                     mAdapter.notifyItemChanged(position);
                 } else {//未连:连接，加入全局，显示变化
-                    UdpClient mUdpClient = new UdpClient();
-                    mUdpClient.connect(list.get(position).getIp(), list.get(position).getPort());
-
                     MyApplication.getInstance().setDeviceType(1,list.get(position).getIp(),list.get(position).getPort());
-
-//                    list.get(position).setType(1);
+                    list.get(position).setType(1);
                     mAdapter.notifyItemChanged(position);
                 }
             }
@@ -142,7 +145,6 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     }
 
                     MyApplication.getInstance().addDevice(item);
-//                    MySelfInfo.getInstance().addDevice(item);
 //                    list.add(item);
                     mAdapter.setData(list);
                 }).show();

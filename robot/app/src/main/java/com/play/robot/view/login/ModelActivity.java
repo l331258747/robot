@@ -82,6 +82,11 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                     return;
                 }
 
+                if(MyApplication.getInstance().getSingleDevice() == null){
+                    showShortToast("请重新选择设备");
+                    return;
+                }
+
                 intent = new Intent(context, SingleActivity.class);
                 intent.putExtra("ip",MyApplication.getInstance().getSingleDevice().getIp());
                 intent.putExtra("port",MyApplication.getInstance().getSingleDevice().getPort());
@@ -89,9 +94,19 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.tv_many:
+                if (!MySelfInfo.getInstance().isLogin()) {
+                    showShortToast("请先登录");
+                    return;
+                }
+
 
                 break;
             case R.id.tv_device:
+                if (!MySelfInfo.getInstance().isLogin()) {
+                    showShortToast("请先登录");
+                    return;
+                }
+
                 startActivity(new Intent(context, DeviceActivity.class));
                 break;
         }

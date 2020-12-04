@@ -31,6 +31,7 @@ public class MyApplication extends Application {
     public static int displayWidth = 0;
     public static int displayHeight = 0;
 
+    //全局对象，用来控制使用
     List<DeviceBean> mDeviceBeans;
 
     public static MyApplication getInstance() {
@@ -75,6 +76,7 @@ public class MyApplication extends Application {
     Disposable disposable;
 
     public void initDeviceConnection() {
+        //从缓存里面获取存在的ip
         mDeviceBeans = new ArrayList<>();
         for (int i = 0; i < MySelfInfo.getInstance().getDevice().size(); i++) {
             DeviceBean item = new DeviceBean();
@@ -84,6 +86,8 @@ public class MyApplication extends Application {
             mDeviceBeans.add(item);
         }
 
+
+        //监听，如果断连了修改状态
         disposable = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
             for (int i = 0; i < mDeviceBeans.size(); i++) {
                 if (mDeviceBeans.get(i).getIpPort().equals(event.getIpPort())) {
@@ -95,11 +99,13 @@ public class MyApplication extends Application {
         });
     }
 
+    //添加设备，缓存和全局变量中添加
     public void addDevice(DeviceBean item) {
         mDeviceBeans.add(item);
         MySelfInfo.getInstance().addDevice(item.getIp(),item.getPort());
     }
 
+    //删除设备，缓存和全局变量中删除
     public void removeDevice(DeviceBean item) {
         for (int i = 0; i < mDeviceBeans.size(); i++) {
             if (mDeviceBeans.get(i).getIpPort().equals(item.getIpPort())) {
@@ -110,6 +116,7 @@ public class MyApplication extends Application {
         }
     }
 
+    //修改设备状态，0初始状态，1已连接，2断开连接
     public void setDeviceType(int type, String ip, int port) {//0正常，1连接，2断连
         String ipPort = ip + ":" + port;
         for (int i = 0; i < mDeviceBeans.size(); i++) {
@@ -129,10 +136,12 @@ public class MyApplication extends Application {
         }
     }
 
+    //全局数据调用
     public List<DeviceBean> getDevices() {
         return mDeviceBeans;
     }
 
+    //获取连接数
     public int getConnectionNum() {
         int num = 0;
         for (int i = 0; i < mDeviceBeans.size(); i++) {
@@ -143,6 +152,7 @@ public class MyApplication extends Application {
         return num;
     }
 
+    //获取单机操控对象
     public DeviceBean getSingleDevice() {
         for (int i = 0; i < mDeviceBeans.size(); i++) {
             if (mDeviceBeans.get(i).getType() == 1) {

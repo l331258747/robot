@@ -60,7 +60,7 @@ public class UdpClient {
                 mSocket.connect(ipAddress, port); //连接
 
                 //设置timeout
-                mSocket.setSoTimeout(TIME_OUT);
+                mSocket.setSoTimeout(TIME_CALL);
 
                 LogUtil.e("udp connect = " + isConnect());
 
