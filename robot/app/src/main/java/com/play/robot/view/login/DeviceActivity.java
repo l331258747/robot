@@ -110,7 +110,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
                 new TextDialog(context).setContent("确认删除？").setSubmitListener(v -> {
                     MyApplication.getInstance().removeDevice(mAdapter.getData(position));
-//                    list.remove(position);
+                    list.remove(position);
                     mAdapter.setData(list);
                 }).show();
             }
@@ -145,7 +145,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     }
 
                     MyApplication.getInstance().addDevice(item);
-//                    list.add(item);
+                    list.add(item);
                     mAdapter.setData(list);
                 }).show();
                 break;
