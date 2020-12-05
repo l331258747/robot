@@ -137,9 +137,12 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                                     mBean.setLongitude(longitude);
                                     mBean.setType(type);
                                     mBean.setNum(type == 1 ? markers.size() : 0);
-                                    LatLng latLng1 = new LatLng(latitude, longitude);
-                                    mBaiduHelper.onMapClick(latLng1, mBean.getNumStr());
                                     markers.add(mBean);
+                                    mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr());
+
+                                    if(type == -1){
+                                        mBaiduHelper.onMapClick(markers);
+                                    }
                                 }).show();
                     }
                 }

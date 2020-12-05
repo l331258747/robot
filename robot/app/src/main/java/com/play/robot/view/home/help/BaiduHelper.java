@@ -15,13 +15,19 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.play.robot.R;
+import com.play.robot.bean.MarkerBean;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaiduHelper {
 
@@ -62,6 +68,24 @@ public class BaiduHelper {
 //        bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mark);
 //    }
 
+    public void onMapClick(List<MarkerBean> markers) {
+        List<LatLng> points = new ArrayList<>();
+        for (int i=0;i<markers.size();i++){
+            //构建折线点坐标
+            LatLng p1 = new LatLng(markers.get(i).getLatitude(), markers.get(i).getLongitude());
+            points.add(p1);
+        }
+
+        //设置折线的属性
+        OverlayOptions mOverlayOptions = new PolylineOptions()
+                .width(5)
+                .color(0xAAFF0000)
+                .points(points);
+        //在地图上绘制折线
+        //mPloyline 折线对象
+        Overlay mPolyline = mBaiduMap.addOverlay(mOverlayOptions);
+    }
+
     public void onMapClick(LatLng latLng, String str) {
         View view = LayoutInflater.from(context).inflate(R.layout.view_mark, null, true);
         TextView tv_num = view.findViewById(R.id.tv_text);//获取自定义布局中的textview
@@ -80,7 +104,7 @@ public class BaiduHelper {
                 .draggable(true)  //设置手势拖拽
                 .icon(bitmap);
         // 在地图上添加Marker，并显示
-        mBaiduMap.addOverlay(options);
+        Overlay mPolyline = mBaiduMap.addOverlay(options);
 
 
 //        //Marker点击事件
