@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapPoi;
@@ -33,6 +34,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     IvBattery iv_battery;
     IvSignal iv_signal;
     View small_view;
+    LinearLayout ll_loc;
 
     ViewScale view_scale;
 
@@ -47,6 +49,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     DeviceBean mDevice;
 
+    double longitude;
+    double latitude;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_single;
@@ -58,6 +63,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mDevice.setIp(intent.getStringExtra("ip"));
         mDevice.setPort(intent.getIntExtra("port", 0));
         mDevice.setType(intent.getIntExtra("type", 0));
+        longitude = intent.getDoubleExtra("longitude",0);
+        latitude = intent.getDoubleExtra("latitude",0);
 
         small_view = $(R.id.small_view);
         iv_status = $(R.id.iv_status);
@@ -67,8 +74,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         iv_battery = $(R.id.iv_battery);
         iv_signal = $(R.id.iv_signal);
         view_scale = $(R.id.view_scale);
+        ll_loc = $(R.id.ll_loc);
 
-        setOnClick(iv_more, iv_route, iv_camera, iv_battery, iv_signal);
+        setOnClick(ll_loc,iv_more, iv_route, iv_camera, iv_battery, iv_signal);
 
         initBaiduMap();
 
@@ -151,13 +159,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         //------------------地图 start----------
         mBaiduHelper = new BaiduHelper(context, mMapView);
-        mBaiduHelper.initMap();
+        mBaiduHelper.initMap(longitude,latitude);
 
         //------------------地图 end----------
 
 
         //------------------动画 start----------
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view);
+        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view,ll_loc);
         mAnimatorHelp.getAnimatorParam();
 
         //------------------动画 end----------
@@ -200,6 +208,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 if (mAnimatorHelp.getSurfaceViewCenter()) return;
                 LogUtil.e("surfaceView onClick");
                 mAnimatorHelp.setAnimator();
+                break;
+            case R.id.ll_loc:
+                mBaiduHelper.setLoc();
                 break;
         }
     }
@@ -247,6 +258,35 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                        }
+                    }
+                }).start();
+     */
+
+    /*
+    百度地图无人车定位
+    List<Double> a = new ArrayList<>();
+                a.add(112.929229);
+                a.add(112.929839);
+                a.add(112.933828);
+                a.add(112.936451);
+                a.add(112.939793);
+                a.add(112.944176);
+                List<Double> b = new ArrayList<>();
+                b.add(28.231485);
+                b.add(28.231389);
+                b.add(28.231517);
+                b.add(28.231548);
+                b.add(28.231548);
+                b.add(28.231676);
+
+                new Thread(() -> {
+                    for (int i = 0; i < a.size(); i++) {
+                        mBaiduHelper.setLocation(a.get(i),b.get(i));
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }).start();

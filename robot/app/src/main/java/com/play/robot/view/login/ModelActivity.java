@@ -10,6 +10,7 @@ import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.MySelfInfo;
 import com.play.robot.view.home.SingleActivity;
+import com.play.robot.view.home.help.LocationUtil;
 
 import androidx.core.content.ContextCompat;
 
@@ -17,6 +18,11 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
 
     ImageView iv_login, iv_status;
     TextView tv_single, tv_many, tv_device;
+
+    LocationUtil locationUtil;
+
+    double longitude;
+    double latitude;
 
     @Override
     public int getLayoutId() {
@@ -58,7 +64,14 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initData() {
+        longitude = 114.419825;
+        latitude = 30.518659;
 
+        locationUtil = new LocationUtil();
+        locationUtil.startLocation(adress -> {
+            longitude = adress.getLongitude();
+            latitude = adress.getLatitude();
+        });
     }
 
     @Override
@@ -82,15 +95,17 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                     return;
                 }
 
-                if(MyApplication.getInstance().getSingleDevice() == null){
+                if (MyApplication.getInstance().getSingleDevice() == null) {
                     showShortToast("请重新选择设备");
                     return;
                 }
 
                 intent = new Intent(context, SingleActivity.class);
-                intent.putExtra("ip",MyApplication.getInstance().getSingleDevice().getIp());
-                intent.putExtra("port",MyApplication.getInstance().getSingleDevice().getPort());
-                intent.putExtra("type",MyApplication.getInstance().getSingleDevice().getType());
+                intent.putExtra("ip", MyApplication.getInstance().getSingleDevice().getIp());
+                intent.putExtra("port", MyApplication.getInstance().getSingleDevice().getPort());
+                intent.putExtra("type", MyApplication.getInstance().getSingleDevice().getType());
+                intent.putExtra("longitude", longitude);
+                intent.putExtra("latitude", latitude);
                 startActivity(intent);
 
                 break;
@@ -113,4 +128,9 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationUtil.stopLocation();
+    }
 }

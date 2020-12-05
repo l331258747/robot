@@ -2,12 +2,14 @@ package com.play.robot.view.home.help;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ZoomControls;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,29 +31,41 @@ public class BaiduHelper {
     }
 
 
-    public void initMap() {
-//        LatLng cenpt = new LatLng(29.806651,121.606983);
-//        //定义地图状态
-//        MapStatus mMapStatus = new MapStatus.Builder()
-//                .target(cenpt)
-//                .zoom(18)
-//                .build();
-        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+    public void initMap(double longitude, double latitude) {
+        LatLng cenpt = new LatLng(latitude, longitude);
+        // 不显示缩放比例尺
+        mMapView.showZoomControls(false);
+        // 不显示百度地图Logo
+        mMapView.removeViewAt(1);
+        //百度地图
+        mBaiduMap = mMapView.getMap();
+        // 改变地图状态，使地图显示在恰当的缩放大小
+        MapStatus mMapStatus = new MapStatus.Builder().target(cenpt).zoom(15).build();
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        mBaiduMap.setMapStatus(mMapStatusUpdate);
 
-        //改变地图状态
-//        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-//        mBaiduMap.setMapStatus(mMapStatusUpdate);
+        // 开启定位图层，一定不要少了这句，否则对在地图的设置、绘制定位点将无效
+        mBaiduMap.setMyLocationEnabled(true);
+    }
 
-        // 隐藏logo
-        View child = mMapView.getChildAt(1);
-        if (child != null && (child instanceof ImageView || child instanceof ZoomControls)) {
-            child.setVisibility(View.INVISIBLE);
-        }
+    double longitude;
+    double latitude;
+    public void setLocation(double longitude, double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        MyLocationData locData = new MyLocationData.Builder()
+                .accuracy(100)//getRadius 获取定位精度,默认值0.0f
+                .direction(100)//方向 // 此处设置开发者获取到的方向信息，顺时针0-360
+                .latitude(latitude)
+                .longitude(longitude).build();
+        mBaiduMap.setMyLocationData(locData);
+    }
 
-        // 开启定位图层
-//        mBaiduMap.setMyLocationEnabled(true);
-//        mLocationClient = new LocationClient(MyApplication.getInstance());     //声明LocationClient类
-
+    public void setLoc(){
+        if(latitude == 0) return;
+        LatLng cenpt = new LatLng(latitude, longitude);
+        MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(cenpt);
+        mBaiduMap.animateMapStatus(msu);
     }
 
     //---------------start 地图样式------------------
@@ -102,6 +116,7 @@ public class BaiduHelper {
         }
         return parentPath + "/" + customStyleFileName;
     }
+
     //---------------end 地图样式------------------
 
 

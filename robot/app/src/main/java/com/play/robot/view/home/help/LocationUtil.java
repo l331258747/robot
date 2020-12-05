@@ -40,9 +40,6 @@ public class LocationUtil {
                     LogUtil.e("街道门牌号信息" + bdLocation.getStreetNumber());
                     LogUtil.e("城市编码" + bdLocation.getCityCode());
                     LogUtil.e("地区编码" + bdLocation.getAdCode());
-                    String city = bdLocation.getCity();
-                    if (city.endsWith("市"))
-                        city = city.substring(0, city.length() - 1);
                     locationListener.getAdress(new LocationModel(
                              bdLocation.getLongitude()
                             , bdLocation.getLatitude()));

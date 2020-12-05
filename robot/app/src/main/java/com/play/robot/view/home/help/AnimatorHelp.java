@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 
 import com.baidu.mapapi.map.MapView;
 import com.play.robot.util.LogUtil;
@@ -17,11 +18,13 @@ public class AnimatorHelp {
     SurfaceView mSurfaceView;
     MapView mMapView;
     View small_view;
+    LinearLayout ll_loc;
 
-    public AnimatorHelp(SurfaceView surfaceView, MapView mMapView, View small_view) {
+    public AnimatorHelp(SurfaceView surfaceView, MapView mMapView, View small_view, LinearLayout ll_loc) {
         mSurfaceView = surfaceView;
         this.mMapView = mMapView;
         this.small_view = small_view;
+        this.ll_loc = ll_loc;
     }
 
     float bigViewWidth;
@@ -74,7 +77,7 @@ public class AnimatorHelp {
 
     float scaleXToSmall, scaleYToSmall, translationXToSmall, translationYToSmall;
 
-    public void setSmallAnimation() {
+    public void setSmallAnimation() {//地图变小
         scaleXToSmall = smallViewWidth / bigViewWidth;
         scaleYToSmall = smallViewHeight / bigViewHeight;
 
@@ -119,7 +122,7 @@ public class AnimatorHelp {
     //设置动画
     public void setAnimator() {
 
-        if (isSurfaceViewCenter) {
+        if (isSurfaceViewCenter) {//地图变大，视频变小
 
             //缩放---ofFloat用4个参数的ofFloat
             ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(mSurfaceView, "scaleX", 1, scaleXToSmall);
@@ -161,11 +164,12 @@ public class AnimatorHelp {
                     int[] location = new int[2];
                     mSurfaceView.getLocationOnScreen(location);
                     LogUtil.e("bigViewX:" + location[0] + " bigViewY:" + location[1]);
+                    ll_loc.setVisibility(View.VISIBLE);
 
                 }
             });
 
-        } else {
+        } else {//地图变小，视频变大
             //缩放---ofFloat用4个参数的ofFloat
             ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(mSurfaceView, "scaleX", scaleXToSmall, 1);
             ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(mSurfaceView, "scaleY", scaleYToSmall, 1);
@@ -206,6 +210,7 @@ public class AnimatorHelp {
                     int[] location = new int[2];
                     mSurfaceView.getLocationOnScreen(location);
                     LogUtil.e("bigViewX:" + location[0] + " bigViewY:" + location[1]);
+                    ll_loc.setVisibility(View.GONE);
                 }
             });
 

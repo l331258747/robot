@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
@@ -37,6 +38,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     IvShape iv_shape;
     TextView tv_status;
     View small_view;
+    LinearLayout ll_loc;
 
     ViewScale view_scale;
 
@@ -65,8 +67,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         iv_signal = $(R.id.iv_signal);
         iv_shape = $(R.id.iv_shape);
         view_scale = $(R.id.view_scale);
+        ll_loc = $(R.id.ll_loc);
 
-        setOnClick(tv_status, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_shape);
+        setOnClick(ll_loc,tv_status, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_shape);
 
         initBaiduMap();
 
@@ -121,9 +124,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         });
 
         mBaiduHelper = new BaiduHelper(context, mMapView);
-        mBaiduHelper.initMap();
+//        mBaiduHelper.initMap();
 //        mBaiduHelper.setMapCustomStyle();
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView,mMapView,small_view);
+        mAnimatorHelp = new AnimatorHelp(mSurfaceView,mMapView,small_view,ll_loc);
         mAnimatorHelp.getAnimatorParam();
 
     }
@@ -189,6 +192,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 if(mAnimatorHelp.getSurfaceViewCenter()) return;
                 LogUtil.e("surfaceView onClick");
                 mAnimatorHelp.setAnimator();
+                break;
+            case R.id.ll_loc:
+                mBaiduHelper.setLoc();
                 break;
         }
     }
