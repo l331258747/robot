@@ -7,11 +7,7 @@ import android.widget.ImageView;
 import android.widget.ZoomControls;
 
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.model.LatLng;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,28 +29,34 @@ public class BaiduHelper {
     }
 
 
-    public void initMap(){
-        LatLng cenpt = new LatLng(29.806651,121.606983);
-        //定义地图状态
-        MapStatus mMapStatus = new MapStatus.Builder()
-                .target(cenpt)
-                .zoom(18)
-                .build();
+    public void initMap() {
+//        LatLng cenpt = new LatLng(29.806651,121.606983);
+//        //定义地图状态
+//        MapStatus mMapStatus = new MapStatus.Builder()
+//                .target(cenpt)
+//                .zoom(18)
+//                .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
 
         //改变地图状态
-        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-        mBaiduMap.setMapStatus(mMapStatusUpdate);
+//        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+//        mBaiduMap.setMapStatus(mMapStatusUpdate);
 
         // 隐藏logo
         View child = mMapView.getChildAt(1);
-        if (child != null && (child instanceof ImageView || child instanceof ZoomControls)){
+        if (child != null && (child instanceof ImageView || child instanceof ZoomControls)) {
             child.setVisibility(View.INVISIBLE);
         }
+
+        // 开启定位图层
+//        mBaiduMap.setMyLocationEnabled(true);
+//        mLocationClient = new LocationClient(MyApplication.getInstance());     //声明LocationClient类
+
     }
 
+    //---------------start 地图样式------------------
     //设置已定义地图样式
-    public void setMapCustomStyle(){
+    public void setMapCustomStyle() {
         // 获取.sty文件路径 22935e6550b6085cda2643a668d11e8b.sty
         String customStyleFilePath = getCustomStyleFilePath(context, CUSTOM_FILE_NAME_CX);
         // 设置个性化地图样式文件的路径和加载方式
@@ -62,6 +64,7 @@ public class BaiduHelper {
         // 动态设置个性化地图样式是否生效
         mMapView.setMapCustomStyleEnable(true);
     }
+
     /**
      * 读取json路径
      */
@@ -99,4 +102,7 @@ public class BaiduHelper {
         }
         return parentPath + "/" + customStyleFileName;
     }
+    //---------------end 地图样式------------------
+
+
 }
