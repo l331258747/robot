@@ -6,6 +6,7 @@ package com.play.robot.bean;
  * Function:
  */
 
+//定位数据
 public class LocationModel {
 
     String city;

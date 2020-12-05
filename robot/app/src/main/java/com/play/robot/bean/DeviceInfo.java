@@ -1,5 +1,6 @@
 package com.play.robot.bean;
 
+//缓存ip数据
 public class DeviceInfo {
 
     private String ip;

@@ -2,6 +2,7 @@ package com.play.robot.bean;
 
 import com.play.robot.util.udp.UdpClient;
 
+//公用设备数据
 public class DeviceBean {
 
     private String ip;

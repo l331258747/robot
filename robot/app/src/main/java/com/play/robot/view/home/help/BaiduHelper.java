@@ -2,14 +2,21 @@ package com.play.robot.view.home.help;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.play.robot.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,10 +40,12 @@ public class BaiduHelper {
 
     public void initMap(double longitude, double latitude) {
         LatLng cenpt = new LatLng(latitude, longitude);
-        // 不显示缩放比例尺
-        mMapView.showZoomControls(false);
         // 不显示百度地图Logo
         mMapView.removeViewAt(1);
+        //设置是否显示比例尺控件
+        mMapView.showScaleControl(false);
+        //设置是否显示缩放控件
+        mMapView.showZoomControls(false);
         //百度地图
         mBaiduMap = mMapView.getMap();
         // 改变地图状态，使地图显示在恰当的缩放大小
@@ -48,8 +57,72 @@ public class BaiduHelper {
         mBaiduMap.setMyLocationEnabled(true);
     }
 
+//    public void setMark(){
+//        // 设置marker图标
+//        bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mark);
+//    }
+
+    public void onMapClick(LatLng latLng, String str) {
+        View view = LayoutInflater.from(context).inflate(R.layout.view_mark, null, true);
+        TextView tv_num = view.findViewById(R.id.tv_text);//获取自定义布局中的textview
+        tv_num.setText(str);//设置要显示的文本
+        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromView(view);
+        //获取经纬度
+        double latitude = latLng.latitude;
+        double longitude = latLng.longitude;
+        //先清除图层
+//        mBaiduMap.clear();
+        // 定义Maker坐标点
+        LatLng point = new LatLng(latitude, longitude);
+        // 构建MarkerOption，用于在地图上添加Marker
+        MarkerOptions options = new MarkerOptions()
+                .position(point)
+                .draggable(true)  //设置手势拖拽
+                .icon(bitmap);
+        // 在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(options);
+
+
+//        //Marker点击事件
+//        mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+//            //marker被点击时回调的方法
+//            //若响应点击事件，返回true，否则返回false
+//            //默认返回false
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                return false;
+//            }
+//        });
+//
+//        //Marker拖拽事件
+//        mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
+//
+//            //在Marker拖拽过程中回调此方法，这个Marker的位置可以通过getPosition()方法获取
+//            //marker 被拖动的Marker对象
+//            @Override
+//            public void onMarkerDrag(Marker marker) {
+//                //对marker处理拖拽逻辑 //拖拽中
+//            }
+//
+//            //在Marker拖动完成后回调此方法， 这个Marker的位可以通过getPosition()方法获取
+//            //marker 被拖拽的Marker对象
+//            @Override
+//            public void onMarkerDragEnd(Marker marker) {
+//                    //拖拽结束
+//            }
+//
+//            //在Marker开始被拖拽时回调此方法， 这个Marker的位可以通过getPosition()方法获取
+//            //marker 被拖拽的Marker对象
+//            @Override
+//            public void onMarkerDragStart(Marker marker) {
+//                    //开始拖拽
+//            }
+//        });
+    }
+
     double longitude;
     double latitude;
+
     public void setLocation(double longitude, double latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
@@ -61,8 +134,10 @@ public class BaiduHelper {
         mBaiduMap.setMyLocationData(locData);
     }
 
-    public void setLoc(){
-        if(latitude == 0) return;
+    // 1，获取无人车位置后，设置定位点
+    // 2，或者通过传感器最后一条数据设置定位点
+    public void setLoc() {
+        if (latitude == 0) return;
         LatLng cenpt = new LatLng(latitude, longitude);
         MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(cenpt);
         mBaiduMap.animateMapStatus(msu);

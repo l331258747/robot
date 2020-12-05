@@ -13,7 +13,9 @@ import com.baidu.mapapi.model.LatLng;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
+import com.play.robot.bean.MarkerBean;
 import com.play.robot.constant.Constant;
+import com.play.robot.dialog.MarkerDialog;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
@@ -25,6 +27,9 @@ import com.play.robot.view.setting.SettingActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvSignal;
 import com.play.robot.widget.scale.ViewScale;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -49,8 +54,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     DeviceBean mDevice;
 
-    double longitude;
-    double latitude;
+    double meLongitude;
+    double meLatitude;
+
+    int mode = 1;//0遥控模式，1智能遥控模式，2自主模式，3跟人，4跟车
+    List<MarkerBean> markers;
 
     @Override
     public int getLayoutId() {
@@ -63,8 +71,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mDevice.setIp(intent.getStringExtra("ip"));
         mDevice.setPort(intent.getIntExtra("port", 0));
         mDevice.setType(intent.getIntExtra("type", 0));
-        longitude = intent.getDoubleExtra("longitude",0);
-        latitude = intent.getDoubleExtra("latitude",0);
+        meLongitude = intent.getDoubleExtra("meLongitude", 0);
+        meLatitude = intent.getDoubleExtra("meLatitude", 0);
 
         small_view = $(R.id.small_view);
         iv_status = $(R.id.iv_status);
@@ -76,7 +84,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         view_scale = $(R.id.view_scale);
         ll_loc = $(R.id.ll_loc);
 
-        setOnClick(ll_loc,iv_more, iv_route, iv_camera, iv_battery, iv_signal);
+        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal);
 
         initBaiduMap();
 
@@ -113,10 +121,28 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     LogUtil.e("mapView onClick");
                     mAnimatorHelp.setAnimator();
                 } else {
-                    //设置途经点
+                    if (mode == 1 || mode == 2) {//设置途径点
+                        if (isMarkerUn()) {
+                            showShortToast("已添加终点，不可再添加");
+                            return;
+                        }
 
+                        int showType = markers.size() == 0 ? 0 : 1;
+                        new MarkerDialog(context)
+                                .setLatLng(latLng.latitude, latLng.longitude)
+                                .setShowType(showType)
+                                .setSubmitListener((latitude, longitude, type) -> {
+                                    MarkerBean mBean = new MarkerBean();
+                                    mBean.setLatitude(latitude);
+                                    mBean.setLongitude(longitude);
+                                    mBean.setType(type);
+                                    mBean.setNum(type == 1 ? markers.size() : 0);
+                                    LatLng latLng1 = new LatLng(latitude, longitude);
+                                    mBaiduHelper.onMapClick(latLng1, mBean.getNumStr());
+                                    markers.add(mBean);
+                                }).show();
+                    }
                 }
-
             }
 
             @Override
@@ -127,6 +153,24 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mMapView.setVisibility(View.GONE);
     }
 
+    public boolean isMarkerUn() {
+        if (markers.size() >= 2) {
+            boolean isStart = false;
+            boolean isEnd = false;
+            for (int i = 0; i < markers.size(); i++) {
+                if (markers.get(i).getType() == 0) {
+                    isStart = true;
+                }
+                if (markers.get(i).getType() == -1) {
+                    isEnd = true;
+                }
+                if (isStart && isEnd)
+                    return true;
+            }
+        }
+        return false;
+    }
+
 
     //设置状态
     public void setStatus() {
@@ -135,7 +179,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
-
 
         //游标
         disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
@@ -159,17 +202,18 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         //------------------地图 start----------
         mBaiduHelper = new BaiduHelper(context, mMapView);
-        mBaiduHelper.initMap(longitude,latitude);
+        mBaiduHelper.initMap(meLongitude, meLatitude);
 
         //------------------地图 end----------
 
 
         //------------------动画 start----------
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view,ll_loc);
+        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, ll_loc);
         mAnimatorHelp.getAnimatorParam();
 
         //------------------动画 end----------
 
+        markers = new ArrayList<>();
     }
 
 
