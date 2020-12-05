@@ -13,6 +13,7 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.Overlay;
@@ -21,6 +22,7 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.play.robot.R;
 import com.play.robot.bean.MarkerBean;
+import com.play.robot.util.LogUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,7 +72,7 @@ public class BaiduHelper {
 
     public void onMapClick(List<MarkerBean> markers) {
         List<LatLng> points = new ArrayList<>();
-        for (int i=0;i<markers.size();i++){
+        for (int i = 0; i < markers.size(); i++) {
             //构建折线点坐标
             LatLng p1 = new LatLng(markers.get(i).getLatitude(), markers.get(i).getLongitude());
             points.add(p1);
@@ -107,41 +109,52 @@ public class BaiduHelper {
         Overlay mPolyline = mBaiduMap.addOverlay(options);
 
 
-//        //Marker点击事件
-//        mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-//            //marker被点击时回调的方法
-//            //若响应点击事件，返回true，否则返回false
-//            //默认返回false
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                return false;
-//            }
-//        });
-//
-//        //Marker拖拽事件
-//        mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
-//
-//            //在Marker拖拽过程中回调此方法，这个Marker的位置可以通过getPosition()方法获取
-//            //marker 被拖动的Marker对象
-//            @Override
-//            public void onMarkerDrag(Marker marker) {
-//                //对marker处理拖拽逻辑 //拖拽中
-//            }
-//
-//            //在Marker拖动完成后回调此方法， 这个Marker的位可以通过getPosition()方法获取
-//            //marker 被拖拽的Marker对象
-//            @Override
-//            public void onMarkerDragEnd(Marker marker) {
-//                    //拖拽结束
-//            }
-//
-//            //在Marker开始被拖拽时回调此方法， 这个Marker的位可以通过getPosition()方法获取
-//            //marker 被拖拽的Marker对象
-//            @Override
-//            public void onMarkerDragStart(Marker marker) {
-//                    //开始拖拽
-//            }
-//        });
+        //Marker点击事件
+        //marker被点击时回调的方法
+        //若响应点击事件，返回true，否则返回false
+        //默认返回false
+        mBaiduMap.setOnMarkerClickListener(marker -> {
+            //点击编辑
+            LogUtil.e("点击编辑");
+            return false;
+        });
+
+        //Marker拖拽事件
+        mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
+            boolean isMove;
+            //在Marker拖拽过程中回调此方法，这个Marker的位置可以通过getPosition()方法获取
+            //marker 被拖动的Marker对象
+            @Override
+            public void onMarkerDrag(Marker marker) {
+                //对marker处理拖拽逻辑 //拖拽中
+                isMove = true;
+                LogUtil.e("拖拽中");
+            }
+
+            //在Marker拖动完成后回调此方法， 这个Marker的位可以通过getPosition()方法获取
+            //marker 被拖拽的Marker对象
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                //拖拽结束
+                if(!isMove){
+                    //删除
+                    LogUtil.e("删除");
+                }else{
+                    //拖拽
+                    LogUtil.e("拖拽");
+                }
+            }
+
+            //在Marker开始被拖拽时回调此方法， 这个Marker的位可以通过getPosition()方法获取
+            //marker 被拖拽的Marker对象
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                //开始拖拽
+                isMove = false;
+                LogUtil.e("开始拖拽");
+
+            }
+        });
     }
 
     double longitude;
