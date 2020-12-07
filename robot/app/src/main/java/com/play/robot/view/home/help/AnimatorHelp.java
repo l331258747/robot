@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.LinearLayout;
 
 import com.baidu.mapapi.map.MapView;
 import com.play.robot.util.LogUtil;
@@ -18,13 +17,12 @@ public class AnimatorHelp {
     SurfaceView mSurfaceView;
     MapView mMapView;
     View small_view;
-    LinearLayout ll_loc;
 
-    public AnimatorHelp(SurfaceView surfaceView, MapView mMapView, View small_view, LinearLayout ll_loc) {
-        mSurfaceView = surfaceView;
+    public AnimatorHelp(SurfaceView surfaceView, MapView mMapView, View small_view,AnimatorEndListener mAnimatorEndListener) {
+        this.mSurfaceView = surfaceView;
         this.mMapView = mMapView;
         this.small_view = small_view;
-        this.ll_loc = ll_loc;
+        this.mAnimatorEndListener = mAnimatorEndListener;
     }
 
     float bigViewWidth;
@@ -34,6 +32,8 @@ public class AnimatorHelp {
     int bigViewX, bigViewY, smallViewX, smallViewY;
     boolean isSurfaceViewCenter = true;
     AnimatorEvent mAnimatorEvent;
+
+    AnimatorEndListener mAnimatorEndListener;
 
     //获取动画需要的参数
     public void getAnimatorParam() {
@@ -164,8 +164,8 @@ public class AnimatorHelp {
                     int[] location = new int[2];
                     mSurfaceView.getLocationOnScreen(location);
                     LogUtil.e("bigViewX:" + location[0] + " bigViewY:" + location[1]);
-                    ll_loc.setVisibility(View.VISIBLE);
 
+                    mAnimatorEndListener.onAnimationEnd(isSurfaceViewCenter);
                 }
             });
 
@@ -210,7 +210,8 @@ public class AnimatorHelp {
                     int[] location = new int[2];
                     mSurfaceView.getLocationOnScreen(location);
                     LogUtil.e("bigViewX:" + location[0] + " bigViewY:" + location[1]);
-                    ll_loc.setVisibility(View.GONE);
+
+                    mAnimatorEndListener.onAnimationEnd(isSurfaceViewCenter);
                 }
             });
 

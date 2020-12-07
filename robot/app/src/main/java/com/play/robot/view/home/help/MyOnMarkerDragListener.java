@@ -6,7 +6,6 @@ import com.play.robot.util.LogUtil;
 
 public class MyOnMarkerDragListener implements BaiduMap.OnMarkerDragListener {
     boolean isMove;
-
     //在Marker拖拽过程中回调此方法，这个Marker的位置可以通过getPosition()方法获取
     //marker 被拖动的Marker对象
     @Override
@@ -21,13 +20,17 @@ public class MyOnMarkerDragListener implements BaiduMap.OnMarkerDragListener {
     @Override
     public void onMarkerDragEnd(Marker marker) {
         //拖拽结束
-        if (!isMove) {
+        if(!isMove){
             //删除
             LogUtil.e("删除");
-        } else {
+        }else{
             //拖拽
             LogUtil.e("拖拽");
         }
+    }
+
+    public boolean isMove(){
+        return isMove;
     }
 
     //在Marker开始被拖拽时回调此方法， 这个Marker的位可以通过getPosition()方法获取

@@ -126,7 +126,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         mBaiduHelper = new BaiduHelper(context, mMapView);
 //        mBaiduHelper.initMap();
 //        mBaiduHelper.setMapCustomStyle();
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView,mMapView,small_view,ll_loc);
+        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, isCenter -> {
+            ll_loc.setVisibility(isCenter?View.VISIBLE:View.GONE);
+        });
         mAnimatorHelp.getAnimatorParam();
 
     }

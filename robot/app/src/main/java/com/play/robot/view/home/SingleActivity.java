@@ -5,6 +5,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapPoi;
@@ -44,7 +45,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     IvBattery iv_battery;
     IvSignal iv_signal;
     View small_view;
-    LinearLayout ll_loc;
+    LinearLayout ll_loc,ll_task;
+    TextView tv_task_send,tv_task_read;
 
     ViewScale view_scale;
 
@@ -88,8 +90,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         iv_signal = $(R.id.iv_signal);
         view_scale = $(R.id.view_scale);
         ll_loc = $(R.id.ll_loc);
+        ll_task = $(R.id.ll_task);
+        tv_task_send = $(R.id.tv_task_send);
+        tv_task_read = $(R.id.tv_task_read);
 
-        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal);
+        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal,tv_task_send,tv_task_read);
 
         initBaiduMap();
 
@@ -188,6 +193,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void initData() {
 
+        markers = new ArrayList<>();
+
         //游标
         disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
 
@@ -231,19 +238,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             }
         };
         MyOnMarkerDragListener markerDragListener = new MyOnMarkerDragListener() {
-            boolean isMove;
-
-            @Override
-            public void onMarkerDrag(Marker marker) {
-                isMove = true;
-                LogUtil.e("拖拽中");
-            }
-
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 int pos = marker.getExtraInfo().getInt("markerPos");
                 //拖拽结束
-                if (!isMove) {
+                if (!isMove()) {
                     //删除
                     new TextDialog(context)
                             .setTitle("删除")
@@ -271,7 +270,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
                 } else {
                     //拖拽
-                    LogUtil.e("拖拽");
                     new MarkerModifyDialog(context)
                             .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude)
                             .setSubmitListener((latitude, longitude) -> {
@@ -287,14 +285,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                             }).show();
                 }
             }
-
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-                //开始拖拽
-                isMove = false;
-                LogUtil.e("开始拖拽");
-
-            }
         };
 
         mBaiduHelper.initMap(meLongitude, meLatitude, markerClickListener, markerDragListener);
@@ -303,12 +293,19 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
 
         //------------------动画 start----------
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, ll_loc);
+        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, isCenter -> {
+            ll_loc.setVisibility(isCenter?View.GONE:View.VISIBLE);
+            if(mode == 1 || mode == 2){
+                ll_task.setVisibility(isCenter?View.GONE:View.VISIBLE);
+            }else{
+                ll_task.setVisibility(View.GONE);
+            }
+        });
         mAnimatorHelp.getAnimatorParam();
 
         //------------------动画 end----------
 
-        markers = new ArrayList<>();
+
     }
 
 
@@ -350,6 +347,17 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.ll_loc:
                 mBaiduHelper.setLoc();
+                break;
+            case R.id.tv_task_send:
+                if(!isMarkerUn()){
+                    showShortToast("请先设置途径点");
+                    return;
+                }
+
+                break;
+            case R.id.tv_task_read:
+
+
                 break;
         }
     }

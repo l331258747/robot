@@ -68,6 +68,7 @@
         android:layout_height="@dimen/dp_20"
         android:background="@color/white"
         android:visibility="gone"
+        tools:visibility="visible"
         android:gravity="center"
         android:layout_margin="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="@+id/bmapView"
@@ -77,6 +78,47 @@
             android:layout_width="@dimen/dp_20"
             android:layout_height="@dimen/dp_20"
             android:src="@mipmap/ic_loc" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_task"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_40"
+        app:layout_constraintStart_toStartOf="@id/bmapView"
+        app:layout_constraintEnd_toEndOf="@id/bmapView"
+        app:layout_constraintBottom_toBottomOf="@id/bmapView"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginBottom="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_task_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送任务点"
+            android:textSize="@dimen/sp_12"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_3"
+            android:paddingEnd="@dimen/dp_10"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_3"
+            android:background="@drawable/shape_red_r40"/>
+
+        <TextView
+            android:id="@+id/tv_task_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="读取任务点"
+            android:textSize="@dimen/sp_12"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/dp_20"
+            android:paddingBottom="@dimen/dp_3"
+            android:paddingEnd="@dimen/dp_10"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_3"
+            android:background="@drawable/shape_red_r40"/>
+
     </LinearLayout>
 
     <!--    左边控件：线路，启动/熄火，控制-->
@@ -95,7 +137,7 @@
         android:id="@+id/iv_rocker"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        android:src="@mipmap/ic_rocker"
+        android:src="@mipmap/ic_rocker_un"
         app:layout_constraintBottom_toBottomOf="@+id/view_left"
         app:layout_constraintEnd_toEndOf="@+id/view_left"
         app:layout_constraintStart_toStartOf="@+id/view_left" />
@@ -105,7 +147,7 @@
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
         android:layout_marginBottom="@dimen/dp_30"
-        android:src="@mipmap/ic_flameout"
+        android:src="@mipmap/ic_flameout_un"
         app:layout_constraintBottom_toTopOf="@+id/iv_rocker"
         app:layout_constraintEnd_toEndOf="@+id/view_left"
         app:layout_constraintStart_toStartOf="@+id/view_left" />
@@ -115,7 +157,7 @@
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
         android:layout_marginBottom="@dimen/dp_30"
-        android:src="@mipmap/ic_sign"
+        android:src="@mipmap/ic_device"
         app:layout_constraintBottom_toTopOf="@+id/iv_flameout"
         app:layout_constraintEnd_toEndOf="@+id/view_left"
         app:layout_constraintStart_toStartOf="@+id/view_left" />
