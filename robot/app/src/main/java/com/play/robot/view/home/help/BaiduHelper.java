@@ -112,6 +112,10 @@ public class BaiduHelper {
         mBaiduMap.addOverlays(options);
     }
 
+    public void ClearMarkers(){
+        mBaiduMap.clear();
+    }
+
     //显示marker点
     public void showMarkers(List<MarkerBean> markers){
         //先清除图层

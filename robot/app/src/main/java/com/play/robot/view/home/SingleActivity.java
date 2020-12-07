@@ -18,6 +18,7 @@ import com.play.robot.bean.MarkerBean;
 import com.play.robot.constant.Constant;
 import com.play.robot.dialog.MarkerDialog;
 import com.play.robot.dialog.MarkerModifyDialog;
+import com.play.robot.dialog.TextDialog;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
@@ -142,7 +143,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                                     mBean.setType(type);
                                     mBean.setNum(type == 1 ? markers.size() : 0);
                                     markers.add(mBean);
-                                    mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr(),markers.size() - 1);
+                                    mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr(), markers.size() - 1);
 
                                     if (type == -1) {
                                         mBaiduHelper.showMarkerLine(markers);
@@ -221,7 +222,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
                             if (isMarkerUn()) {
                                 mBaiduHelper.showMarkerLine(markers);
-                            }else{
+                            } else {
                                 mBaiduHelper.showMarkers(markers);
                             }
 
@@ -229,7 +230,60 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 return false;
             }
         };
-        MyOnMarkerDragListener markerDragListener = new MyOnMarkerDragListener();
+        MyOnMarkerDragListener markerDragListener = new MyOnMarkerDragListener() {
+            boolean isMove;
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+                isMove = true;
+                LogUtil.e("拖拽中");
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                //拖拽结束
+                if (!isMove) {
+                    //删除
+                    int pos = marker.getExtraInfo().getInt("markerPos");
+
+                    new TextDialog(context)
+                            .setTitle("删除")
+                            .setContent(pos == 0 ? "如果删除起点，将清除所有点。" : "是否删除途径点")
+                            .setSubmitListener(v -> {
+                                if (pos == 0) {
+                                    markers.clear();
+                                    mBaiduHelper.ClearMarkers();
+                                } else {
+                                    markers.remove(pos);
+                                    if (isMarkerUn()) {
+                                        mBaiduHelper.showMarkerLine(markers);
+                                    } else {
+                                        mBaiduHelper.showMarkers(markers);
+                                    }
+                                }
+                            })
+                            .setCancelListener(v -> {
+                                if (isMarkerUn()) {
+                                    mBaiduHelper.showMarkerLine(markers);
+                                } else {
+                                    mBaiduHelper.showMarkers(markers);
+                                }
+                            }).show();
+
+                } else {
+                    //拖拽
+                    LogUtil.e("拖拽");
+                }
+            }
+
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                //开始拖拽
+                isMove = false;
+                LogUtil.e("开始拖拽");
+
+            }
+        };
 
         mBaiduHelper.initMap(meLongitude, meLatitude, markerClickListener, markerDragListener);
 
