@@ -18,7 +18,7 @@ public class MarkerDialog  extends Dialog {
     TextView btn_start,btn_road,btn_end,tv_btn;
     EditText et_account,et_password;
 
-    int type;//0起点，-1终点，1途径点
+    int type = -2;//0起点，-1终点，1途径点
 
     public MarkerDialog(Context context) {
         super(context, R.style.mdialog);

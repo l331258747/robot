@@ -1,6 +1,7 @@
 package com.play.robot.view.home.help;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +14,13 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.play.robot.R;
 import com.play.robot.bean.MarkerBean;
-import com.play.robot.util.LogUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,7 +44,8 @@ public class BaiduHelper {
     }
 
 
-    public void initMap(double longitude, double latitude) {
+    //初始化mapView
+    public void initMap(double longitude, double latitude,MyOnMarkerClickListener markerClickListener,MyOnMarkerDragListener markerDragListener) {
         LatLng cenpt = new LatLng(latitude, longitude);
         // 不显示百度地图Logo
         mMapView.removeViewAt(1);
@@ -63,14 +62,16 @@ public class BaiduHelper {
 
         // 开启定位图层，一定不要少了这句，否则对在地图的设置、绘制定位点将无效
         mBaiduMap.setMyLocationEnabled(true);
+
+        mBaiduMap.setOnMarkerClickListener(markerClickListener);
+        mBaiduMap.setOnMarkerDragListener(markerDragListener);
     }
 
-//    public void setMark(){
-//        // 设置marker图标
-//        bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.ic_mark);
-//    }
+    //途径点设置完成后，重新画点和线，而且要先画线再画点，要不然marker的点捕获不到，点击事件无效
+    public void showMarkerLine(List<MarkerBean> markers) {
+        //先清除图层
+        mBaiduMap.clear();
 
-    public void onMapClick(List<MarkerBean> markers) {
         List<LatLng> points = new ArrayList<>();
         for (int i = 0; i < markers.size(); i++) {
             //构建折线点坐标
@@ -85,81 +86,89 @@ public class BaiduHelper {
                 .points(points);
         //在地图上绘制折线
         //mPloyline 折线对象
-        Overlay mPolyline = mBaiduMap.addOverlay(mOverlayOptions);
+        mBaiduMap.addOverlay(mOverlayOptions);
+
+        List<OverlayOptions> options = new ArrayList<>();
+        for (int i=0;i<markers.size();i++){
+            Bundle bundle = new Bundle();
+            bundle.putInt("markerPos",i);
+
+            BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr());
+            //获取经纬度
+            double latitude = markers.get(i).getLatitude();
+            double longitude = markers.get(i).getLongitude();
+            //先清除图层
+//        mBaiduMap.clear();
+            // 定义Maker坐标点
+            LatLng point = new LatLng(latitude, longitude);
+            // 构建MarkerOption，用于在地图上添加Marker
+            MarkerOptions item = new MarkerOptions()
+                    .position(point)
+                    .extraInfo(bundle)
+                    .draggable(true)  //设置手势拖拽
+                    .icon(bitmap);
+            options.add(item);
+        }
+        mBaiduMap.addOverlays(options);
     }
 
-    public void onMapClick(LatLng latLng, String str) {
+    //显示marker点
+    public void showMarkers(List<MarkerBean> markers){
+        //先清除图层
+        mBaiduMap.clear();
+
+        List<OverlayOptions> options = new ArrayList<>();
+        for (int i=0;i<markers.size();i++){
+            Bundle bundle = new Bundle();
+            bundle.putInt("markerPos",i);
+
+            BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr());
+            //获取经纬度
+            double latitude = markers.get(i).getLatitude();
+            double longitude = markers.get(i).getLongitude();
+            // 定义Maker坐标点
+            LatLng point = new LatLng(latitude, longitude);
+            // 构建MarkerOption，用于在地图上添加Marker
+            MarkerOptions item = new MarkerOptions()
+                    .position(point)
+                    .extraInfo(bundle)
+                    .draggable(true)  //设置手势拖拽
+                    .icon(bitmap);
+            options.add(item);
+        }
+        mBaiduMap.addOverlays(options);
+    }
+
+    //获取marker的bitmap
+    public BitmapDescriptor getMarkerBitMap(String str){
         View view = LayoutInflater.from(context).inflate(R.layout.view_mark, null, true);
         TextView tv_num = view.findViewById(R.id.tv_text);//获取自定义布局中的textview
         tv_num.setText(str);//设置要显示的文本
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromView(view);
-        //获取经纬度
-        double latitude = latLng.latitude;
-        double longitude = latLng.longitude;
+        return BitmapDescriptorFactory.fromView(view);
+    }
+
+    //地图的点击事件，添加marker点
+    public void onMapClick(LatLng latLng, String str,int markerPos) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("markerPos",markerPos);
+        BitmapDescriptor bitmap = getMarkerBitMap(str);
         //先清除图层
 //        mBaiduMap.clear();
         // 定义Maker坐标点
-        LatLng point = new LatLng(latitude, longitude);
         // 构建MarkerOption，用于在地图上添加Marker
         MarkerOptions options = new MarkerOptions()
-                .position(point)
+                .position(latLng)
+                .extraInfo(bundle)
                 .draggable(true)  //设置手势拖拽
                 .icon(bitmap);
         // 在地图上添加Marker，并显示
-        Overlay mPolyline = mBaiduMap.addOverlay(options);
-
-
-        //Marker点击事件
-        //marker被点击时回调的方法
-        //若响应点击事件，返回true，否则返回false
-        //默认返回false
-        mBaiduMap.setOnMarkerClickListener(marker -> {
-            //点击编辑
-            LogUtil.e("点击编辑");
-            return false;
-        });
-
-        //Marker拖拽事件
-        mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
-            boolean isMove;
-            //在Marker拖拽过程中回调此方法，这个Marker的位置可以通过getPosition()方法获取
-            //marker 被拖动的Marker对象
-            @Override
-            public void onMarkerDrag(Marker marker) {
-                //对marker处理拖拽逻辑 //拖拽中
-                isMove = true;
-                LogUtil.e("拖拽中");
-            }
-
-            //在Marker拖动完成后回调此方法， 这个Marker的位可以通过getPosition()方法获取
-            //marker 被拖拽的Marker对象
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                //拖拽结束
-                if(!isMove){
-                    //删除
-                    LogUtil.e("删除");
-                }else{
-                    //拖拽
-                    LogUtil.e("拖拽");
-                }
-            }
-
-            //在Marker开始被拖拽时回调此方法， 这个Marker的位可以通过getPosition()方法获取
-            //marker 被拖拽的Marker对象
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-                //开始拖拽
-                isMove = false;
-                LogUtil.e("开始拖拽");
-
-            }
-        });
+        mBaiduMap.addOverlay(options);
     }
 
     double longitude;
     double latitude;
 
+    //设置地图无人车的位置，并显示
     public void setLocation(double longitude, double latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
@@ -173,6 +182,7 @@ public class BaiduHelper {
 
     // 1，获取无人车位置后，设置定位点
     // 2，或者通过传感器最后一条数据设置定位点
+    // 地图移动到无人车中心为
     public void setLoc() {
         if (latitude == 0) return;
         LatLng cenpt = new LatLng(latitude, longitude);

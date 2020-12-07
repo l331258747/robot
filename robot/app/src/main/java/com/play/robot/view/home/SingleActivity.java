@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.model.LatLng;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
@@ -16,6 +17,7 @@ import com.play.robot.bean.DeviceBean;
 import com.play.robot.bean.MarkerBean;
 import com.play.robot.constant.Constant;
 import com.play.robot.dialog.MarkerDialog;
+import com.play.robot.dialog.MarkerModifyDialog;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
@@ -23,6 +25,8 @@ import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
+import com.play.robot.view.home.help.MyOnMarkerClickListener;
+import com.play.robot.view.home.help.MyOnMarkerDragListener;
 import com.play.robot.view.setting.SettingActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvSignal;
@@ -138,10 +142,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                                     mBean.setType(type);
                                     mBean.setNum(type == 1 ? markers.size() : 0);
                                     markers.add(mBean);
-                                    mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr());
+                                    mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr(),markers.size() - 1);
 
-                                    if(type == -1){
-                                        mBaiduHelper.onMapClick(markers);
+                                    if (type == -1) {
+                                        mBaiduHelper.showMarkerLine(markers);
                                     }
                                 }).show();
                     }
@@ -205,7 +209,29 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         //------------------地图 start----------
         mBaiduHelper = new BaiduHelper(context, mMapView);
-        mBaiduHelper.initMap(meLongitude, meLatitude);
+        MyOnMarkerClickListener markerClickListener = new MyOnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                new MarkerModifyDialog(context)
+                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude)
+                        .setSubmitListener((latitude, longitude) -> {
+                            int pos = marker.getExtraInfo().getInt("markerPos");
+                            markers.get(pos).setLatitude(latitude);
+                            markers.get(pos).setLongitude(longitude);
+
+                            if (isMarkerUn()) {
+                                mBaiduHelper.showMarkerLine(markers);
+                            }else{
+                                mBaiduHelper.showMarkers(markers);
+                            }
+
+                        }).show();
+                return false;
+            }
+        };
+        MyOnMarkerDragListener markerDragListener = new MyOnMarkerDragListener();
+
+        mBaiduHelper.initMap(meLongitude, meLatitude, markerClickListener, markerDragListener);
 
         //------------------地图 end----------
 
