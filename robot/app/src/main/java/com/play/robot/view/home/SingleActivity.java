@@ -17,6 +17,9 @@ import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
 import com.play.robot.bean.MarkerBean;
 import com.play.robot.constant.Constant;
+import com.play.robot.dialog.DeviceInfoDialog;
+import com.play.robot.dialog.DeviceModeDialog;
+import com.play.robot.dialog.InstructDialog;
 import com.play.robot.dialog.MarkerDialog;
 import com.play.robot.dialog.MarkerModifyDialog;
 import com.play.robot.dialog.TextDialog;
@@ -39,14 +42,14 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
-public class SingleActivity extends BaseActivity implements View.OnClickListener {
+public class SingleActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
 
-    ImageView iv_more, iv_route, iv_camera, iv_status;
+    ImageView iv_more, iv_route, iv_camera, iv_status, iv_sign, iv_flameout, iv_rocker;
     IvBattery iv_battery;
     IvSignal iv_signal;
     View small_view;
-    LinearLayout ll_loc,ll_task;
-    TextView tv_task_send,tv_task_read;
+    LinearLayout ll_loc, ll_task;
+    TextView tv_task_send, tv_task_read;
 
     ViewScale view_scale;
 
@@ -64,7 +67,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     double meLongitude;
     double meLatitude;
 
-    int mode = 1;//0遥控模式，1智能遥控模式，2自主模式，3跟人，4跟车
+    int mode = 0;//0遥控模式，1智能遥控模式，2自主模式，3跟人，4跟车
     List<MarkerBean> markers;
 
     @Override
@@ -93,8 +96,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         ll_task = $(R.id.ll_task);
         tv_task_send = $(R.id.tv_task_send);
         tv_task_read = $(R.id.tv_task_read);
+        iv_sign = $(R.id.iv_sign);
+        iv_flameout = $(R.id.iv_flameout);
+        iv_rocker = $(R.id.iv_rocker);
 
-        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal,tv_task_send,tv_task_read);
+        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, tv_task_send, tv_task_read, iv_sign, iv_flameout, iv_rocker);
+
+        iv_sign.setOnLongClickListener(this);
 
         initBaiduMap();
 
@@ -106,7 +114,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mMapView.setPivotX(0);
         mMapView.setPivotY(0);
 
-        setStatus();
+        setStatusView();
+        setModeView();
     }
 
     //初始化视频SurfaceView控件
@@ -186,8 +195,30 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
 
     //设置状态
-    public void setStatus() {
+    public void setStatusView() {
         iv_status.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_ugv_in : R.mipmap.ic_ugv_un);
+    }
+
+    //设置mode显示
+    public void setModeView() {
+        iv_rocker.setImageResource(mode == 0 ? R.mipmap.ic_control_un
+                : mode == 1 ? R.mipmap.ic_control_mind_un
+                : mode == 2 ? R.mipmap.ic_mind_un
+                : mode == 3 ? R.mipmap.ic_follow_people_un
+                : mode == 4 ? R.mipmap.ic_follow_car_un
+                : R.mipmap.ic_control_un);
+    }
+
+    //设置任务点
+    boolean isSufCenter;
+
+    public void setTaskView(boolean isSufCenter) {
+        this.isSufCenter = isSufCenter;
+        if (mode == 1 || mode == 2) {
+            ll_task.setVisibility(isSufCenter ? View.GONE : View.VISIBLE);
+        } else {
+            ll_task.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -210,7 +241,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         disposableDevice = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
             if (event.getIpPort().equals(mDevice.getIpPort())) {
                 if (event.getType() == -1) {
-                    setStatus();
+                    setStatusView();
                 }
             }
         });
@@ -293,13 +324,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
 
         //------------------动画 start----------
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, isCenter -> {
-            ll_loc.setVisibility(isCenter?View.GONE:View.VISIBLE);
-            if(mode == 1 || mode == 2){
-                ll_task.setVisibility(isCenter?View.GONE:View.VISIBLE);
-            }else{
-                ll_task.setVisibility(View.GONE);
-            }
+        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, isSufCenter -> {
+            ll_loc.setVisibility(isSufCenter ? View.GONE : View.VISIBLE);
+
+            setTaskView(isSufCenter);
         });
         mAnimatorHelp.getAnimatorParam();
 
@@ -349,17 +377,47 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 mBaiduHelper.setLoc();
                 break;
             case R.id.tv_task_send:
-                if(!isMarkerUn()){
+                if (!isMarkerUn()) {
                     showShortToast("请先设置途径点");
                     return;
                 }
 
                 break;
             case R.id.tv_task_read:
+                showShortToast("读取途径点");
+                break;
+            case R.id.iv_sign://信息，指令
+                String str = "V:10m/s\nS:100m\nD:50m\n精度:12.325415\n维度:112.324567";
+                new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(str).show();
+                break;
+            case R.id.iv_flameout://启动，熄火
+                new TextDialog(context).setContent("是否确认熄火/启动").show();
+                break;
+            case R.id.iv_rocker://模式切换
+                new DeviceModeDialog(context).setSubmitListener(mode -> {
+                    if (this.mode == mode) return;
+                    this.mode = mode;
+                    this.markers.clear();
+                    mBaiduHelper.ClearMarkers();
 
+                    setModeView();
+                    setTaskView(isSufCenter);
 
+                }).show();
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_sign://信息，指令
+                new InstructDialog(context).setTitle(mDevice.getIpPort()).setSubmitListener(content -> {
+                    showShortToast("指令：" + content);
+                }).show();
+                break;
+        }
+        return false;
     }
 
 
@@ -388,8 +446,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
     }
-
-
 
     /*
     移动尺标

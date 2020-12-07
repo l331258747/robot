@@ -56,7 +56,7 @@ public class BaiduHelper {
         //百度地图
         mBaiduMap = mMapView.getMap();
         // 改变地图状态，使地图显示在恰当的缩放大小
-        MapStatus mMapStatus = new MapStatus.Builder().target(cenpt).zoom(15).build();
+        MapStatus mMapStatus = new MapStatus.Builder().target(cenpt).zoom(16).build();
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         mBaiduMap.setMapStatus(mMapStatusUpdate);
 

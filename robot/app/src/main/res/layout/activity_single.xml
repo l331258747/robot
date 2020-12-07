@@ -137,7 +137,7 @@
         android:id="@+id/iv_rocker"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        android:src="@mipmap/ic_rocker_un"
+        android:src="@mipmap/ic_control_un"
         app:layout_constraintBottom_toBottomOf="@+id/view_left"
         app:layout_constraintEnd_toEndOf="@+id/view_left"
         app:layout_constraintStart_toStartOf="@+id/view_left" />
