@@ -241,11 +241,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
+                int pos = marker.getExtraInfo().getInt("markerPos");
                 //拖拽结束
                 if (!isMove) {
                     //删除
-                    int pos = marker.getExtraInfo().getInt("markerPos");
-
                     new TextDialog(context)
                             .setTitle("删除")
                             .setContent(pos == 0 ? "如果删除起点，将清除所有点。" : "是否删除途径点")
@@ -273,6 +272,19 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     //拖拽
                     LogUtil.e("拖拽");
+                    new MarkerModifyDialog(context)
+                            .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude)
+                            .setSubmitListener((latitude, longitude) -> {
+                                markers.get(pos).setLatitude(latitude);
+                                markers.get(pos).setLongitude(longitude);
+
+                                if (isMarkerUn()) {
+                                    mBaiduHelper.showMarkerLine(markers);
+                                } else {
+                                    mBaiduHelper.showMarkers(markers);
+                                }
+
+                            }).show();
                 }
             }
 

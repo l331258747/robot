@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:includeFontPadding="false"
-        android:text="修改途径点"
+        android:text="编辑途径点"
         android:textColor="@color/color_1e1e1e"
         android:textSize="@dimen/sp_16"
         android:textStyle="bold"
