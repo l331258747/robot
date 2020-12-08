@@ -35,11 +35,14 @@ import com.play.robot.view.home.help.MyOnMarkerDragListener;
 import com.play.robot.view.setting.SettingActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvSignal;
+import com.play.robot.widget.rocherView.MyRockerShakeListener;
+import com.play.robot.widget.rocherView.MyRockerView;
 import com.play.robot.widget.scale.ViewScale;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import io.reactivex.disposables.Disposable;
 
 public class SingleActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
@@ -49,7 +52,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     IvSignal iv_signal;
     View small_view;
     LinearLayout ll_loc, ll_task;
-    TextView tv_task_send, tv_task_read;
+    TextView tv_task_send, tv_task_read,tv_rocker_inside,tv_rocker_outside;
+    MyRockerView rockerViewLeft,rockerViewRight;
+    ConstraintLayout cl_rocker;
 
     ViewScale view_scale;
 
@@ -85,6 +90,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         meLatitude = intent.getDoubleExtra("meLatitude", 0);
 
         small_view = $(R.id.small_view);
+        cl_rocker = $(R.id.cl_rocker);
         iv_status = $(R.id.iv_status);
         iv_more = $(R.id.iv_more);
         iv_route = $(R.id.iv_route);
@@ -99,8 +105,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         iv_sign = $(R.id.iv_sign);
         iv_flameout = $(R.id.iv_flameout);
         iv_rocker = $(R.id.iv_rocker);
+        tv_rocker_inside = $(R.id.tv_rocker_inside);
+        tv_rocker_outside = $(R.id.tv_rocker_outside);
 
-        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, tv_task_send, tv_task_read, iv_sign, iv_flameout, iv_rocker);
+        setOnClick(tv_rocker_inside,tv_rocker_outside,ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, tv_task_send, tv_task_read, iv_sign, iv_flameout, iv_rocker);
 
         iv_sign.setOnLongClickListener(this);
 
@@ -114,8 +122,12 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mMapView.setPivotX(0);
         mMapView.setPivotY(0);
 
+        initRockerView();
+
         setStatusView();
         setModeView();
+        setRockerView(0);
+        setTaskView(isSufCenter);
     }
 
     //初始化视频SurfaceView控件
@@ -210,7 +222,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     }
 
     //设置任务点
-    boolean isSufCenter;
+    boolean isSufCenter = true;
 
     public void setTaskView(boolean isSufCenter) {
         this.isSufCenter = isSufCenter;
@@ -218,6 +230,30 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             ll_task.setVisibility(isSufCenter ? View.GONE : View.VISIBLE);
         } else {
             ll_task.setVisibility(View.GONE);
+        }
+    }
+
+    public void setRockerView(int rockerType){//0初始，1内置，2外置
+        if (mode == 0 || mode == 1) {
+            cl_rocker.setVisibility(View.VISIBLE);
+            if(rockerType == 1){
+                tv_rocker_inside.setVisibility(View.GONE);
+                tv_rocker_outside.setVisibility(View.GONE);
+                rockerViewLeft.setVisibility(View.VISIBLE);
+                rockerViewRight.setVisibility(View.VISIBLE);
+            }else if(rockerType == 2){
+                tv_rocker_inside.setVisibility(View.GONE);
+                tv_rocker_outside.setVisibility(View.GONE);
+                rockerViewLeft.setVisibility(View.GONE);
+                rockerViewRight.setVisibility(View.GONE);
+            }else{
+                tv_rocker_inside.setVisibility(View.VISIBLE);
+                tv_rocker_outside.setVisibility(View.VISIBLE);
+                rockerViewLeft.setVisibility(View.GONE);
+                rockerViewRight.setVisibility(View.GONE);
+            }
+        } else {
+            cl_rocker.setVisibility(View.GONE);
         }
     }
 
@@ -376,12 +412,17 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             case R.id.ll_loc:
                 mBaiduHelper.setLoc();
                 break;
+            case R.id.tv_rocker_inside:
+                setRockerView(1);
+                break;
+            case R.id.tv_rocker_outside:
+                setRockerView(2);
+                break;
             case R.id.tv_task_send:
                 if (!isMarkerUn()) {
                     showShortToast("请先设置途径点");
                     return;
                 }
-
                 break;
             case R.id.tv_task_read:
                 showShortToast("读取途径点");
@@ -395,13 +436,15 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.iv_rocker://模式切换
                 new DeviceModeDialog(context).setSubmitListener(mode -> {
-                    if (this.mode == mode) return;
                     this.mode = mode;
                     this.markers.clear();
                     mBaiduHelper.ClearMarkers();
 
                     setModeView();
+                    setRockerView(0);
+
                     setTaskView(isSufCenter);
+
 
                 }).show();
                 break;
@@ -446,6 +489,47 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
     }
+
+    //----------------------------------- 遥控 start-----------------
+    int upLevel;
+    int turnLevel;
+
+    public void initRockerView(){
+        //前后
+        rockerViewLeft = findViewById(R.id.rocker_view_left);
+        if (rockerViewLeft != null) {
+            rockerViewLeft.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_MOVE);
+            rockerViewLeft.setOnShakeListener(MyRockerView.DirectionMode.DIRECTION_2_VERTICAL, new MyRockerShakeListener() {
+
+                @Override
+                public void directionLevel(int level) {
+                    upLevel = level;
+                    sendRocker();
+                }
+            });
+        }
+
+        //左右
+        rockerViewRight = findViewById(R.id.rocker_view_right);
+        if (rockerViewRight != null) {
+            rockerViewRight.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_MOVE);
+            rockerViewRight.setOnShakeListener(MyRockerView.DirectionMode.DIRECTION_2_HORIZONTAL, new MyRockerShakeListener() {
+
+                @Override
+                public void directionLevel(int level) {
+                    turnLevel = level;
+                    sendRocker();
+                }
+
+            });
+        }
+    }
+
+    public void sendRocker(){
+        LogUtil.e("" + upLevel + "," + turnLevel);
+    }
+
+    //----------------------------------- 遥控 end-----------------
 
     /*
     移动尺标
