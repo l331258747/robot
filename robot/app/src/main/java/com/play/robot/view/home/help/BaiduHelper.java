@@ -65,6 +65,7 @@ public class BaiduHelper {
 
         mBaiduMap.setOnMarkerClickListener(markerClickListener);
         mBaiduMap.setOnMarkerDragListener(markerDragListener);
+
     }
 
     //途径点设置完成后，重新画点和线，而且要先画线再画点，要不然marker的点捕获不到，点击事件无效
@@ -93,6 +94,7 @@ public class BaiduHelper {
             Bundle bundle = new Bundle();
             bundle.putInt("markerPos",i);
 
+            markers.get(i).setNum(i);
             BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr());
             //获取经纬度
             double latitude = markers.get(i).getLatitude();
@@ -126,6 +128,7 @@ public class BaiduHelper {
             Bundle bundle = new Bundle();
             bundle.putInt("markerPos",i);
 
+            markers.get(i).setNum(i);
             BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr());
             //获取经纬度
             double latitude = markers.get(i).getLatitude();
