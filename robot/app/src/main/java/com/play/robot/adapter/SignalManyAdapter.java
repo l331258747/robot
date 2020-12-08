@@ -16,12 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SignalAdapter extends RecyclerView.Adapter<SignalAdapter.ViewHolder> {
+public class SignalManyAdapter extends RecyclerView.Adapter<SignalManyAdapter.ViewHolder> {
 
     Context mContext;
     List<DeviceBean> datas;
 
-    public SignalAdapter(Context context, List<DeviceBean> datas) {
+    public SignalManyAdapter(Context context, List<DeviceBean> datas) {
         mContext = context;
         this.datas = datas;
     }
@@ -30,7 +30,7 @@ public class SignalAdapter extends RecyclerView.Adapter<SignalAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(mContext).inflate(R.layout.item_signal, parent, false);
+        view = LayoutInflater.from(mContext).inflate(R.layout.item_signal_many, parent, false);
         return new ViewHolder(view);
     }
 
@@ -60,12 +60,6 @@ public class SignalAdapter extends RecyclerView.Adapter<SignalAdapter.ViewHolder
             holder.tv_status.setTextColor(ContextCompat.getColor(mContext,R.color.color_c3392d));
             holder.tv_ip.setTextColor(ContextCompat.getColor(mContext,R.color.color_c3392d));
         }
-
-        if (mOnItemClickListener != null) {
-            holder.iv_check.setOnClickListener(v -> mOnItemClickListener.onClick(position));
-        }
-
-
 
     }
 
@@ -102,13 +96,4 @@ public class SignalAdapter extends RecyclerView.Adapter<SignalAdapter.ViewHolder
         }
     }
 
-    OnItemClickListener mOnItemClickListener;
-
-    public interface OnItemClickListener {
-        void onClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.mOnItemClickListener = onItemClickListener;
-    }
 }
