@@ -1,6 +1,9 @@
 package com.play.robot.view.home;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +30,7 @@ import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
+import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
@@ -47,18 +51,19 @@ import io.reactivex.disposables.Disposable;
 
 public class SingleActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
 
-    ImageView iv_more, iv_route, iv_camera, iv_status, iv_sign, iv_flameout, iv_rocker;
+    ImageView iv_more, iv_route, iv_camera, iv_status, iv_sign, iv_flameout, iv_rocker, iv_stop;
     IvBattery iv_battery;
     IvSignal iv_signal;
     View small_view;
     LinearLayout ll_loc, ll_task;
-    TextView tv_task_send, tv_task_read,tv_rocker_inside,tv_rocker_outside;
-    MyRockerView rockerViewLeft,rockerViewRight;
+    TextView tv_task_send, tv_task_read, tv_rocker_inside, tv_rocker_outside;
+    MyRockerView rockerViewLeft, rockerViewRight;
     ConstraintLayout cl_rocker;
+    View view_stop;
 
     ViewScale view_scale;
 
-    Disposable disposableRuler, disposableAnim, disposableDevice;
+    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -107,8 +112,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         iv_rocker = $(R.id.iv_rocker);
         tv_rocker_inside = $(R.id.tv_rocker_inside);
         tv_rocker_outside = $(R.id.tv_rocker_outside);
+        iv_stop = $(R.id.iv_stop);
+        view_stop = $(R.id.view_stop);
 
-        setOnClick(tv_rocker_inside,tv_rocker_outside,ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, tv_task_send, tv_task_read, iv_sign, iv_flameout, iv_rocker);
+        setOnClick(tv_rocker_inside, tv_rocker_outside, ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, tv_task_send, tv_task_read, iv_sign, iv_flameout, iv_rocker);
 
         iv_sign.setOnLongClickListener(this);
 
@@ -123,11 +130,41 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mMapView.setPivotY(0);
 
         initRockerView();
+        initIvTop();
 
         setStatusView();
         setModeView();
         setRockerView(0);
         setTaskView(isSufCenter);
+
+
+    }
+
+    boolean isDown = false;
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void initIvTop() {
+        view_stop.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:// 按下
+                    isDown = true;
+                    new Handler().postDelayed(() -> {
+                        if (isDown) {
+                            RxBus2.getInstance().post(new StopShowEvent());
+                        }
+                    }, 1200);
+                    break;
+                case MotionEvent.ACTION_MOVE:// 移动
+
+                    break;
+                case MotionEvent.ACTION_UP:// 抬起
+                case MotionEvent.ACTION_CANCEL:// 移出区域
+                    isDown = false;
+                    iv_stop.setVisibility(View.GONE);
+                    break;
+            }
+            return true;
+        });
     }
 
     //初始化视频SurfaceView控件
@@ -233,20 +270,20 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public void setRockerView(int rockerType){//0初始，1内置，2外置
+    public void setRockerView(int rockerType) {//0初始，1内置，2外置
         if (mode == 0 || mode == 1) {
             cl_rocker.setVisibility(View.VISIBLE);
-            if(rockerType == 1){
+            if (rockerType == 1) {
                 tv_rocker_inside.setVisibility(View.GONE);
                 tv_rocker_outside.setVisibility(View.GONE);
                 rockerViewLeft.setVisibility(View.VISIBLE);
                 rockerViewRight.setVisibility(View.VISIBLE);
-            }else if(rockerType == 2){
+            } else if (rockerType == 2) {
                 tv_rocker_inside.setVisibility(View.GONE);
                 tv_rocker_outside.setVisibility(View.GONE);
                 rockerViewLeft.setVisibility(View.GONE);
                 rockerViewRight.setVisibility(View.GONE);
-            }else{
+            } else {
                 tv_rocker_inside.setVisibility(View.VISIBLE);
                 tv_rocker_outside.setVisibility(View.VISIBLE);
                 rockerViewLeft.setVisibility(View.GONE);
@@ -280,6 +317,15 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     setStatusView();
                 }
             }
+        });
+
+        disposableStop = RxBus2.getInstance().toObservable(StopShowEvent.class, event -> {
+            iv_stop.setAlpha(0f);
+            iv_stop.setVisibility(View.VISIBLE);
+            iv_stop.animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .setListener(null);
         });
 
         //------------------地图 start----------
@@ -494,7 +540,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     int upLevel;
     int turnLevel;
 
-    public void initRockerView(){
+    public void initRockerView() {
         //前后
         rockerViewLeft = findViewById(R.id.rocker_view_left);
         if (rockerViewLeft != null) {
@@ -525,7 +571,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public void sendRocker(){
+    public void sendRocker() {
         LogUtil.e("" + upLevel + "," + turnLevel);
     }
 
