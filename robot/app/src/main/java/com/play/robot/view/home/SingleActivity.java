@@ -29,6 +29,7 @@ import com.play.robot.dialog.TextDialog;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
+import com.play.robot.util.rxbus.rxbusEvent.ChangeEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
@@ -63,7 +64,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     ViewScale view_scale;
 
-    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop;
+    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop, disposableChange;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -328,6 +329,17 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     .setListener(null);
         });
 
+        disposableChange = RxBus2.getInstance().toObservable(ChangeEvent.class, event -> {
+            mDevice.setIp(event.getIp());
+            mDevice.setPort(event.getPort());
+            mDevice.setType(event.getType());
+
+            setStatusView();
+
+            markers.clear();
+            mBaiduHelper.ClearMarkers();
+        });
+
         //------------------地图 start----------
         mBaiduHelper = new BaiduHelper(context, mMapView);
         MyOnMarkerClickListener markerClickListener = new MyOnMarkerClickListener() {
@@ -509,33 +521,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         return false;
     }
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (disposableRuler != null && !disposableRuler.isDisposed())
-            disposableRuler.dispose();
-        if (disposableAnim != null && !disposableAnim.isDisposed())
-            disposableAnim.dispose();
-        if (disposableDevice != null && !disposableDevice.isDisposed())
-            disposableDevice.dispose();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
-        mMapView.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
-        mMapView.onPause();
-    }
-
     //----------------------------------- 遥控 start-----------------
     int upLevel;
     int turnLevel;
@@ -576,6 +561,36 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     }
 
     //----------------------------------- 遥控 end-----------------
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mMapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
+        mMapView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposableRuler != null && !disposableRuler.isDisposed())
+            disposableRuler.dispose();
+        if (disposableAnim != null && !disposableAnim.isDisposed())
+            disposableAnim.dispose();
+        if (disposableDevice != null && !disposableDevice.isDisposed())
+            disposableDevice.dispose();
+        if (disposableStop != null && !disposableStop.isDisposed())
+            disposableStop.dispose();
+        if (disposableChange != null && !disposableChange.isDisposed())
+            disposableChange.dispose();
+        mMapView.onDestroy();
+    }
 
     /*
     移动尺标

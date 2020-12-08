@@ -15,9 +15,9 @@ import java.util.List;
 
 import androidx.fragment.app.Fragment;
 
-public class SettingActivity extends BaseActivity implements View.OnClickListener {
+public class SettingManyActivity extends BaseActivity implements View.OnClickListener {
 
-    ImageView iv_more, iv_route, iv_camera,iv_battery,iv_signal,iv_close;
+    ImageView iv_more, iv_route, iv_camera,iv_battery,iv_signal,iv_shape,iv_close;
 
     CustomViewPager mViewPager;
     TextView tv_title;
@@ -26,7 +26,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_setting;
+        return R.layout.activity_setting_many;
     }
 
     @Override
@@ -39,14 +39,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         iv_camera = $(R.id.iv_camera);
         iv_battery = $(R.id.iv_battery);
         iv_signal = $(R.id.iv_signal);
+        iv_shape = $(R.id.iv_shape);
 
-        setOnClick(iv_close, iv_more, iv_route, iv_camera, iv_battery, iv_signal);
+        setOnClick(iv_close, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_shape);
 
 
         List<Fragment> mFragments = new ArrayList<>();
         mFragments.add(CameraFragment.newInstance());
         mFragments.add(RouteFragment.newInstance());
-        mFragments.add(SignalFragment.newInstance());
+        mFragments.add(ShapeFragment.newInstance());
+        mFragments.add(SignalManyFragment.newInstance());
         mFragments.add(BatteryFragment.newInstance());
         mFragments.add(MoreFragment.newInstance());
 
@@ -77,19 +79,22 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.iv_camera:
-                setSelectView(Constant.SETTING_CAMERA);
+                setSelectView(Constant.SETTING_MANY_CAMERA);
                 break;
             case R.id.iv_route:
-                setSelectView(Constant.SETTING_ROUTE);
+                setSelectView(Constant.SETTING_MANY_ROUTE);
+                break;
+            case R.id.iv_shape:
+                setSelectView(Constant.SETTING_MANY_SHAPE);
                 break;
             case R.id.iv_signal:
-                setSelectView(Constant.SETTING_SIGNAL);
+                setSelectView(Constant.SETTING_MANY_SIGNAL);
                 break;
             case R.id.iv_battery:
-                setSelectView(Constant.SETTING_BATTERY);
+                setSelectView(Constant.SETTING_MANY_BATTERY);
                 break;
             case R.id.iv_more:
-                setSelectView(Constant.SETTING_MORE);
+                setSelectView(Constant.SETTING_MANY_MORE);
                 break;
         }
     }
@@ -98,23 +103,27 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mViewPager.setCurrentItem(pos);
         clearView();
         switch (pos){
-            case Constant.SETTING_CAMERA:
+            case Constant.SETTING_MANY_CAMERA:
                 tv_title.setText("摄像头设置");
                 iv_camera.setImageResource(R.mipmap.setting_camera);
                 break;
-            case Constant.SETTING_ROUTE:
+            case Constant.SETTING_MANY_ROUTE:
                 tv_title.setText("轨迹记录");
                 iv_route.setImageResource(R.mipmap.setting_route);
                 break;
-            case Constant.SETTING_SIGNAL:
+            case Constant.SETTING_MANY_SHAPE:
+                tv_title.setText("无人机编队");
+                iv_shape.setImageResource(R.mipmap.setting_shape);
+                break;
+            case Constant.SETTING_MANY_SIGNAL:
                 tv_title.setText("通信状态");
                 iv_signal.setImageResource(R.mipmap.setting_signal);
                 break;
-            case Constant.SETTING_BATTERY:
+            case Constant.SETTING_MANY_BATTERY:
                 tv_title.setText("电量");
                 iv_battery.setImageResource(R.mipmap.setting_battery);
                 break;
-            case Constant.SETTING_MORE:
+            case Constant.SETTING_MANY_MORE:
                 tv_title.setText("通用设置");
                 iv_more.setImageResource(R.mipmap.setting_more);
                 break;
@@ -124,6 +133,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void clearView(){
         iv_camera.setImageResource(R.mipmap.setting_camera_un);
         iv_route.setImageResource(R.mipmap.setting_route_un);
+        iv_shape.setImageResource(R.mipmap.setting_shape_un);
         iv_signal.setImageResource(R.mipmap.setting_signal_un);
         iv_battery.setImageResource(R.mipmap.setting_battery_un);
         iv_more.setImageResource(R.mipmap.setting_more_un);

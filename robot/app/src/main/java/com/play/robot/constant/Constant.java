@@ -29,9 +29,16 @@ public class Constant {
     //
     public static final int SETTING_CAMERA = 0;
     public static final int SETTING_ROUTE = 1;
-    public static final int SETTING_SHAPE = 2;
-    public static final int SETTING_SIGNAL = 3;
-    public static final int SETTING_BATTERY = 4;
-    public static final int SETTING_MORE = 5;
+    public static final int SETTING_SIGNAL = 2;
+    public static final int SETTING_BATTERY = 3;
+    public static final int SETTING_MORE = 4;
+
+    //
+    public static final int SETTING_MANY_CAMERA = 0;
+    public static final int SETTING_MANY_ROUTE = 1;
+    public static final int SETTING_MANY_SHAPE = 2;
+    public static final int SETTING_MANY_SIGNAL = 3;
+    public static final int SETTING_MANY_BATTERY = 4;
+    public static final int SETTING_MANY_MORE = 5;
 
 }

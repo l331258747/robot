@@ -57,6 +57,10 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".view.setting.SettingManyActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".view.login.ModelActivity"
             android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"

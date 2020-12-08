@@ -20,7 +20,7 @@ import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
-import com.play.robot.view.setting.SettingActivity;
+import com.play.robot.view.setting.SettingManyActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvShape;
 import com.play.robot.widget.IvSignal;
@@ -142,7 +142,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(context, SettingActivity.class);
+        Intent intent = new Intent(context, SettingManyActivity.class);
         switch (v.getId()) {
             case R.id.tv_status:
 
@@ -166,27 +166,27 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
             case R.id.iv_more:
-                intent.putExtra("position", Constant.SETTING_MORE);
+                intent.putExtra("position", Constant.SETTING_MANY_MORE);
                 startActivity(intent);
                 break;
             case R.id.iv_route:
-                intent.putExtra("position", Constant.SETTING_ROUTE);
+                intent.putExtra("position", Constant.SETTING_MANY_ROUTE);
                 startActivity(intent);
                 break;
             case R.id.iv_camera:
-                intent.putExtra("position", Constant.SETTING_CAMERA);
+                intent.putExtra("position", Constant.SETTING_MANY_CAMERA);
                 startActivity(intent);
                 break;
             case R.id.iv_battery:
-                intent.putExtra("position", Constant.SETTING_BATTERY);
+                intent.putExtra("position", Constant.SETTING_MANY_BATTERY);
                 startActivity(intent);
                 break;
             case R.id.iv_signal:
-                intent.putExtra("position", Constant.SETTING_SIGNAL);
+                intent.putExtra("position", Constant.SETTING_MANY_SIGNAL);
                 startActivity(intent);
                 break;
             case R.id.iv_shape:
-                intent.putExtra("position", Constant.SETTING_SHAPE);
+                intent.putExtra("position", Constant.SETTING_MANY_SHAPE);
                 startActivity(intent);
                 break;
 
