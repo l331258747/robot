@@ -14,7 +14,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class ContentDeviceView extends LinearLayout {
+public class ContentDeviceView extends LinearLayout implements View.OnClickListener, View.OnLongClickListener {
 
     ImageView iv_status_0, iv_status_1, iv_status_2, iv_status_3, iv_status_4;
 
@@ -43,6 +43,18 @@ public class ContentDeviceView extends LinearLayout {
         iv_status_2.setVisibility(GONE);
         iv_status_3.setVisibility(GONE);
         iv_status_4.setVisibility(GONE);
+
+        iv_status_0.setOnClickListener(this);
+        iv_status_1.setOnClickListener(this);
+        iv_status_2.setOnClickListener(this);
+        iv_status_3.setOnClickListener(this);
+        iv_status_4.setOnClickListener(this);
+
+        iv_status_0.setOnLongClickListener(this);
+        iv_status_1.setOnLongClickListener(this);
+        iv_status_2.setOnLongClickListener(this);
+        iv_status_3.setOnLongClickListener(this);
+        iv_status_4.setOnLongClickListener(this);
     }
 
     public void setDevice(List<DeviceBean> list) {
@@ -65,6 +77,61 @@ public class ContentDeviceView extends LinearLayout {
                 iv_status_4.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_device_in : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
             }
         }
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_status_0:
+                mOnItemClickListener.onClick(0);
+                break;
+            case R.id.iv_status_1:
+                mOnItemClickListener.onClick(1);
+                break;
+            case R.id.iv_status_2:
+                mOnItemClickListener.onClick(2);
+                break;
+            case R.id.iv_status_3:
+                mOnItemClickListener.onClick(3);
+                break;
+            case R.id.iv_status_4:
+                mOnItemClickListener.onClick(4);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_status_0:
+                mOnItemClickListener.onLongClick(0);
+                break;
+            case R.id.iv_status_1:
+                mOnItemClickListener.onLongClick(1);
+                break;
+            case R.id.iv_status_2:
+                mOnItemClickListener.onLongClick(2);
+                break;
+            case R.id.iv_status_3:
+                mOnItemClickListener.onLongClick(3);
+                break;
+            case R.id.iv_status_4:
+                mOnItemClickListener.onLongClick(4);
+                break;
+
+        }
+        return false;
+    }
+
+
+    OnItemClickListener mOnItemClickListener;
+
+    public interface OnItemClickListener {
+        void onClick(int position);
+        void onLongClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
     }
 }

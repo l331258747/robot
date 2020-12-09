@@ -22,6 +22,8 @@ import com.play.robot.bean.DeviceBean;
 import com.play.robot.bean.MarkerBean;
 import com.play.robot.bean.SettingInfo;
 import com.play.robot.constant.Constant;
+import com.play.robot.dialog.DeviceInfoDialog;
+import com.play.robot.dialog.InstructDialog;
 import com.play.robot.dialog.MarkerDialog;
 import com.play.robot.dialog.MarkerModifyDialog;
 import com.play.robot.dialog.TextDialog;
@@ -132,11 +134,28 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
 
         initIvStop();
+        initDeviceView();
 
         setStatusView();
-
         setTaskView(isSufCenter);
 
+    }
+
+    private void initDeviceView() {
+        view_device.setOnItemClickListener(new ContentDeviceView.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                String str = "V:10m/s\nS:100m\nD:50m\n精度:12.325415\n维度:112.324567";
+                new DeviceInfoDialog(context).setTitle(mDevices.get(position).getIpPort()).setContent(str).show();
+            }
+
+            @Override
+            public void onLongClick(int position) {
+                new InstructDialog(context).setTitle(mDevices.get(position).getIpPort()).setSubmitListener(content -> {
+                    showShortToast("指令：" + content);
+                }).show();
+            }
+        });
     }
 
     boolean isDown = false;
