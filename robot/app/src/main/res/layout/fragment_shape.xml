@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.Guideline
@@ -17,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.25" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/line_p50"
@@ -35,77 +36,185 @@
 
 
     <TextView
-        android:id="@+id/tv_sjx"
+        android:id="@+id/tv_bdms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="三角形编队"
-        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="编队模式"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.play.robot.widget.SwitchButton
-        android:id="@+id/switch_sjx"
-        android:layout_width="@dimen/dp_56"
-        android:layout_height="@dimen/dp_30"
-        app:layout_constraintTop_toTopOf="@+id/tv_sjx"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_sjx"
-        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
+    <TextView
+        android:id="@+id/btn_bdms"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_eeeeeed_r40"
+        android:drawableRight="@mipmap/ic_down"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_3"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_bdms"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"
+        app:layout_constraintTop_toTopOf="@+id/tv_bdms"
+        tools:text="11111" />
 
     <TextView
-        android:id="@+id/tv_zx"
+        android:id="@+id/tv_zkcxz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_40"
-        android:text="纵向编队"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="主控车选择"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/line_p5"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sjx" />
-
-    <com.play.robot.widget.SwitchButton
-        android:id="@+id/switch_zx"
-        android:layout_width="@dimen/dp_56"
-        android:layout_height="@dimen/dp_30"
-        app:layout_constraintTop_toTopOf="@+id/tv_zx"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_zx"
-        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
-
-    <TextView
-        android:id="@+id/tv_hx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="横向编队"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/dp_40"
         app:layout_constraintStart_toStartOf="@+id/line_p50"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.play.robot.widget.SwitchButton
-        android:id="@+id/switch_hx"
-        android:layout_width="@dimen/dp_56"
-        android:layout_height="@dimen/dp_30"
-        app:layout_constraintTop_toTopOf="@+id/tv_hx"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_hx"
-        app:layout_constraintStart_toStartOf="@+id/line_p70"/>
+    <TextView
+        android:id="@+id/btn_zkcxz"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_eeeeeed_r40"
+        android:drawableRight="@mipmap/ic_down"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_3"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_zkcxz"
+        app:layout_constraintStart_toStartOf="@+id/line_p70"
+        app:layout_constraintTop_toTopOf="@+id/tv_zkcxz"
+        tools:text="222" />
 
     <TextView
-        android:id="@+id/tv_fslj"
+        android:id="@+id/tv_gsgxsd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="编队控制"
+        android:layout_marginTop="@dimen/dp_30"
+        android:text="跟随关系设定"
         android:textColor="@color/white"
-        android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_p50"
-        app:layout_constraintTop_toBottomOf="@+id/tv_hx" />
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
+        app:layout_constraintTop_toBottomOf="@+id/tv_bdms" />
 
-    <ImageView
-        android:id="@+id/iv_fslj"
-        android:layout_width="@dimen/dp_56"
+    <TextView
+        android:id="@+id/tv_1"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_c0bbbb_r40"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingBottom="@dimen/dp_3"
+        android:text="被跟随车"
+        android:textColor="@color/color_1e1e1e"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_gsgxsd"
+        app:layout_constraintEnd_toEndOf="@+id/btn_bgsc"
+        app:layout_constraintStart_toStartOf="@+id/btn_bgsc"
+        app:layout_constraintTop_toTopOf="@+id/tv_gsgxsd" />
+
+    <TextView
+        android:id="@+id/btn_bgsc"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/shape_eeeeeed_r40"
+        android:drawableRight="@mipmap/ic_down"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_3"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintStart_toStartOf="@+id/line_p30"
+        app:layout_constraintTop_toBottomOf="@+id/tv_1"
+        tools:text="33" />
+
+    <TextView
+        android:id="@+id/tv_2"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_c0bbbb_r40"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingBottom="@dimen/dp_3"
+        android:text="跟随车"
+        android:textColor="@color/color_1e1e1e"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_gsgxsd"
+        app:layout_constraintEnd_toEndOf="@+id/btn_gsc"
+        app:layout_constraintStart_toStartOf="@+id/btn_gsc"
+        app:layout_constraintTop_toTopOf="@+id/tv_gsgxsd" />
+
+    <TextView
+        android:id="@+id/btn_gsc"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/shape_eeeeeed_r40"
+        android:drawableRight="@mipmap/ic_down"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_3"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
+        app:layout_constraintTop_toBottomOf="@+id/tv_1"
+        tools:text="44" />
+
+    <TextView
+        android:id="@+id/tv_add"
+        android:layout_width="@dimen/dp_80"
         android:layout_height="@dimen/dp_30"
-        android:src="@mipmap/setting_more_un"
-        android:background="@drawable/bg_click"
-        app:layout_constraintTop_toTopOf="@+id/tv_fslj"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_fslj"
-        app:layout_constraintStart_toStartOf="@+id/line_p70"/>
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/shape_c0bbbb_r5"
+        android:gravity="center"
+        android:text="添加"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintStart_toStartOf="@id/line_p70"
+        app:layout_constraintTop_toTopOf="@+id/tv_gsgxsd" />
+
+
+    <TextView
+        android:id="@+id/tv_gsgxlb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_50"
+        android:text="跟随关系列表"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/line_p5"
+        app:layout_constraintTop_toBottomOf="@+id/tv_gsgxsd" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/line_p70"
+        app:layout_constraintStart_toStartOf="@id/line_p30"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/dp_10"
+        android:background="@color/white"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="@id/tv_gsgxlb"/>
+
+
+    <TextView
+        android:id="@+id/tv_send"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/shape_c0bbbb_r5"
+        android:gravity="center"
+        android:text="一键发送"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintStart_toStartOf="@id/line_p70"
+        app:layout_constraintTop_toTopOf="@+id/tv_gsgxlb" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

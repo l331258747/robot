@@ -19,6 +19,7 @@ import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
 import com.play.robot.bean.MarkerBean;
+import com.play.robot.bean.SettingInfo;
 import com.play.robot.constant.Constant;
 import com.play.robot.dialog.DeviceInfoDialog;
 import com.play.robot.dialog.DeviceModeDialog;
@@ -299,6 +300,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     public void initData() {
 
         markers = new ArrayList<>();
+        SettingInfo.initData();
 
         //游标
         disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
@@ -335,6 +337,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             mDevice.setType(event.getType());
 
             setStatusView();
+            SettingInfo.initData();
 
             markers.clear();
             mBaiduHelper.ClearMarkers();

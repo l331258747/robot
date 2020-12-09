@@ -13,6 +13,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
+import com.play.robot.bean.SettingInfo;
 import com.play.robot.constant.Constant;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
@@ -113,6 +114,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initData() {
+
+        SettingInfo.initData();
 
         VoteDisposable = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
 

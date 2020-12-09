@@ -9,6 +9,7 @@ import com.play.robot.MyApplication;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.MySelfInfo;
+import com.play.robot.view.home.ManyActivity;
 import com.play.robot.view.home.SingleActivity;
 import com.play.robot.view.home.help.LocationUtil;
 
@@ -114,7 +115,22 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                     showShortToast("请先登录");
                     return;
                 }
+                if (MyApplication.getInstance().getConnectionNum() < 1) {
+                    showShortToast("请选择设备");
+                    return;
+                }
+                if (MyApplication.getInstance().getSingleDevice() == null) {
+                    showShortToast("请重新选择设备");
+                    return;
+                }
 
+                intent = new Intent(context, ManyActivity.class);
+                intent.putExtra("ip", MyApplication.getInstance().getSingleDevice().getIp());
+                intent.putExtra("port", MyApplication.getInstance().getSingleDevice().getPort());
+                intent.putExtra("type", MyApplication.getInstance().getSingleDevice().getType());
+                intent.putExtra("meLongitude", longitude);
+                intent.putExtra("meLatitude", latitude);
+                startActivity(intent);
 
                 break;
             case R.id.tv_device:
