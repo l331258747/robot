@@ -132,7 +132,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mMapView.setPivotY(0);
 
         initRockerView();
-        initIvTop();
+        initIvStop();
 
         setStatusView();
         setModeView();
@@ -144,8 +144,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     boolean isDown = false;
 
+    //急停按钮
     @SuppressLint("ClickableViewAccessibility")
-    public void initIvTop() {
+    public void initIvStop() {
         view_stop.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:// 按下
@@ -272,6 +273,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    //内外置摇杆
     public void setRockerView(int rockerType) {//0初始，1内置，2外置
         if (mode == 0 || mode == 1) {
             cl_rocker.setVisibility(View.VISIBLE);

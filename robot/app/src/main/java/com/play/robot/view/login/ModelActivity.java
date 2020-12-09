@@ -125,9 +125,6 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                 }
 
                 intent = new Intent(context, ManyActivity.class);
-                intent.putExtra("ip", MyApplication.getInstance().getSingleDevice().getIp());
-                intent.putExtra("port", MyApplication.getInstance().getSingleDevice().getPort());
-                intent.putExtra("type", MyApplication.getInstance().getSingleDevice().getType());
                 intent.putExtra("meLongitude", longitude);
                 intent.putExtra("meLatitude", latitude);
                 startActivity(intent);
