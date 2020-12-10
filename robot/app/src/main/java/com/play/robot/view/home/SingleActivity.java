@@ -27,6 +27,7 @@ import com.play.robot.dialog.InstructDialog;
 import com.play.robot.dialog.MarkerDialog;
 import com.play.robot.dialog.MarkerModifyDialog;
 import com.play.robot.dialog.TextDialog;
+import com.play.robot.util.AppUtils;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
@@ -61,7 +62,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     View small_view;
     LinearLayout ll_loc, ll_task;
     TextView tv_task_send, tv_task_read, tv_rocker_inside, tv_rocker_outside;
-    MyRockerView rockerViewLeft, rockerViewRight,rockerViewRound;
+    MyRockerView rockerViewLeft, rockerViewRight, rockerViewRound1,rockerViewRound2;
     ConstraintLayout cl_rocker;
     View view_stop;
 
@@ -314,45 +315,35 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     public void setRockerView(int rockerType) {//0初始，1内置，2外置
         if (mode == 0) {
             cl_rocker.setVisibility(View.VISIBLE);
+            tv_rocker_inside.setVisibility(View.GONE);
+            tv_rocker_outside.setVisibility(View.GONE);
+            rockerViewLeft.setVisibility(View.GONE);
+            rockerViewRight.setVisibility(View.GONE);
+            rockerViewRound1.setVisibility(View.GONE);
+            rockerViewRound2.setVisibility(View.GONE);
             if (rockerType == 1) {
-                tv_rocker_inside.setVisibility(View.GONE);
-                tv_rocker_outside.setVisibility(View.GONE);
                 rockerViewLeft.setVisibility(View.VISIBLE);
                 rockerViewRight.setVisibility(View.VISIBLE);
-                rockerViewRound.setVisibility(View.GONE);
             } else if (rockerType == 2) {
-                tv_rocker_inside.setVisibility(View.GONE);
-                tv_rocker_outside.setVisibility(View.GONE);
-                rockerViewLeft.setVisibility(View.GONE);
-                rockerViewRight.setVisibility(View.GONE);
-                rockerViewRound.setVisibility(View.GONE);
             } else {
                 tv_rocker_inside.setVisibility(View.VISIBLE);
                 tv_rocker_outside.setVisibility(View.VISIBLE);
-                rockerViewLeft.setVisibility(View.GONE);
-                rockerViewRight.setVisibility(View.GONE);
-                rockerViewRound.setVisibility(View.GONE);
             }
         } else if(mode == 1){
             cl_rocker.setVisibility(View.VISIBLE);
+            tv_rocker_inside.setVisibility(View.GONE);
+            tv_rocker_outside.setVisibility(View.GONE);
+            rockerViewLeft.setVisibility(View.GONE);
+            rockerViewRight.setVisibility(View.GONE);
+            rockerViewRound1.setVisibility(View.GONE);
+            rockerViewRound2.setVisibility(View.GONE);
             if (rockerType == 1) {
-                tv_rocker_inside.setVisibility(View.GONE);
-                tv_rocker_outside.setVisibility(View.GONE);
-                rockerViewLeft.setVisibility(View.GONE);
-                rockerViewRight.setVisibility(View.GONE);
-                rockerViewRound.setVisibility(View.VISIBLE);
+                rockerViewRound1.setVisibility(View.VISIBLE);
+                rockerViewRound2.setVisibility(View.VISIBLE);
             } else if (rockerType == 2) {
-                tv_rocker_inside.setVisibility(View.GONE);
-                tv_rocker_outside.setVisibility(View.GONE);
-                rockerViewLeft.setVisibility(View.GONE);
-                rockerViewRight.setVisibility(View.GONE);
-                rockerViewRound.setVisibility(View.GONE);
             } else {
                 tv_rocker_inside.setVisibility(View.VISIBLE);
                 tv_rocker_outside.setVisibility(View.VISIBLE);
-                rockerViewLeft.setVisibility(View.GONE);
-                rockerViewRight.setVisibility(View.GONE);
-                rockerViewRound.setVisibility(View.GONE);
             }
         }else {
             cl_rocker.setVisibility(View.GONE);
@@ -590,7 +581,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
                     setTaskView(isSufCenter);
 
-
                 }).show();
                 break;
         }
@@ -643,28 +633,48 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             });
         }
 
-        rockerViewRound = findViewById(R.id.rocker_view_round);
-        if (rockerViewRound != null) {
-            rockerViewRound.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_MOVE);
-            rockerViewRound.setOnAngleChangeListener(new MyRockerView.OnAngleChangeListener() {
+        rockerViewRound1 = findViewById(R.id.rocker_view_round1);
+        if (rockerViewRound1 != null) {
+            rockerViewRound1.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_STATE_CHANGE);
+            rockerViewRound1.setOnShakeListener(MyRockerView.DirectionMode.DIRECTION_2_VERTICAL, new MyRockerShakeListener() {
                 @Override
-                public void onStart() {
+                public void direction(MyRockerView.Direction direction) {
+                    super.direction(direction);
 
-                }
-
-                @Override
-                public void angle(double angle) {
-                    sendRockerAngle(angle);
-                }
-
-                @Override
-                public void onFinish() {
-
+                    if(direction == MyRockerView.Direction.DIRECTION_UP){
+                        view_center.setY(view_center.getTop() - 10);
+                    }else if(direction == MyRockerView.Direction.DIRECTION_DOWN){
+                        view_center.setY(view_center.getTop() + 10);
+                    }
                 }
             });
         }
+
+        rockerViewRound2 = findViewById(R.id.rocker_view_round2);
+        if (rockerViewRound2 != null) {
+            rockerViewRound2.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_STATE_CHANGE);
+            rockerViewRound2.setOnShakeListener(MyRockerView.DirectionMode.DIRECTION_2_HORIZONTAL, new MyRockerShakeListener() {
+                @Override
+                public void direction(MyRockerView.Direction direction) {
+                    super.direction(direction);
+
+                    if(direction == MyRockerView.Direction.DIRECTION_LEFT){
+                        view_center.setX(view_center.getLeft() - 10);
+                    }else if(direction == MyRockerView.Direction.DIRECTION_RIGHT){
+                        view_center.setX(view_center.getLeft() + 10);
+                    }
+                }
+            });
+        }
+
+        view_center = findViewById(R.id.view_center);
     }
 
+    int w = AppUtils.getDisplayWidth();
+    int h = AppUtils.getDisplayHeight();
+    View view_center;
+    int centerW = 0;
+    int centerY = 0;
     //----------------------------------- 遥控 end-----------------
 
     @Override

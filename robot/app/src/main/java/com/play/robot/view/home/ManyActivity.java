@@ -648,7 +648,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         mMapView.onDestroy();
 
         MyApplication.getInstance().deviceClear();
-        
+
         setStop();
 
         super.onDestroy();
