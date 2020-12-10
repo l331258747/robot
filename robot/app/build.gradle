@@ -65,6 +65,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
+    implementation 'com.github.NodeMedia:NodeMediaClient-Android:2.9.1'
+
     implementation files('libs/BaiduLBS_Android.jar')
 
 }

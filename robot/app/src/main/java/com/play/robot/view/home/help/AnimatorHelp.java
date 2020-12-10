@@ -3,7 +3,6 @@ package com.play.robot.view.home.help;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -12,13 +11,15 @@ import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 
+import cn.nodemedia.NodePlayerView;
+
 public class AnimatorHelp {
 
-    SurfaceView mSurfaceView;
+    NodePlayerView mSurfaceView;
     MapView mMapView;
     View small_view;
 
-    public AnimatorHelp(SurfaceView surfaceView, MapView mMapView, View small_view,AnimatorEndListener mAnimatorEndListener) {
+    public AnimatorHelp(NodePlayerView surfaceView, MapView mMapView, View small_view, AnimatorEndListener mAnimatorEndListener) {
         this.mSurfaceView = surfaceView;
         this.mMapView = mMapView;
         this.small_view = small_view;

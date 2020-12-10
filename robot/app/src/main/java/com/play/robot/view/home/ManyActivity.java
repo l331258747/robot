@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,6 +47,8 @@ import com.play.robot.widget.scale.ViewScale;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.nodemedia.NodePlayer;
+import cn.nodemedia.NodePlayerView;
 import io.reactivex.disposables.Disposable;
 
 public class ManyActivity extends BaseActivity implements View.OnClickListener {
@@ -74,7 +75,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     BaiduHelper mBaiduHelper;
     AnimatorHelp mAnimatorHelp;
 
-    SurfaceView mSurfaceView;
+    NodePlayerView mSurfaceView;
 
     List<DeviceBean> mDevices = new ArrayList<>();
 
@@ -187,9 +188,26 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    private NodePlayer nodePlayer;
+    //初始化视频SurfaceView控件
     private void initSurfaceView() {
         mSurfaceView = $(R.id.surfaceView);
         mSurfaceView.setOnClickListener(this);
+
+//        //设置渲染器类型
+//        mSurfaceView.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
+//        //设置视频画面缩放模式
+//        mSurfaceView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
+//
+//        nodePlayer =new NodePlayer(this);
+//        //设置播放视图
+//        nodePlayer.setPlayerView(mSurfaceView);
+//        //设置RTSP流使用的传输协议,支持的模式有:
+//        nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
+//        nodePlayer.setInputUrl(mDevice.getRtsp());
+//        //设置视频是否开启
+//        nodePlayer.setVideoEnable(true);
+//        nodePlayer.start();
     }
 
     //初始化地图控件

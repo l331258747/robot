@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import cn.nodemedia.NodePlayer;
+import cn.nodemedia.NodePlayerView;
 import io.reactivex.disposables.Disposable;
 
 public class SingleActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
@@ -72,7 +73,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     BaiduHelper mBaiduHelper;
     AnimatorHelp mAnimatorHelp;
 
-    SurfaceView mSurfaceView;
+    NodePlayerView mSurfaceView;
 
     DeviceBean mDevice;
 
@@ -93,7 +94,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mDevice.setIp(intent.getStringExtra("ip"));
         mDevice.setPort(intent.getIntExtra("port", 0));
         mDevice.setType(intent.getIntExtra("type", 0));
-        mDevice.setRtsp(intent.getStringExtra("trsp"));
+        mDevice.setRtsp(intent.getStringExtra("rtsp"));
         meLongitude = intent.getDoubleExtra("meLongitude", 0);
         meLatitude = intent.getDoubleExtra("meLatitude", 0);
 
@@ -140,6 +141,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         setRockerView(0);
         setTaskView(isSufCenter);
 
+        setStart(mDevice.getRtsp());
 
     }
 
@@ -171,10 +173,45 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
+    private NodePlayer nodePlayer;
     //初始化视频SurfaceView控件
     private void initSurfaceView() {
         mSurfaceView = $(R.id.surfaceView);
         mSurfaceView.setOnClickListener(this);
+
+        //设置渲染器类型
+        mSurfaceView.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
+        //设置视频画面缩放模式
+        mSurfaceView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
+
+        nodePlayer =new NodePlayer(this);
+        //设置播放视图
+        nodePlayer.setPlayerView(mSurfaceView);
+        //设置RTSP流使用的传输协议,支持的模式有:
+        nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
+
+    }
+
+    public void setStart(String rtsp){
+        nodePlayer.setInputUrl(rtsp);
+        //设置视频是否开启
+        nodePlayer.setVideoEnable(true);
+        nodePlayer.start();
+
+    }
+
+    public void setPause(){
+        if(nodePlayer != null && nodePlayer.isPlaying()){
+            nodePlayer.setVideoEnable(false);
+            nodePlayer.pause();
+        }
+    }
+
+    public void setStop(){
+        if(nodePlayer != null && nodePlayer.isPlaying()){
+            nodePlayer.setVideoEnable(false);
+            nodePlayer.stop();
+        }
     }
 
     //初始化地图控件
@@ -321,6 +358,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             if (event.getIpPort().equals(mDevice.getIpPort())) {
                 if (event.getType() == -1) {
                     setStatusView();
+
+                    setStop();
                 }
             }
         });
@@ -345,6 +384,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
             markers.clear();
             mBaiduHelper.ClearMarkers();
+
+            setStart(mDevice.getRtsp());
         });
 
         //------------------地图 start----------
@@ -574,6 +615,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
+        setStart(mDevice.getRtsp());
     }
 
     @Override
@@ -581,11 +623,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
+        setPause();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (disposableRuler != null && !disposableRuler.isDisposed())
             disposableRuler.dispose();
         if (disposableAnim != null && !disposableAnim.isDisposed())
@@ -597,6 +639,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         if (disposableChange != null && !disposableChange.isDisposed())
             disposableChange.dispose();
         mMapView.onDestroy();
+
+        setStop();
+
+        super.onDestroy();
     }
 
     /*

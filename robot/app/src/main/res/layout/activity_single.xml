@@ -50,7 +50,20 @@
 
     <!--    视屏-->
 
-    <SurfaceView
+<!--    <SurfaceView-->
+<!--        android:id="@+id/surfaceView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="@dimen/dp_10"-->
+<!--        android:layout_marginTop="@dimen/dp_10"-->
+<!--        android:layout_marginEnd="@dimen/dp_160"-->
+<!--        android:layout_marginBottom="@dimen/dp_10"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/view_left"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/view_scale" />-->
+
+    <cn.nodemedia.NodePlayerView
         android:id="@+id/surfaceView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -61,7 +74,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view_left"
-        app:layout_constraintTop_toBottomOf="@+id/view_scale" />
+        app:layout_constraintTop_toBottomOf="@+id/view_scale"/>
 
     <LinearLayout
         android:id="@+id/ll_loc"
