@@ -169,6 +169,10 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }
             }
+
+            if(mDeviceZkc != null && TextUtils.equals(event.getIpPort(),mDeviceZkc.getIpPort())){
+                setStop();
+            }
         });
 
         disposableStop = RxBus2.getInstance().toObservable(StopShowEvent.class, event -> {
@@ -237,6 +241,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     private NodePlayer nodePlayer;
     //初始化视频SurfaceView控件
+    @SuppressLint("ClickableViewAccessibility")
     private void initSurfaceView() {
         mSurfaceView = $(R.id.surfaceView);
         mSurfaceView.setOnClickListener(this);
@@ -251,6 +256,98 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         nodePlayer.setPlayerView(mSurfaceView);
         //设置RTSP流使用的传输协议,支持的模式有:
         nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
+
+        mSurfaceView.setOnTouchListener((v, event) -> {
+            //继承了Activity的onTouchEvent方法，直接监听点击事件
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //当手指按下的时候
+                x1 = event.getX();
+                y1 = event.getY();
+            }
+            if(event.getAction() == MotionEvent.ACTION_UP) {
+                //当手指离开的时候
+                x2 = event.getX();
+                y2 = event.getY();
+                if(y1 - y2 > 100) {
+                    LogUtil.e( "向上滑" );
+                    if(currentPos < mDevices.size() - 1){
+                        currentPos = currentPos + 1;
+                        setStatusView();
+
+                        mAnimatorHelp.moveUp();
+                    }
+                } else if(y2 - y1 > 100) {
+                    LogUtil.e("向下滑");
+                    if(currentPos > 0){
+                        currentPos = currentPos - 1;
+                        setStatusView();
+
+                        mAnimatorHelp.moveDown();
+                    }
+                } else if(x1 - x2 > 100) {
+                    LogUtil.e("向左滑");
+                    if(leftCentreRight == 0){
+                        //左边
+                        leftCentreRight = 1;
+
+                        mAnimatorHelp.moveLeft();
+                    }else if(leftCentreRight == 1){
+                        //中间
+                        leftCentreRight = 2;
+
+                        mAnimatorHelp.moveLeft();
+                    }
+
+                } else if(x2 - x1 > 100) {
+                    LogUtil.e( "向右滑");
+                    if(leftCentreRight == 1){
+                        //左边
+                        leftCentreRight = 0;
+
+                        mAnimatorHelp.moveRight();
+                    }else if(leftCentreRight == 2){
+                        //中间
+                        leftCentreRight = 1;
+
+                        mAnimatorHelp.moveRight();
+                    }
+
+                }
+            }
+            return true;
+        });
+    }
+
+
+
+    int leftCentreRight = 1;
+
+    //手指按下的点为(x1, y1)手指离开屏幕的点为(x2, y2)
+    float x1 = 0;
+    float x2 = 0;
+    float y1 = 0;
+    float y2 = 0;
+
+    public void setStart(String rtsp){
+        nodePlayer.setInputUrl(rtsp);
+        //设置视频是否开启
+        nodePlayer.setVideoEnable(true);
+        nodePlayer.start();
+
+    }
+
+    public void setPause(){
+        if(nodePlayer != null && nodePlayer.isPlaying()){
+            nodePlayer.setVideoEnable(false);
+            nodePlayer.pause();
+        }
+    }
+
+    public void setStop(){
+        if(nodePlayer != null && nodePlayer.isPlaying()){
+            nodePlayer.setVideoEnable(false);
+            nodePlayer.stop();
+        }
     }
 
     //初始化地图控件
@@ -334,7 +431,6 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         view_device.setDevice(mDevices,currentPos);
     }
 
-
     public void getDeviceZkc(){
         for (int i=0;i<mDevices.size();i++){
             if(mDevices.get(i).getIpPort().equals(SettingInfo.shapeZkc)){
@@ -347,6 +443,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     public void setZkcChange(){
         setStatusView();
+        setStart(mDeviceZkc.getRtsp());
     }
 
     boolean isInitData = false;
@@ -363,6 +460,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
         setStatusView();
         setTaskView(isSufCenter);
+
+        if(mDeviceZkc != null)
+        setStart(mDeviceZkc.getRtsp());
 
         markers = new ArrayList<>();
 
@@ -521,6 +621,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
+        if(mDeviceZkc != null)
+            setStart(mDeviceZkc.getRtsp());
     }
 
     @Override
@@ -528,6 +630,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
+        setPause();
     }
 
     @Override
@@ -543,6 +646,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         if (disposableZkc != null && !disposableZkc.isDisposed())
             disposableZkc.dispose();
         mMapView.onDestroy();
+
+        setStop();
+
         super.onDestroy();
     }
 

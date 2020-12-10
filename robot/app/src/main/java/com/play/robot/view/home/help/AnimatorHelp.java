@@ -76,6 +76,46 @@ public class AnimatorHelp {
         });
     }
 
+    public void moveLeft(){
+        ObjectAnimator moveIn = ObjectAnimator.ofFloat(mSurfaceView, "translationX", 500f, 0f);
+
+        AnimatorSet set = new AnimatorSet();
+        set.play(moveIn);
+
+        set.setDuration(500);
+        set.start();
+    }
+
+    public void moveRight(){
+        ObjectAnimator moveIn = ObjectAnimator.ofFloat(mSurfaceView, "translationX", -500f, 0f);
+
+        AnimatorSet set = new AnimatorSet();
+        set.play(moveIn);
+
+        set.setDuration(500);
+        set.start();
+    }
+
+    public void moveUp(){
+        ObjectAnimator moveIn = ObjectAnimator.ofFloat(mSurfaceView, "translationY", 500f, 0f);
+
+        AnimatorSet set = new AnimatorSet();
+        set.play(moveIn);
+
+        set.setDuration(500);
+        set.start();
+    }
+
+    public void moveDown(){
+        ObjectAnimator moveIn = ObjectAnimator.ofFloat(mSurfaceView, "translationY", -500f, 0f);
+
+        AnimatorSet set = new AnimatorSet();
+        set.play(moveIn);
+
+        set.setDuration(500);
+        set.start();
+    }
+
     float scaleXToSmall, scaleYToSmall, translationXToSmall, translationYToSmall;
 
     public void setSmallAnimation() {//地图变小

@@ -63,7 +63,6 @@ public class ContentDeviceView extends LinearLayout implements View.OnClickListe
             if (i == 0) {
                 iv_status_0.setVisibility(VISIBLE);
                 iv_status_0.setImageResource(pos == i ? R.mipmap.ic_device_in : mDevice.getType() == 1 ? R.mipmap.ic_device : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
-
             } else if (i == 1) {
                 iv_status_1.setVisibility(VISIBLE);
                 iv_status_1.setImageResource(pos == i ? R.mipmap.ic_device_in : mDevice.getType() == 1 ? R.mipmap.ic_device : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
