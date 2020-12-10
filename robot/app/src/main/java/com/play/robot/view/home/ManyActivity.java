@@ -647,6 +647,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             disposableZkc.dispose();
         mMapView.onDestroy();
 
+        MyApplication.getInstance().deviceClear();
+        
         setStop();
 
         super.onDestroy();
