@@ -1,5 +1,6 @@
 package com.play.robot.view.setting;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.base.BaseFragmentAdapter;
+import com.play.robot.bean.SettingInfo;
 import com.play.robot.constant.Constant;
 import com.play.robot.widget.CustomViewPager;
 
@@ -74,6 +76,11 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        if(TextUtils.isEmpty(SettingInfo.shapeZkc) || TextUtils.isEmpty(SettingInfo.shapeMode)){
+            showShortToast("请选择主控车和编队模式");
+            return;
+        }
+
         switch (v.getId()){
             case R.id.iv_close:
                 finish();
@@ -137,5 +144,14 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
         iv_signal.setImageResource(R.mipmap.setting_signal_un);
         iv_battery.setImageResource(R.mipmap.setting_battery_un);
         iv_more.setImageResource(R.mipmap.setting_more_un);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(TextUtils.isEmpty(SettingInfo.shapeZkc) || TextUtils.isEmpty(SettingInfo.shapeMode)){
+            showShortToast("请选择主控车和编队模式");
+            return;
+        }
+        super.onBackPressed();
     }
 }

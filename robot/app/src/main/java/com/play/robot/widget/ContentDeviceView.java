@@ -57,31 +57,32 @@ public class ContentDeviceView extends LinearLayout implements View.OnClickListe
         iv_status_4.setOnLongClickListener(this);
     }
 
-    public void setDevice(List<DeviceBean> list) {
+    public void setDevice(List<DeviceBean> list, int pos) {
         for (int i = 0; i < list.size(); i++) {
             DeviceBean mDevice = list.get(i);
             if (i == 0) {
                 iv_status_0.setVisibility(VISIBLE);
-                iv_status_0.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_device_in : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
-            }else if(i == 1){
+                iv_status_0.setImageResource(pos == i ? R.mipmap.ic_device_in : mDevice.getType() == 1 ? R.mipmap.ic_device : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
+
+            } else if (i == 1) {
                 iv_status_1.setVisibility(VISIBLE);
-                iv_status_1.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_device_in : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
-            }else if(i == 2){
+                iv_status_1.setImageResource(pos == i ? R.mipmap.ic_device_in : mDevice.getType() == 1 ? R.mipmap.ic_device : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
+            } else if (i == 2) {
                 iv_status_2.setVisibility(VISIBLE);
-                iv_status_2.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_device_in : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
-            }else if(i == 3){
+                iv_status_2.setImageResource(pos == i ? R.mipmap.ic_device_in : mDevice.getType() == 1 ? R.mipmap.ic_device : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
+            } else if (i == 3) {
                 iv_status_3.setVisibility(VISIBLE);
-                iv_status_3.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_device_in : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
-            }else if(i == 4){
+                iv_status_3.setImageResource(pos == i ? R.mipmap.ic_device_in : mDevice.getType() == 1 ? R.mipmap.ic_device : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
+            } else if (i == 4) {
                 iv_status_4.setVisibility(VISIBLE);
-                iv_status_4.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_device_in : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
+                iv_status_4.setImageResource(pos == i ? R.mipmap.ic_device_in : mDevice.getType() == 1 ? R.mipmap.ic_device : mDevice.getType() == 2 ? R.mipmap.ic_device_un : R.mipmap.ic_device);
             }
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_status_0:
                 mOnItemClickListener.onClick(0);
                 break;
@@ -102,7 +103,7 @@ public class ContentDeviceView extends LinearLayout implements View.OnClickListe
 
     @Override
     public boolean onLongClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_status_0:
                 mOnItemClickListener.onLongClick(0);
                 break;
@@ -128,6 +129,7 @@ public class ContentDeviceView extends LinearLayout implements View.OnClickListe
 
     public interface OnItemClickListener {
         void onClick(int position);
+
         void onLongClick(int position);
     }
 

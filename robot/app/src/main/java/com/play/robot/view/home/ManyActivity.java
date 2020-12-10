@@ -3,6 +3,7 @@ package com.play.robot.view.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
+import com.play.robot.util.rxbus.rxbusEvent.ZkcEvent;
 import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.home.help.MyOnMarkerClickListener;
@@ -68,7 +70,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     ViewScale view_scale;
 
-    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop;
+    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop,disposableZkc;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -78,6 +80,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     NodePlayerView mSurfaceView;
 
     List<DeviceBean> mDevices = new ArrayList<>();
+    DeviceBean mDeviceZkc;//主控车
+    int currentPos = 0;
 
     double meLongitude;
     double meLatitude;
@@ -123,7 +127,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         view_scale = $(R.id.view_scale);
         ll_loc = $(R.id.ll_loc);
 
-        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_flameout,tv_task_send,tv_task_read);
+        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_flameout,tv_task_send,tv_task_read,iv_shape);
 
         initBaiduMap();
         initSurfaceView();
@@ -138,9 +142,52 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         initIvStop();
         initDeviceView();
 
-        setStatusView();
-        setTaskView(isSufCenter);
+        SettingInfo.initData();
 
+        initDisposable();
+
+    }
+
+    private void initDisposable() {
+        //游标
+        disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
+
+        //动画 地图和视频视图加载完了之后  设置地图缩小，如果直接设置地图是小图的话，放大视图会变形。
+        disposableAnim = RxBus2.getInstance().toObservable(AnimatorEvent.class, animatorEvent -> {
+            if (animatorEvent.isBig() && animatorEvent.isSmall()) {
+                mAnimatorHelp.setSmallAnimation();
+            }
+        });
+
+        //链接状态
+        disposableDevice = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
+            for (int i = 0; i < mDevices.size(); i++) {
+                if (mDevices.get(i).getIpPort().equals(event.getIpPort())) {
+                    if (event.getType() == -1) {
+                        mDevices.get(i).setType(event.getType() == 1 ? 1 : 2);
+                        setStatusView();
+                    }
+                }
+            }
+        });
+
+        disposableStop = RxBus2.getInstance().toObservable(StopShowEvent.class, event -> {
+            iv_stop.setAlpha(0f);
+            iv_stop.setVisibility(View.VISIBLE);
+            iv_stop.animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .setListener(null);
+        });
+
+        disposableZkc = RxBus2.getInstance().toObservable(ZkcEvent.class, event->{
+            getDeviceZkc();
+            if(isInitData){
+                setZkcChange();
+            }else{
+                initData();
+            }
+        });
     }
 
     private void initDeviceView() {
@@ -194,20 +241,16 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         mSurfaceView = $(R.id.surfaceView);
         mSurfaceView.setOnClickListener(this);
 
-//        //设置渲染器类型
-//        mSurfaceView.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
-//        //设置视频画面缩放模式
-//        mSurfaceView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
-//
-//        nodePlayer =new NodePlayer(this);
-//        //设置播放视图
-//        nodePlayer.setPlayerView(mSurfaceView);
-//        //设置RTSP流使用的传输协议,支持的模式有:
-//        nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
-//        nodePlayer.setInputUrl(mDevice.getRtsp());
-//        //设置视频是否开启
-//        nodePlayer.setVideoEnable(true);
-//        nodePlayer.start();
+        //设置渲染器类型
+        mSurfaceView.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
+        //设置视频画面缩放模式
+        mSurfaceView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
+
+        nodePlayer =new NodePlayer(this);
+        //设置播放视图
+        nodePlayer.setPlayerView(mSurfaceView);
+        //设置RTSP流使用的传输协议,支持的模式有:
+        nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
     }
 
     //初始化地图控件
@@ -288,46 +331,40 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     //设备状态
     private void setStatusView() {
         iv_status.setDevice(mDevices);
-        view_device.setDevice(mDevices);
+        view_device.setDevice(mDevices,currentPos);
     }
 
+
+    public void getDeviceZkc(){
+        for (int i=0;i<mDevices.size();i++){
+            if(mDevices.get(i).getIpPort().equals(SettingInfo.shapeZkc)){
+                mDeviceZkc = mDevices.get(i);
+                currentPos = i;
+            }
+        }
+    }
+
+
+    public void setZkcChange(){
+        setStatusView();
+    }
+
+    boolean isInitData = false;
     @Override
     public void initData() {
+        if(TextUtils.isEmpty(SettingInfo.shapeZkc)){
+            intent = new Intent(context, SettingManyActivity.class);
+            intent.putExtra("position", Constant.SETTING_MANY_SHAPE);
+            startActivity(intent);
+            return;
+        }
+
+        isInitData = true;
+
+        setStatusView();
+        setTaskView(isSufCenter);
 
         markers = new ArrayList<>();
-        SettingInfo.initData();
-
-        //游标
-        disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
-
-        //动画 地图和视频视图加载完了之后  设置地图缩小，如果直接设置地图是小图的话，放大视图会变形。
-        disposableAnim = RxBus2.getInstance().toObservable(AnimatorEvent.class, animatorEvent -> {
-            if (animatorEvent.isBig() && animatorEvent.isSmall()) {
-                mAnimatorHelp.setSmallAnimation();
-            }
-        });
-
-        //链接状态
-        disposableDevice = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
-            for (int i = 0; i < mDevices.size(); i++) {
-                if (mDevices.get(i).getIpPort().equals(event.getIpPort())) {
-                    if (event.getType() == -1) {
-                        mDevices.get(i).setType(event.getType() == 1 ? 1 : 2);
-                        setStatusView();
-                    }
-                }
-            }
-        });
-
-        disposableStop = RxBus2.getInstance().toObservable(StopShowEvent.class, event -> {
-            iv_stop.setAlpha(0f);
-            iv_stop.setVisibility(View.VISIBLE);
-            iv_stop.animate()
-                    .alpha(1f)
-                    .setDuration(300)
-                    .setListener(null);
-        });
-
 
         //------------------地图 start----------
         mBaiduHelper = new BaiduHelper(context, mMapView);
@@ -426,7 +463,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(context, SettingManyActivity.class);
+        intent = new Intent(context, SettingManyActivity.class);
         switch (v.getId()) {
             case R.id.iv_more:
                 intent.putExtra("position", Constant.SETTING_MANY_MORE);
@@ -495,7 +532,6 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (disposableRuler != null && !disposableRuler.isDisposed())
             disposableRuler.dispose();
         if (disposableAnim != null && !disposableAnim.isDisposed())
@@ -504,7 +540,10 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             disposableDevice.dispose();
         if (disposableStop != null && !disposableStop.isDisposed())
             disposableStop.dispose();
+        if (disposableZkc != null && !disposableZkc.isDisposed())
+            disposableZkc.dispose();
         mMapView.onDestroy();
+        super.onDestroy();
     }
 
 }

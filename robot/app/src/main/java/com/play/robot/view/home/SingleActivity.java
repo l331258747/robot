@@ -136,13 +136,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         initRockerView();
         initIvStop();
 
-        setStatusView();
-        setModeView();
-        setRockerView(0);
-        setTaskView(isSufCenter);
-
-        setStart(mDevice.getRtsp());
-
     }
 
     boolean isDown = false;
@@ -338,6 +331,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void initData() {
+
+        setStatusView();
+        setModeView();
+        setRockerView(0);
+        setTaskView(isSufCenter);
+
+        setStart(mDevice.getRtsp());
 
         markers = new ArrayList<>();
         SettingInfo.initData();

@@ -120,6 +120,10 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                     showShortToast("请选择设备");
                     return;
                 }
+                if (MyApplication.getInstance().getConnectionNum() < 2) {
+                    showShortToast("请选择多台设备");
+                    return;
+                }
                 if (MyApplication.getInstance().getSingleDevice() == null) {
                     showShortToast("请重新选择设备");
                     return;

@@ -12,6 +12,8 @@ import com.play.robot.bean.MyListBean;
 import com.play.robot.bean.SettingInfo;
 import com.play.robot.dialog.MyListDialog;
 import com.play.robot.dialog.TextDialog;
+import com.play.robot.util.rxbus.RxBus2;
+import com.play.robot.util.rxbus.rxbusEvent.ZkcEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,10 +95,12 @@ public class ShapeFragment extends BaseFragment implements View.OnClickListener 
 
         listDevice = new ArrayList<>();
         for (int i = 0; i < MyApplication.getInstance().getDevices().size(); i++) {
-            MyListBean item = new MyListBean();
-            item.setId(MyApplication.getInstance().getDevices().get(i).getType());
-            item.setContent(MyApplication.getInstance().getDevices().get(i).getIpPort());
-            listDevice.add(item);
+            if(MyApplication.getInstance().getDevices().get(i).getType() == 1){
+                MyListBean item = new MyListBean();
+                item.setId(MyApplication.getInstance().getDevices().get(i).getType());
+                item.setContent(MyApplication.getInstance().getDevices().get(i).getIpPort());
+                listDevice.add(item);
+            }
         }
     }
 
@@ -113,12 +117,22 @@ public class ShapeFragment extends BaseFragment implements View.OnClickListener 
             case R.id.btn_bdms:
                 new MyListDialog(context).setData(listBdms).setOnItemClickListener(position -> {
                     btn_bdms.setText(SettingInfo.shapeMode = listBdms.get(position).getContent());
+
+                    if(!TextUtils.isEmpty(SettingInfo.shapeMode) && !TextUtils.isEmpty(SettingInfo.shapeZkc)){
+                        RxBus2.getInstance().post(new ZkcEvent());
+                    }
                 }).show();
+
                 break;
             case R.id.btn_zkcxz:
                 new MyListDialog(context).setData(listDevice).setOnItemClickListener(position -> {
                     btn_zkcxz.setText(SettingInfo.shapeZkc = listDevice.get(position).getContent());
+
+                    if(!TextUtils.isEmpty(SettingInfo.shapeMode) && !TextUtils.isEmpty(SettingInfo.shapeZkc)){
+                        RxBus2.getInstance().post(new ZkcEvent());
+                    }
                 }).show();
+
                 break;
             case R.id.btn_bgsc:
                 new MyListDialog(context).setData(listDevice).setOnItemClickListener(position -> {

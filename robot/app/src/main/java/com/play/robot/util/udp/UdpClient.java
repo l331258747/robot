@@ -107,6 +107,11 @@ public class UdpClient {
                     LogUtil.e("SocketThread read io exception = " + e.getMessage());
                     e.printStackTrace();
                     return;
+                } catch (Exception e) {
+                    onConnectFail();
+                    LogUtil.e("Exception = " + e.getMessage());
+                    e.printStackTrace();
+                    return;
                 }
             }
         }
