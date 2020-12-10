@@ -82,6 +82,7 @@ public class MyApplication extends Application {
             DeviceBean item = new DeviceBean();
             item.setIp(MySelfInfo.getInstance().getDevice().get(i).getIp());
             item.setPort(MySelfInfo.getInstance().getDevice().get(i).getPort());
+            item.setRtsp(MySelfInfo.getInstance().getDevice().get(i).getRtsp());
             item.setType(0);
             mDeviceBeans.add(item);
         }
@@ -102,7 +103,7 @@ public class MyApplication extends Application {
     //添加设备，缓存和全局变量中添加
     public void addDevice(DeviceBean item) {
         mDeviceBeans.add(item);
-        MySelfInfo.getInstance().addDevice(item.getIp(),item.getPort());
+        MySelfInfo.getInstance().addDevice(item.getIp(),item.getPort(),item.getRtsp());
     }
 
     //删除设备，缓存和全局变量中删除

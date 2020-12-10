@@ -105,6 +105,7 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
                 intent.putExtra("ip", MyApplication.getInstance().getSingleDevice().getIp());
                 intent.putExtra("port", MyApplication.getInstance().getSingleDevice().getPort());
                 intent.putExtra("type", MyApplication.getInstance().getSingleDevice().getType());
+                intent.putExtra("rtsp", MyApplication.getInstance().getSingleDevice().getRtsp());
                 intent.putExtra("meLongitude", longitude);
                 intent.putExtra("meLatitude", latitude);
                 startActivity(intent);

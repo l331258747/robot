@@ -18,7 +18,7 @@ public class EditDialog extends Dialog {
 
     TextView tv_btn;
 
-    EditText et_account, et_password;
+    EditText et_account, et_password,et_rtsp;
 
     public EditDialog(Context context) {
         super(context, R.style.mdialog);
@@ -36,6 +36,7 @@ public class EditDialog extends Dialog {
         tv_btn = layout.findViewById(R.id.tv_btn);
         et_account = layout.findViewById(R.id.et_account);
         et_password = layout.findViewById(R.id.et_password);
+        et_rtsp = layout.findViewById(R.id.et_rtsp);
 
         tv_btn.setOnClickListener(view -> {
             if (submitListener != null) {
@@ -47,8 +48,12 @@ public class EditDialog extends Dialog {
                     ToastUtil.showShortToast(mContext, et_password.getHint().toString());
                     return;
                 }
+                if (TextUtils.isEmpty(et_rtsp.getText().toString())) {
+                    ToastUtil.showShortToast(mContext, et_rtsp.getHint().toString());
+                    return;
+                }
 
-                submitListener.onClick(et_account.getText().toString(), Integer.parseInt(et_password.getText().toString()));
+                submitListener.onClick(et_account.getText().toString(), Integer.parseInt(et_password.getText().toString()),et_rtsp.getText().toString());
             }
             dismiss();
         });
@@ -56,7 +61,7 @@ public class EditDialog extends Dialog {
     }
 
     public interface OnItemClickListener {
-        void onClick(String ip, int port);
+        void onClick(String ip, int port,String rtsp);
     }
 
     OnItemClickListener submitListener;

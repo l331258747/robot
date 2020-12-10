@@ -10,6 +10,15 @@ public class DeviceBean {
     private int type;
     UdpClient mUdpClient;
     boolean isLead;
+    private String rtsp;
+
+    public String getRtsp() {
+        return rtsp;
+    }
+
+    public void setRtsp(String rtsp) {
+        this.rtsp = rtsp;
+    }
 
     public UdpClient getUdpClient() {
         return mUdpClient;

@@ -27,7 +27,7 @@
     <View
         android:id="@+id/view_account"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_38"
+        android:layout_height="@dimen/dp_35"
         android:layout_marginStart="@dimen/dp_40"
         android:layout_marginTop="@dimen/dp_15"
         android:layout_marginEnd="@dimen/dp_40"
@@ -53,7 +53,7 @@
         android:hint="请输入IP"
         android:maxLength="15"
         android:maxLines="1"
-        android:layout_marginStart="@dimen/dp_50"
+        android:layout_marginStart="@dimen/dp_56"
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="@+id/view_account"
@@ -64,7 +64,7 @@
     <View
         android:id="@+id/view_password"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_38"
+        android:layout_height="@dimen/dp_35"
         android:layout_marginStart="@dimen/dp_40"
         android:layout_marginTop="@dimen/dp_15"
         android:layout_marginEnd="@dimen/dp_40"
@@ -91,7 +91,7 @@
         android:inputType="number"
         android:maxLength="6"
         android:textColor="@color/color_1e1e1e"
-        android:layout_marginStart="@dimen/dp_50"
+        android:layout_marginStart="@dimen/dp_56"
         android:maxLines="1"
         android:paddingStart="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_10"
@@ -99,6 +99,46 @@
         app:layout_constraintEnd_toEndOf="@+id/view_password"
         app:layout_constraintStart_toStartOf="@+id/view_password"
         app:layout_constraintTop_toTopOf="@+id/view_password" />
+
+
+    <View
+        android:id="@+id/view_rtsp"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_35"
+        android:layout_marginStart="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_40"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_password" />
+
+    <TextView
+        android:id="@+id/tv_rtsp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="视频流："
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintBottom_toBottomOf="@id/view_rtsp"
+        app:layout_constraintStart_toStartOf="@+id/view_rtsp"
+        app:layout_constraintTop_toTopOf="@+id/view_rtsp" />
+
+    <EditText
+        android:id="@+id/et_rtsp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/shape_eeeeeed_r40"
+        android:hint="请输入视频流"
+        android:maxLength="50"
+        android:textColor="@color/color_1e1e1e"
+        android:layout_marginStart="@dimen/dp_56"
+        android:maxLines="2"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        app:layout_constraintBottom_toBottomOf="@+id/view_rtsp"
+        app:layout_constraintEnd_toEndOf="@+id/view_rtsp"
+        app:layout_constraintStart_toStartOf="@+id/view_rtsp"
+        app:layout_constraintTop_toTopOf="@+id/view_rtsp"
+        android:text="rtmp://58.200.131.2:1935/livetv/hunantv"/>
 
     <TextView
         android:id="@+id/tv_btn"
@@ -111,7 +151,7 @@
         android:textColor="@color/color_1e1e1e"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_password" />
+        app:layout_constraintTop_toBottomOf="@+id/view_rtsp" />
 
     <View
         android:layout_width="match_parent"

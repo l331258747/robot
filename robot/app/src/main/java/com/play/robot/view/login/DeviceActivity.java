@@ -60,6 +60,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
             item.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
             item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
             item.setType(MyApplication.getInstance().getDevices().get(i).getType());
+            item.setRtsp(MyApplication.getInstance().getDevices().get(i).getRtsp());
             list.add(item);
         }
         mAdapter.setData(list);
@@ -130,10 +131,11 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
 
-                new EditDialog(context).setSubmitListener((ip, port) -> {
+                new EditDialog(context).setSubmitListener((ip, port, rtsp) -> {
                     DeviceBean item = new DeviceBean();
                     item.setIp(ip);
                     item.setPort(port);
+                    item.setRtsp(rtsp);
                     item.setType(0);
 
                     List<DeviceBean> lists = MyApplication.getInstance().getDevices();

@@ -93,6 +93,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         mDevice.setIp(intent.getStringExtra("ip"));
         mDevice.setPort(intent.getIntExtra("port", 0));
         mDevice.setType(intent.getIntExtra("type", 0));
+        mDevice.setRtsp(intent.getStringExtra("trsp"));
         meLongitude = intent.getDoubleExtra("meLongitude", 0);
         meLatitude = intent.getDoubleExtra("meLatitude", 0);
 
@@ -337,6 +338,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             mDevice.setIp(event.getIp());
             mDevice.setPort(event.getPort());
             mDevice.setType(event.getType());
+            mDevice.setRtsp(event.getRtsp());
 
             setStatusView();
             SettingInfo.initData();

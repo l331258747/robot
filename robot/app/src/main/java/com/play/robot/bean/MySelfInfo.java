@@ -60,7 +60,7 @@ public class MySelfInfo {
         SPUtils.getInstance().putString(SPUtils.SP_DEVICE, GsonUtil.convertVO2String(lists));
     }
 
-    public void addDevice(String ip, int port) {
+    public void addDevice(String ip, int port,String rtsp) {
         String ipPort = ip + ":" + port;
         List<DeviceInfo> results = new ArrayList<>();
 
@@ -79,6 +79,7 @@ public class MySelfInfo {
         DeviceInfo data = new DeviceInfo();
         data.setIp(ip);
         data.setPort(port);
+        data.setRtsp(rtsp);
 
         results.add(data);
         results.addAll(lists);

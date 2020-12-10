@@ -70,7 +70,7 @@ public class SignalFragment extends BaseFragment {
             mAdapter.notifyDataSetChanged();
         }
 
-        RxBus2.getInstance().post(new ChangeEvent(list.get(pos).getIp(),list.get(pos).getPort(),list.get(pos).getType()));
+        RxBus2.getInstance().post(new ChangeEvent(list.get(pos).getIp(),list.get(pos).getPort(),list.get(pos).getType(),list.get(pos).getRtsp()));
     }
 
     @Override
@@ -83,6 +83,7 @@ public class SignalFragment extends BaseFragment {
             item.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
             item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
             item.setType(MyApplication.getInstance().getDevices().get(i).getType());
+            item.setRtsp(MyApplication.getInstance().getDevices().get(i).getRtsp());
             list.add(item);
         }
         mAdapter.setData(list);

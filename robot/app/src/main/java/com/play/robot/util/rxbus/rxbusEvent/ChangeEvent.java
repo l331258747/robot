@@ -4,11 +4,17 @@ public class ChangeEvent {
     String ip;
     int port;
     int type;
+    String rtsp;
 
-    public ChangeEvent(String ip, int port, int type) {
+    public ChangeEvent(String ip, int port, int type,String rtsp) {
         this.ip = ip;
         this.port = port;
         this.type = type;
+        this.rtsp = rtsp;
+    }
+
+    public String getRtsp() {
+        return rtsp;
     }
 
     public String getIp() {

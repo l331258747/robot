@@ -99,6 +99,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 item.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
                 item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
                 item.setType(MyApplication.getInstance().getDevices().get(i).getType());
+                item.setRtsp(MyApplication.getInstance().getDevices().get(i).getRtsp());
                 mDevices.add(item);
             }
         }

@@ -5,7 +5,15 @@ public class DeviceInfo {
 
     private String ip;
     private int port;
+    private String rtsp;
 
+    public String getRtsp() {
+        return rtsp;
+    }
+
+    public void setRtsp(String rtsp) {
+        this.rtsp = rtsp;
+    }
 
     public int getPort() {
         return port;
