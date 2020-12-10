@@ -4,7 +4,6 @@ import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -22,8 +21,8 @@ public class UdpClient {
      * single instance UdpClient
      */
 
-//    public static final int TIME_CALL = 3 * 1000;//报警时间
-    public static final int TIME_CALL = 600 * 1000;//报警时间
+    public static final int TIME_CALL = 3 * 1000;//报警时间
+//    public static final int TIME_CALL = 600 * 1000;//报警时间
     public static final int TIME_OUT = 12 * 1000;//超时时间
     public static final String wSend = "hello";
 
@@ -74,7 +73,7 @@ public class UdpClient {
                     return;
                 }
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 onConnectFail();
                 LogUtil.e("SocketThread connect io exception = " + e.getMessage());
                 e.printStackTrace();
@@ -102,11 +101,6 @@ public class UdpClient {
                         onConnectSuccess();
                     }
                     LogUtil.e("SocketThread read listening");
-                } catch (IOException e) {
-                    onConnectFail();
-                    LogUtil.e("SocketThread read io exception = " + e.getMessage());
-                    e.printStackTrace();
-                    return;
                 } catch (Exception e) {
                     onConnectFail();
                     LogUtil.e("Exception = " + e.getMessage());
@@ -181,7 +175,7 @@ public class UdpClient {
                     InetAddress ipAddress = InetAddress.getByName(ip);
                     sendPacket = new DatagramPacket(mBuffer, mBuffer.length, ipAddress, port);
                     mSocket.send(sendPacket);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -201,7 +195,7 @@ public class UdpClient {
                 byte[] mBuffer = wSend.getBytes();
                 sendPacket = new DatagramPacket(mBuffer, mBuffer.length, ipAddress, port);
                 mSocket.send(sendPacket);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

@@ -124,7 +124,7 @@ public class MyApplication extends Application {
             if (mDeviceBeans.get(i).getIpPort().equals(ipPort)) {
                 mDeviceBeans.get(i).setType(type);
 
-                if (type == 2) {
+                if (type == 2 || type == 0) {
                     mDeviceBeans.get(i).getUdpClient().disconnect();
                 } else if (type == 1) {
                     UdpClient mUdpClient = new UdpClient();
@@ -163,4 +163,21 @@ public class MyApplication extends Application {
         return null;
     }
 
+    public void sendMsg(String ipPort,String msg){
+        LogUtil.e("sendMsg：" + msg);
+
+        for (int i = 0; i < mDeviceBeans.size(); i++) {
+            if (mDeviceBeans.get(i).getIpPort().equals(ipPort)) {
+                byte[] mBuffer = msg.getBytes();
+                mDeviceBeans.get(i).getUdpClient().sendByteCmd(mBuffer, -1);
+            }
+        }
+    }
+
+    public void deviceClear(){
+        for (int i = 0; i < mDeviceBeans.size(); i++) {
+            mDeviceBeans.get(i).setType(0);
+            mDeviceBeans.get(i).getUdpClient().disconnect();
+        }
+    }
 }

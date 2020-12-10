@@ -14,6 +14,7 @@ import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.model.LatLng;
+import com.play.robot.MyApplication;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
@@ -60,7 +61,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     View small_view;
     LinearLayout ll_loc, ll_task;
     TextView tv_task_send, tv_task_read, tv_rocker_inside, tv_rocker_outside;
-    MyRockerView rockerViewLeft, rockerViewRight;
+    MyRockerView rockerViewLeft, rockerViewRight,rockerViewRound;
     ConstraintLayout cl_rocker;
     View view_stop;
 
@@ -75,13 +76,17 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     NodePlayerView mSurfaceView;
 
+    //链接的设备
     DeviceBean mDevice;
 
+    //自己的经纬度
     double meLongitude;
     double meLatitude;
 
     int mode = 0;//0遥控模式，1智能遥控模式，2自主模式，3跟人，4跟车
-    List<MarkerBean> markers;
+    List<MarkerBean> markers;//地图marker点
+
+    boolean isFlameout;//启动熄火
 
     @Override
     public int getLayoutId() {
@@ -150,6 +155,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     new Handler().postDelayed(() -> {
                         if (isDown) {
                             RxBus2.getInstance().post(new StopShowEvent());
+                            sendJS();
                         }
                     }, 1200);
                     break;
@@ -306,25 +312,49 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     //内外置摇杆
     public void setRockerView(int rockerType) {//0初始，1内置，2外置
-        if (mode == 0 || mode == 1) {
+        if (mode == 0) {
             cl_rocker.setVisibility(View.VISIBLE);
             if (rockerType == 1) {
                 tv_rocker_inside.setVisibility(View.GONE);
                 tv_rocker_outside.setVisibility(View.GONE);
                 rockerViewLeft.setVisibility(View.VISIBLE);
                 rockerViewRight.setVisibility(View.VISIBLE);
+                rockerViewRound.setVisibility(View.GONE);
             } else if (rockerType == 2) {
                 tv_rocker_inside.setVisibility(View.GONE);
                 tv_rocker_outside.setVisibility(View.GONE);
                 rockerViewLeft.setVisibility(View.GONE);
                 rockerViewRight.setVisibility(View.GONE);
+                rockerViewRound.setVisibility(View.GONE);
             } else {
                 tv_rocker_inside.setVisibility(View.VISIBLE);
                 tv_rocker_outside.setVisibility(View.VISIBLE);
                 rockerViewLeft.setVisibility(View.GONE);
                 rockerViewRight.setVisibility(View.GONE);
+                rockerViewRound.setVisibility(View.GONE);
             }
-        } else {
+        } else if(mode == 1){
+            cl_rocker.setVisibility(View.VISIBLE);
+            if (rockerType == 1) {
+                tv_rocker_inside.setVisibility(View.GONE);
+                tv_rocker_outside.setVisibility(View.GONE);
+                rockerViewLeft.setVisibility(View.GONE);
+                rockerViewRight.setVisibility(View.GONE);
+                rockerViewRound.setVisibility(View.VISIBLE);
+            } else if (rockerType == 2) {
+                tv_rocker_inside.setVisibility(View.GONE);
+                tv_rocker_outside.setVisibility(View.GONE);
+                rockerViewLeft.setVisibility(View.GONE);
+                rockerViewRight.setVisibility(View.GONE);
+                rockerViewRound.setVisibility(View.GONE);
+            } else {
+                tv_rocker_inside.setVisibility(View.VISIBLE);
+                tv_rocker_outside.setVisibility(View.VISIBLE);
+                rockerViewLeft.setVisibility(View.GONE);
+                rockerViewRight.setVisibility(View.GONE);
+                rockerViewRound.setVisibility(View.GONE);
+            }
+        }else {
             cl_rocker.setVisibility(View.GONE);
         }
     }
@@ -357,8 +387,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         disposableDevice = RxBus2.getInstance().toObservable(ConnectIpEvent.class, event -> {
             if (event.getIpPort().equals(mDevice.getIpPort())) {
                 if (event.getType() == -1) {
+                    mDevice.setType(event.getType() == 1 ? 1 : 2);
                     setStatusView();
-
                     setStop();
                 }
             }
@@ -529,6 +559,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     showShortToast("请先设置途径点");
                     return;
                 }
+                sendMarker();
                 break;
             case R.id.tv_task_read:
                 showShortToast("读取途径点");
@@ -538,7 +569,15 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(str).show();
                 break;
             case R.id.iv_flameout://启动，熄火
-                new TextDialog(context).setContent("是否确认熄火/启动").show();
+                new TextDialog(context).setContent("是否确认熄火/启动").setSubmitListener(v1 -> {
+                    if(isFlameout){
+                        sendXH();
+                    }else{
+                        sendQD();
+                    }
+                    isFlameout = !isFlameout;
+                }).show();
+
                 break;
             case R.id.iv_rocker://模式切换
                 new DeviceModeDialog(context).setSubmitListener(mode -> {
@@ -557,12 +596,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+
     @Override
     public boolean onLongClick(View v) {
         switch (v.getId()) {
             case R.id.iv_sign://信息，指令
                 new InstructDialog(context).setTitle(mDevice.getIpPort()).setSubmitListener(content -> {
-                    showShortToast("指令：" + content);
+                    sendMsg(content);
                 }).show();
                 break;
         }
@@ -602,10 +642,27 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
             });
         }
-    }
 
-    public void sendRocker() {
-        LogUtil.e("" + upLevel + "," + turnLevel);
+        rockerViewRound = findViewById(R.id.rocker_view_round);
+        if (rockerViewRound != null) {
+            rockerViewRound.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_MOVE);
+            rockerViewRound.setOnAngleChangeListener(new MyRockerView.OnAngleChangeListener() {
+                @Override
+                public void onStart() {
+
+                }
+
+                @Override
+                public void angle(double angle) {
+                    sendRockerAngle(angle);
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            });
+        }
     }
 
     //----------------------------------- 遥控 end-----------------
@@ -640,11 +697,77 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             disposableChange.dispose();
         mMapView.onDestroy();
 
+        MyApplication.getInstance().deviceClear();
+
         setStop();
 
         super.onDestroy();
     }
 
+    //----------------指令 start----------
+    StringBuilder msg  =  new StringBuilder();
+
+    //方向
+    public void sendRocker() {
+        msg.setLength(0);
+
+        msg.append("$1,1,1");
+        msg.append("," + upLevel);
+        msg.append("," + turnLevel);
+
+        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+    }
+
+    //急刹 $1,1,3
+    public void sendJS() {
+        msg.setLength(0);
+        msg.append("$1,1,3");
+        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+    }
+
+    //熄火 $1,1,6,0
+    public void sendXH() {
+        msg.setLength(0);
+        msg.append("$1,1,6,0");
+        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+    }
+
+    //启动 $1,1,6,1
+    public void sendQD() {
+        msg.setLength(0);
+        msg.append("$1,1,6,1");
+        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+    }
+
+    public void sendMsg(String str) {
+        msg.setLength(0);
+        msg.append(str);
+        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+    }
+
+    //控制模式 摇杆
+    public void sendRockerAngle(double angle){
+        msg.setLength(0);
+        msg.append("$1,2,1");
+        msg.append("," + angle);
+        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+    }
+
+    //发送marker
+    public void sendMarker(){
+        msg.setLength(0);
+        msg.append("$1,2,2");
+        for (int i=0;i<markers.size();i++){
+            msg.append("," + markers.get(i).getLatitude());
+            msg.append("," + markers.get(i).getLongitude());
+        }
+
+        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+    }
+
+
+
+    //----------------指令 end----------
     /*
     移动尺标
     new Thread(new Runnable() {
