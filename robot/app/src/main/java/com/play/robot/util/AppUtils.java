@@ -153,13 +153,17 @@ public class AppUtils {
     }
 
     //获取屏幕宽度
-    public static int getDisplayWidth() {
-        return context.getResources().getDisplayMetrics().widthPixels;
+    public static int getDisplayWidth(Activity activity) {
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
     }
 
     //获取屏幕高度
-    public static int getDisplayHeight() {
-        return context.getResources().getDisplayMetrics().heightPixels;
+    public static int getDisplayHeight(Activity activity) {
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.heightPixels;
     }
 
     //隐藏虚拟键盘
@@ -232,4 +236,5 @@ public class AppUtils {
         context.startActivity(intent);
 
     }
+
 }

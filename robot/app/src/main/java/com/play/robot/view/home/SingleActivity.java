@@ -321,6 +321,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             rockerViewRight.setVisibility(View.GONE);
             rockerViewRound1.setVisibility(View.GONE);
             rockerViewRound2.setVisibility(View.GONE);
+            view_center.setVisibility(View.GONE);
+            iv_center.setVisibility(View.GONE);
             if (rockerType == 1) {
                 rockerViewLeft.setVisibility(View.VISIBLE);
                 rockerViewRight.setVisibility(View.VISIBLE);
@@ -337,9 +339,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             rockerViewRight.setVisibility(View.GONE);
             rockerViewRound1.setVisibility(View.GONE);
             rockerViewRound2.setVisibility(View.GONE);
+            view_center.setVisibility(View.GONE);
+            iv_center.setVisibility(View.GONE);
             if (rockerType == 1) {
                 rockerViewRound1.setVisibility(View.VISIBLE);
                 rockerViewRound2.setVisibility(View.VISIBLE);
+                view_center.setVisibility(View.VISIBLE);
+                iv_center.setVisibility(View.VISIBLE);
             } else if (rockerType == 2) {
             } else {
                 tv_rocker_inside.setVisibility(View.VISIBLE);
@@ -604,6 +610,12 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     int turnLevel;
 
     public void initRockerView() {
+        w = AppUtils.getDisplayWidth(activity);
+        h = AppUtils.getDisplayHeight(activity);
+
+        view_center = findViewById(R.id.view_center);
+        iv_center = findViewById(R.id.iv_center);
+
         //前后
         rockerViewLeft = findViewById(R.id.rocker_view_left);
         if (rockerViewLeft != null) {
@@ -642,9 +654,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     super.direction(direction);
 
                     if(direction == MyRockerView.Direction.DIRECTION_UP){
-                        view_center.setY(view_center.getTop() - 10);
+                        if(centerY == 0) return;
+                        view_center.setY(centerY = centerY - centerMove);
+                        sendRockerAngle(centerW, centerY);
                     }else if(direction == MyRockerView.Direction.DIRECTION_DOWN){
-                        view_center.setY(view_center.getTop() + 10);
+                        if(centerY >= h - AppUtils.dip2px(centerSize)) return;
+                        view_center.setY(centerY = centerY + centerMove);
+                        sendRockerAngle(centerW, centerY);
                     }
                 }
             });
@@ -659,22 +675,41 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     super.direction(direction);
 
                     if(direction == MyRockerView.Direction.DIRECTION_LEFT){
-                        view_center.setX(view_center.getLeft() - 10);
+                        if(centerW == 0) return;
+                        view_center.setX(centerW = centerW - centerMove);
+                        sendRockerAngle(centerW, centerY);
                     }else if(direction == MyRockerView.Direction.DIRECTION_RIGHT){
-                        view_center.setX(view_center.getLeft() + 10);
+                        if(centerW >= w - AppUtils.dip2px(centerSize)) return;
+                        view_center.setX(centerW = centerW + centerMove);
+                        sendRockerAngle(centerW, centerY);
                     }
                 }
             });
         }
 
-        view_center = findViewById(R.id.view_center);
+        iv_center.setOnClickListener(v -> {
+            setCenter();
+            view_center.setX(centerW);
+            view_center.setY(centerY);
+            sendRockerAngle(centerW, centerY);
+        });
+
+        setCenter();
     }
 
-    int w = AppUtils.getDisplayWidth();
-    int h = AppUtils.getDisplayHeight();
+    public void setCenter(){
+        centerW = w / 2 - AppUtils.dip2px(centerSize) / 2;
+        centerY = h / 2 - AppUtils.dip2px(centerSize) / 2;
+    }
+
+    int w =0;
+    int h = 0;
     View view_center;
+    ImageView iv_center;
     int centerW = 0;
     int centerY = 0;
+    int centerSize = 16;
+    int centerMove = 5;
     //----------------------------------- 遥控 end-----------------
 
     @Override
@@ -755,11 +790,14 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
     }
 
-    //控制模式 摇杆
-    public void sendRockerAngle(double angle){
+    //智能控车模式 摇杆
+    public void sendRockerAngle(int x,int y){
         msg.setLength(0);
-        msg.append("$1,2,1");
-        msg.append("," + angle);
+        msg.append("$1,2,3");
+        msg.append("," + x);
+        msg.append("," + y);
+        msg.append("," + w);
+        msg.append("," + h);
         MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
     }
 
