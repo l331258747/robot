@@ -313,4 +313,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/shape_red_r40"/>
 
+    <include layout="@layout/layout_single_track"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

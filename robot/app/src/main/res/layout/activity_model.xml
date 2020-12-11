@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <View
-        android:id="@+id/view_title"
+        android:id="@+id/view_track"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_50"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,9 +21,9 @@
         android:paddingStart="@dimen/dp_15"
         android:paddingEnd="@dimen/dp_15"
         android:text="UGV"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
-        app:layout_constraintStart_toStartOf="@+id/view_title"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintStart_toStartOf="@+id/view_track"
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
 
     <ImageView
@@ -33,9 +33,9 @@
         android:paddingStart="@dimen/dp_30"
         android:paddingEnd="@dimen/dp_30"
         android:src="@mipmap/ic_login_un"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
-        app:layout_constraintEnd_toEndOf="@+id/view_title"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintEnd_toEndOf="@+id/view_track"
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <View
         android:id="@+id/view_conter"

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:background="@color/color_1e1e1e"
+    android:id="@+id/cl_track"
+    app:layout_constraintStart_toStartOf="@+id/surfaceView"
+    app:layout_constraintBottom_toBottomOf="@+id/surfaceView"
+    app:layout_constraintEnd_toEndOf="@+id/surfaceView"
+    android:paddingStart="@dimen/dp_10"
+    android:paddingEnd="@dimen/dp_10"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/view_track"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_track_status"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="@dimen/dp_5"
+        android:src="@mipmap/ic_track_start"
+        android:text="设备未连接"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
+
+    <ImageView
+        android:id="@+id/iv_track_gj"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/ic_track_gj"
+        android:layout_marginStart="@dimen/dp_10"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintStart_toEndOf="@+id/iv_track_status"
+        app:layout_constraintTop_toTopOf="@+id/view_track"
+        android:layout_height="0dp"/>
+
+    <com.play.robot.widget.SwitchButton
+        android:id="@+id/switch_track_gj"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_25"
+        app:layout_constraintTop_toTopOf="@+id/view_track"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintStart_toEndOf="@+id/iv_track_gj"/>
+
+    <ImageView
+        android:id="@+id/iv_track_qs"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/ic_track_qs"
+        android:layout_marginStart="@dimen/dp_10"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintStart_toEndOf="@+id/switch_track_gj"
+        app:layout_constraintTop_toTopOf="@+id/view_track"
+        android:layout_height="0dp"/>
+
+    <com.play.robot.widget.SwitchButton
+        android:id="@+id/switch_track_qs"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_25"
+        app:layout_constraintTop_toTopOf="@+id/view_track"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintStart_toEndOf="@+id/iv_track_qs"/>
+
+
+    <com.play.robot.widget.NumberView
+        android:id="@+id/nv_track_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_3"
+        app:layout_constraintStart_toEndOf="@+id/switch_track_qs"
+        app:layout_constraintTop_toTopOf="@+id/view_track"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加减速调节"
+        android:textSize="@dimen/sp_8"
+        app:layout_constraintStart_toStartOf="@+id/nv_track_speed"
+        app:layout_constraintEnd_toEndOf="@+id/nv_track_speed"
+        android:layout_marginBottom="@dimen/dp_3"
+        app:layout_constraintTop_toBottomOf="@+id/nv_track_speed"/>
+
+
+    <com.play.robot.widget.NumberView
+        android:id="@+id/nv_track_space"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_3"
+        app:layout_constraintStart_toEndOf="@+id/nv_track_speed"
+        app:layout_constraintTop_toTopOf="@+id/view_track"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="距离调节"
+        android:textSize="@dimen/sp_8"
+        app:layout_constraintStart_toStartOf="@+id/nv_track_space"
+        app:layout_constraintEnd_toEndOf="@+id/nv_track_space"
+        android:layout_marginBottom="@dimen/dp_3"
+        app:layout_constraintTop_toBottomOf="@+id/nv_track_space"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

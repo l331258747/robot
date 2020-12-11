@@ -7,7 +7,7 @@
     tools:context=".view.setting.SettingActivity">
 
     <View
-        android:id="@+id/view_title"
+        android:id="@+id/view_track"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_30"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,10 +23,10 @@
         android:paddingEnd="@dimen/dp_15"
         android:text="设置"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
-        app:layout_constraintEnd_toEndOf="@+id/view_title"
-        app:layout_constraintStart_toStartOf="@+id/view_title"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintEnd_toEndOf="@+id/view_track"
+        app:layout_constraintStart_toStartOf="@+id/view_track"
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <ImageView
         android:id="@+id/iv_close"
@@ -39,9 +39,9 @@
         android:src="@mipmap/ic_back"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
-        app:layout_constraintEnd_toEndOf="@+id/view_title"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintEnd_toEndOf="@+id/view_track"
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <View
         android:id="@+id/view_tab"
@@ -49,7 +49,7 @@
         android:layout_height="@dimen/dp_30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_title" />
+        app:layout_constraintTop_toBottomOf="@+id/view_track" />
 
     <ImageView
         android:id="@+id/iv_camera"

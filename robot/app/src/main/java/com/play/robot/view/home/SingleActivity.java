@@ -39,9 +39,12 @@ import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.home.help.MyOnMarkerClickListener;
 import com.play.robot.view.home.help.MyOnMarkerDragListener;
+import com.play.robot.view.home.help.SendHelp;
 import com.play.robot.view.setting.SettingActivity;
 import com.play.robot.widget.IvBattery;
 import com.play.robot.widget.IvSignal;
+import com.play.robot.widget.NumberView;
+import com.play.robot.widget.SwitchButton;
 import com.play.robot.widget.rocherView.MyRockerShakeListener;
 import com.play.robot.widget.rocherView.MyRockerView;
 import com.play.robot.widget.scale.ViewScale;
@@ -141,6 +144,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         initRockerView();
         initIvStop();
+        initTrack();
 
     }
 
@@ -156,7 +160,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     new Handler().postDelayed(() -> {
                         if (isDown) {
                             RxBus2.getInstance().post(new StopShowEvent());
-                            sendJS();
+                            SendHelp.sendJS(mDevice.getIpPort());
                         }
                     }, 1200);
                     break;
@@ -356,6 +360,70 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    //----------------------跟人模式 start----------------
+    ConstraintLayout cl_track;
+    ImageView iv_track_status;
+    SwitchButton switch_track_gj,switch_track_qs;
+    NumberView nv_track_speed,nv_track_space;
+
+    int speedNum;
+    int spaceNum;
+
+    public void initTrack(){
+        cl_track = $(R.id.cl_track);
+        iv_track_status = $(R.id.iv_track_status);
+        switch_track_gj = $(R.id.switch_track_gj);
+        switch_track_qs = $(R.id.switch_track_qs);
+        nv_track_speed = $(R.id.nv_track_speed);
+        nv_track_space = $(R.id.nv_track_space);
+
+        cl_track.setVisibility(View.GONE);
+
+        iv_track_status.setOnClickListener(v -> {
+            if(mode == 3){
+                SendHelp.sendTrackPeopleStart(mDevice.getIpPort());
+            }else if(mode == 4){
+                SendHelp.sendTrackCarStart(mDevice.getIpPort());
+            }
+        });
+
+        switch_track_gj.setChecked(false);
+        switch_track_qs.setChecked(false);
+
+        switch_track_gj.setOnCheckedChangeListener((view, isChecked) -> {
+            SendHelp.sendTrackGj(mDevice.getIpPort(),isChecked);
+        });
+        switch_track_qs.setOnCheckedChangeListener((view, isChecked) -> {
+            SendHelp.sendTrackQc(mDevice.getIpPort(),isChecked);
+        });
+
+        nv_track_speed.setNum(speedNum);
+        nv_track_speed.setCallback(num -> {
+            speedNum = num;
+            SendHelp.sendTrackSpeed(mDevice.getIpPort(),speedNum);
+
+        });
+        nv_track_space.setNum(spaceNum);
+        nv_track_space.setCallback(num -> {
+            spaceNum = num;
+            SendHelp.sendTrackSpace(mDevice.getIpPort(),speedNum);
+        });
+    }
+
+    public void setTrack(boolean isShow){
+        if(isShow){
+            cl_track.setVisibility(View.VISIBLE);
+            switch_track_gj.setChecked(false);
+            switch_track_qs.setChecked(false);
+            nv_track_speed.setNum(speedNum = 0);
+            nv_track_space.setNum(spaceNum = 0);
+        }else{
+            cl_track.setVisibility(View.GONE);
+        }
+    }
+
+
+    //----------------------跟人模式 end----------------
     @Override
     public void initData() {
 
@@ -569,9 +637,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             case R.id.iv_flameout://启动，熄火
                 new TextDialog(context).setContent("是否确认熄火/启动").setSubmitListener(v1 -> {
                     if(isFlameout){
-                        sendXH();
+                        SendHelp.sendXH(mDevice.getIpPort());
                     }else{
-                        sendQD();
+                        SendHelp.sendQD(mDevice.getIpPort());
                     }
                     isFlameout = !isFlameout;
                 }).show();
@@ -588,6 +656,21 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
                     setTaskView(isSufCenter);
 
+                    setTrack(false);
+
+                    if(mode == 3){
+                        setTrack(true);
+                        SendHelp.sendTrackPeopleInit(mDevice.getIpPort());
+                    }
+                    if(mode == 4){
+                        setTrack(true);
+                        SendHelp.sendTrackCarInit(mDevice.getIpPort());
+                    }
+
+
+                    //TODO
+
+
                 }).show();
                 break;
         }
@@ -599,7 +682,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.iv_sign://信息，指令
                 new InstructDialog(context).setTitle(mDevice.getIpPort()).setSubmitListener(content -> {
-                    sendMsg(content);
+                    SendHelp.sendMsg(mDevice.getIpPort(),content);
                 }).show();
                 break;
         }
@@ -626,7 +709,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     upLevel = level;
-                    sendRocker();
+                    SendHelp.sendRocker(mDevice.getIpPort(),upLevel,turnLevel);
                 }
             });
         }
@@ -640,7 +723,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     turnLevel = level;
-                    sendRocker();
+                    SendHelp.sendRocker(mDevice.getIpPort(),upLevel,turnLevel);
                 }
 
             });
@@ -657,11 +740,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     if(direction == MyRockerView.Direction.DIRECTION_UP){
                         if(centerY == 0) return;
                         view_center.setY(centerY = centerY - centerMove);
-                        sendRockerAngle(centerW, centerY);
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
                     }else if(direction == MyRockerView.Direction.DIRECTION_DOWN){
                         if(centerY >= h - AppUtils.dip2px(centerSize)) return;
                         view_center.setY(centerY = centerY + centerMove);
-                        sendRockerAngle(centerW, centerY);
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
                     }
                 }
             });
@@ -678,11 +761,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     if(direction == MyRockerView.Direction.DIRECTION_LEFT){
                         if(centerW == 0) return;
                         view_center.setX(centerW = centerW - centerMove);
-                        sendRockerAngle(centerW, centerY);
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
                     }else if(direction == MyRockerView.Direction.DIRECTION_RIGHT){
                         if(centerW >= w - AppUtils.dip2px(centerSize)) return;
                         view_center.setX(centerW = centerW + centerMove);
-                        sendRockerAngle(centerW, centerY);
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
                     }
                 }
             });
@@ -692,7 +775,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             setCenter();
             view_center.setX(centerW);
             view_center.setY(centerY);
-            sendRockerAngle(centerW, centerY);
+            SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
         });
 
         setCenter();
@@ -750,57 +833,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         super.onDestroy();
     }
 
-    //----------------指令 start----------
-    StringBuilder msg  =  new StringBuilder();
-
-    //方向
-    public void sendRocker() {
-        msg.setLength(0);
-
-        msg.append("$1,1,1");
-        msg.append("," + upLevel);
-        msg.append("," + turnLevel);
-
-        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
-    }
-
-    //急刹 $1,1,3
-    public void sendJS() {
-        msg.setLength(0);
-        msg.append("$1,1,3");
-        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
-    }
-
-    //熄火 $1,1,6,0
-    public void sendXH() {
-        msg.setLength(0);
-        msg.append("$1,1,6,0");
-        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
-    }
-
-    //启动 $1,1,6,1
-    public void sendQD() {
-        msg.setLength(0);
-        msg.append("$1,1,6,1");
-        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
-    }
-
-    public void sendMsg(String str) {
-        msg.setLength(0);
-        msg.append(str);
-        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
-    }
-
-    //智能控车模式 摇杆
-    public void sendRockerAngle(int x,int y){
-        msg.setLength(0);
-        msg.append("$1,2,3");
-        msg.append("," + x);
-        msg.append("," + y);
-        msg.append("," + w);
-        msg.append("," + h);
-        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
-    }
 
 //    //发送marker
 //    public void sendMarker(){

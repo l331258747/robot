@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <View
-        android:id="@+id/view_title"
+        android:id="@+id/view_track"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_30"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,9 +23,9 @@
         android:paddingEnd="@dimen/dp_15"
         android:text="UGV"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
-        app:layout_constraintStart_toStartOf="@+id/view_title"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintStart_toStartOf="@+id/view_track"
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <com.play.robot.widget.TitleDeviceView
         android:id="@+id/iv_status"
@@ -33,9 +33,9 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:src="@mipmap/ic_ugv"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintStart_toEndOf="@+id/tv_UGV"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <ImageView
         android:id="@+id/iv_more"
@@ -43,18 +43,18 @@
         android:layout_height="0dp"
         android:background="@drawable/bg_click"
         android:src="@mipmap/ic_more"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
-        app:layout_constraintEnd_toEndOf="@+id/view_title"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
+        app:layout_constraintEnd_toEndOf="@+id/view_track"
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <View
         android:layout_width="@dimen/dp_1"
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/dp_5"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_more"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <com.play.robot.widget.IvBattery
         android:id="@+id/iv_battery"
@@ -63,9 +63,9 @@
         android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/bg_click"
         app:iv_drawable="@mipmap/ic_battery_1"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_more"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <com.play.robot.widget.IvSignal
         android:id="@+id/iv_signal"
@@ -74,9 +74,9 @@
         android:layout_marginEnd="@dimen/dp_5"
         android:background="@drawable/bg_click"
         app:iv_drawable="@mipmap/ic_signal_1"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_battery"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <ImageView
         android:id="@+id/iv_route"
@@ -85,9 +85,9 @@
         android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/bg_click"
         android:src="@mipmap/ic_route"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_signal"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <ImageView
         android:id="@+id/iv_camera"
@@ -96,9 +96,9 @@
         android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/bg_click"
         android:src="@mipmap/ic_camera"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_route"
-        app:layout_constraintTop_toTopOf="@+id/view_title" />
+        app:layout_constraintTop_toTopOf="@+id/view_track" />
 
     <com.play.robot.widget.IvShape
         android:id="@+id/iv_shape"
@@ -107,8 +107,8 @@
         android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/bg_click"
         app:iv_drawable="@mipmap/ic_shape_square"
-        app:layout_constraintBottom_toBottomOf="@+id/view_title"
+        app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_camera"
-        app:layout_constraintTop_toTopOf="@+id/view_title"/>
+        app:layout_constraintTop_toTopOf="@+id/view_track"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
