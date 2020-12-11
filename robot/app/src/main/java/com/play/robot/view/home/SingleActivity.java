@@ -584,6 +584,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, SettingActivity.class);
+        intent.putExtra("ipPort",mDevice.getIpPort());
         switch (v.getId()) {
             case R.id.iv_more:
                 intent.putExtra("position", Constant.SETTING_MORE);

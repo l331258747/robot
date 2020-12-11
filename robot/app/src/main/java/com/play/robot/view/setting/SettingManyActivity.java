@@ -10,12 +10,15 @@ import com.play.robot.base.BaseActivity;
 import com.play.robot.base.BaseFragmentAdapter;
 import com.play.robot.bean.SettingInfo;
 import com.play.robot.constant.Constant;
+import com.play.robot.util.rxbus.RxBus2;
+import com.play.robot.util.rxbus.rxbusEvent.ZkcEvent;
 import com.play.robot.widget.CustomViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import io.reactivex.disposables.Disposable;
 
 public class SettingManyActivity extends BaseActivity implements View.OnClickListener {
 
@@ -25,6 +28,8 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
     TextView tv_title;
 
     int pos;
+
+    CameraFragment mCameraFragment;
 
     @Override
     public int getLayoutId() {
@@ -47,7 +52,7 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
 
 
         List<Fragment> mFragments = new ArrayList<>();
-        mFragments.add(CameraFragment.newInstance());
+        mFragments.add(mCameraFragment = (CameraFragment) CameraFragment.newInstance(SettingInfo.shapeZkc));
         mFragments.add(RouteFragment.newInstance());
         mFragments.add(ShapeFragment.newInstance());
         mFragments.add(SignalManyFragment.newInstance());
@@ -63,9 +68,13 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
         setSelectView(pos);
     }
 
+    Disposable disposableZkc;
+
     @Override
     public void initData() {
-
+        disposableZkc = RxBus2.getInstance().toObservable(ZkcEvent.class, event->{
+            mCameraFragment.setIpPort(SettingInfo.shapeZkc);
+        });
     }
 
     public void setOnClick(View... views) {
@@ -153,5 +162,12 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposableZkc != null && !disposableZkc.isDisposed())
+            disposableZkc.dispose();
     }
 }

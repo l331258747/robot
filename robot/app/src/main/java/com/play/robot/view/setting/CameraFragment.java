@@ -1,19 +1,40 @@
 package com.play.robot.view.setting;
 
+import android.os.Bundle;
+
 import com.play.robot.R;
 import com.play.robot.base.BaseFragment;
 import com.play.robot.bean.SettingInfo;
+import com.play.robot.view.home.help.SendHelp;
 import com.play.robot.widget.SwitchButton;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class CameraFragment extends BaseFragment {
 
-    SwitchButton switch_qzsxt,switch_cssxt,switch_qztz,switch_hssxt,switch_qztzmbsb;
+    SwitchButton switch_qzsxt, switch_cssxt, switch_qztz, switch_hssxt, switch_qztzmbsb;
+    String ipPort;
 
-    public static Fragment newInstance() {
+    public static Fragment newInstance(String ipPort) {
         CameraFragment fragment = new CameraFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("ipPort", ipPort);
+        fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            ipPort = bundle.getString("ipPort");
+        }
+    }
+
+    public void setIpPort(String ipPort) {
+        this.ipPort = ipPort;
     }
 
     @Override
@@ -36,34 +57,50 @@ public class CameraFragment extends BaseFragment {
         switch_qztz.setChecked(SettingInfo.isCameraUpZt);
         switch_qztzmbsb.setChecked(SettingInfo.isCameraUpZtSb);
 
-//        switchButton.setChecked(true);
-//        switchButton.isChecked();
-//        switchButton.toggle();     //switch state                      //开关状态
-//        switchButton.toggle(false);//switch without animation  //无动画切换
-//        switchButton.setShadowEffect(true);//disable shadow effect     //禁用阴影效果
-//        switchButton.setEnabled(false);//disable button                //禁用按钮
-//        switchButton.setEnableEffect(false);//disable the switch animation     //禁用开关动画
         switch_qzsxt.setOnCheckedChangeListener((view, isChecked) -> {
-            // do your job
-            switch_qzsxt.setChecked(SettingInfo.isCameraUp =!SettingInfo.isCameraUp);
+            clear();
+            switch_qzsxt.setChecked(SettingInfo.isCameraUp = isChecked);
+
+            if (isChecked)
+                SendHelp.sendCamera(ipPort, 1);
+
         });
         switch_cssxt.setOnCheckedChangeListener((view, isChecked) -> {
-            // do your job
-            switch_cssxt.setChecked(SettingInfo.isCameraSide =!SettingInfo.isCameraSide);
+            clear();
+            switch_cssxt.setChecked(SettingInfo.isCameraSide = isChecked);
+
+            SendHelp.sendCamera(ipPort, 4);
         });
         switch_hssxt.setOnCheckedChangeListener((view, isChecked) -> {
-            // do your job
-            switch_hssxt.setChecked(SettingInfo.isCameraAfter =!SettingInfo.isCameraAfter);
+            clear();
+            switch_hssxt.setChecked(SettingInfo.isCameraAfter = isChecked);
+
+
+            if (isChecked)
+                SendHelp.sendCamera(ipPort, 5);
         });
         switch_qztz.setOnCheckedChangeListener((view, isChecked) -> {
-            // do your job
-            switch_qztz.setChecked(SettingInfo.isCameraUpZt =!SettingInfo.isCameraUpZt);
+            clear();
+            switch_qztz.setChecked(SettingInfo.isCameraUpZt = isChecked);
+
+            if (isChecked)
+                SendHelp.sendCamera(ipPort, 2);
         });
         switch_qztzmbsb.setOnCheckedChangeListener((view, isChecked) -> {
-            // do your job
-            switch_qztzmbsb.setChecked(SettingInfo.isCameraUpZtSb =!SettingInfo.isCameraUpZtSb);
-        });
+            clear();
+            switch_qztzmbsb.setChecked(SettingInfo.isCameraUpZtSb = isChecked);
 
+            if (isChecked)
+                SendHelp.sendCamera(ipPort, 3);
+        });
+    }
+
+    public void clear(){
+        switch_qzsxt.setChecked(SettingInfo.isCameraUp = false);
+        switch_cssxt.setChecked(SettingInfo.isCameraSide = false);
+        switch_hssxt.setChecked(SettingInfo.isCameraAfter = false);
+        switch_qztz.setChecked(SettingInfo.isCameraUpZt = false);
+        switch_qztzmbsb.setChecked(SettingInfo.isCameraUpZtSb = false);
     }
 
     @Override

@@ -141,4 +141,11 @@ public class SendHelp {
         }
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
+
+    public static void sendCamera(String ipPort, int type){
+        msg.setLength(0);
+        msg.append("$1,9,1");
+        msg.append("," + type);
+        MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+    }
 }

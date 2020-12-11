@@ -514,11 +514,14 @@ public class SwitchButton extends View implements Checkable {
 
     @Override
     public void setChecked(boolean checked) {
-        if (checked == isChecked()) {
-            postInvalidate();
-            return;
+        isChecked = checked;
+        if (isChecked) {
+            setCheckedViewState(viewState);
+        } else {
+            setUncheckViewState(viewState);
         }
-        toggle(enableEffect, false);
+
+        invalidate();
     }
 
     @Override
