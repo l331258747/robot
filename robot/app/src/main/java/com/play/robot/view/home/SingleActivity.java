@@ -624,8 +624,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     showShortToast("请先设置途径点");
                     return;
                 }
-                //TODO
-
+                SendHelp.sendMarker(mDevice.getIpPort(),markers);
                 break;
             case R.id.tv_task_read:
                 showShortToast("读取途径点");

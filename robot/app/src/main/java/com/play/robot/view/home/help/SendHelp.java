@@ -1,6 +1,9 @@
 package com.play.robot.view.home.help;
 
 import com.play.robot.MyApplication;
+import com.play.robot.bean.MarkerBean;
+
+import java.util.List;
 
 public class SendHelp {
 
@@ -8,7 +11,7 @@ public class SendHelp {
     static StringBuilder msg = new StringBuilder();
 
     //方向
-    public static void sendRocker(String ipPort,int upLevel,int turnLevel) {
+    public static void sendRocker(String ipPort, int upLevel, int turnLevel) {
         msg.setLength(0);
 
         msg.append("$1,1,1");
@@ -46,7 +49,7 @@ public class SendHelp {
     }
 
     //智能控车模式 摇杆
-    public static void sendRockerAngle(String ipPort, int x, int y,int w,int h) {
+    public static void sendRockerAngle(String ipPort, int x, int y, int w, int h) {
         msg.setLength(0);
         msg.append("$1,2,3");
         msg.append("," + x);
@@ -63,6 +66,7 @@ public class SendHelp {
         msg.append("$1,6,1,1,0,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
+
     //初始化跟车
     public static void sendTrackCarInit(String ipPort) {
         msg.setLength(0);
@@ -85,33 +89,47 @@ public class SendHelp {
     }
 
     //一键清除
-    public static void sendTrackQc(String ipPort,boolean isOK) {
+    public static void sendTrackQc(String ipPort, boolean isOK) {
         msg.setLength(0);
         msg.append("$1,6,2");
-        msg.append(isOK? ",1":",0");
+        msg.append(isOK ? ",1" : ",0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
     //跟踪轨迹
-    public static void sendTrackGj(String ipPort,boolean isOK) {
+    public static void sendTrackGj(String ipPort, boolean isOK) {
         msg.setLength(0);
         msg.append("$1,6,6");
-        msg.append(isOK? ",1":",0");
+        msg.append(isOK ? ",1" : ",0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
     //自主跟随模式下的加减速
-    public static void sendTrackSpeed(String ipPort,int num) {
+    public static void sendTrackSpeed(String ipPort, int num) {
         msg.setLength(0);
         msg.append("$1,6,3");
         msg.append("," + num);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
+
     //自主跟随模式下的跟随距离调节
-    public static void sendTrackSpace(String ipPort,int num) {
+    public static void sendTrackSpace(String ipPort, int num) {
         msg.setLength(0);
         msg.append("$1,6,4");
         msg.append("," + num);
+        MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+    }
+
+    public static void sendMarker(String ipPort, List<MarkerBean> markers) {
+        msg.setLength(0);
+        msg.append("$1,8,1");
+        msg.append("," + markers.size());
+        for (int i = 0; i < markers.size(); i++) {
+            msg.append("," + markers.get(i).getLongitude());
+            msg.append("," + markers.get(i).getLatitude());
+            int type = markers.get(i).getType();
+            msg.append("," + (type == 1 ? "3" : type == -1 ? "4" : "0"));
+        }
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 }
