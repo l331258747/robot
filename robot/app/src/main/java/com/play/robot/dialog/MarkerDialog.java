@@ -15,7 +15,7 @@ import com.play.robot.util.ToastUtil;
 public class MarkerDialog  extends Dialog {
 
     Context mContext;
-    TextView btn_start,btn_road,btn_end,tv_btn;
+    TextView btn_start,btn_road,btn_end,tv_btn,btn_road2;
     EditText et_account,et_password;
 
     int type = -2;//0起点，-1终点，1途径点
@@ -35,6 +35,7 @@ public class MarkerDialog  extends Dialog {
 
         btn_start = layout.findViewById(R.id.btn_start);
         btn_road = layout.findViewById(R.id.btn_road);
+        btn_road2 = layout.findViewById(R.id.btn_road2);
         btn_end = layout.findViewById(R.id.btn_end);
         tv_btn = layout.findViewById(R.id.tv_btn);
         et_account = layout.findViewById(R.id.et_account);
@@ -71,6 +72,9 @@ public class MarkerDialog  extends Dialog {
             setBtn(1);
 
         });
+        btn_road2.setOnClickListener(v -> {
+            setBtn(2);
+        });
         btn_end.setOnClickListener(v -> {
             setBtn(-1);
 
@@ -88,10 +92,12 @@ public class MarkerDialog  extends Dialog {
     private void initBtn(int showtype) {
         btn_start.setVisibility(View.GONE);
         btn_road.setVisibility(View.GONE);
+        btn_road2.setVisibility(View.GONE);
         btn_end.setVisibility(View.GONE);
 
         btn_start.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
         btn_road.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
+        btn_road2.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
         btn_end.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
 
         if(showtype == 0){
@@ -101,8 +107,10 @@ public class MarkerDialog  extends Dialog {
         }else{
             this.type = 1;
             btn_road.setVisibility(View.VISIBLE);
+            btn_road2.setVisibility(View.VISIBLE);
             btn_end.setVisibility(View.VISIBLE);
             btn_road.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
+            btn_road2.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
             btn_end.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
         }
     }
@@ -112,12 +120,15 @@ public class MarkerDialog  extends Dialog {
 
         btn_start.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
         btn_road.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
+        btn_road2.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
         btn_end.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
 
         if(type == 0){
             btn_start.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
         }else if(type == 1){
             btn_road.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
+        }else if(type == 2){
+            btn_road2.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
         }else if(type == -1){
             btn_end.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
         }

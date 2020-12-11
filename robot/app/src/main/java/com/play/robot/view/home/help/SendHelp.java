@@ -120,6 +120,7 @@ public class SendHelp {
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
+    //marker点
     public static void sendMarker(String ipPort, List<MarkerBean> markers) {
         msg.setLength(0);
         msg.append("$1,8,1");
@@ -128,7 +129,15 @@ public class SendHelp {
             msg.append("," + markers.get(i).getLongitude());
             msg.append("," + markers.get(i).getLatitude());
             int type = markers.get(i).getType();
-            msg.append("," + (type == 1 ? "3" : type == -1 ? "4" : "0"));
+            String typeStr = "3";//起点
+            if(type == 1){//必经点
+                typeStr = "1";
+            }else if(type == 2){//约束点
+                typeStr = "2";
+            }else if(type == -1){//终点
+                typeStr = "4";
+            }
+            msg.append("," + typeStr);
         }
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }

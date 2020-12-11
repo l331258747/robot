@@ -634,7 +634,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(str).show();
                 break;
             case R.id.iv_flameout://启动，熄火
-                new TextDialog(context).setContent("是否确认熄火/启动").setSubmitListener(v1 -> {
+                new TextDialog(context).setContent(isFlameout?"是否确认熄火":"是否确认启动").setSubmitListener(v1 -> {
                     if(isFlameout){
                         SendHelp.sendXH(mDevice.getIpPort());
                     }else{

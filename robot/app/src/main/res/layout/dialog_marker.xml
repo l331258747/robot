@@ -60,7 +60,21 @@
             android:paddingTop="@dimen/dp_3"
             android:paddingEnd="@dimen/dp_10"
             android:paddingBottom="@dimen/dp_3"
-            android:text="途径点"
+            android:text="必经点"
+            android:textColor="@color/color_1e1e1e"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/btn_road2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:background="@drawable/btn_0_1e1e1e_r40"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_3"
+            android:paddingEnd="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_3"
+            android:text="约束点"
             android:textColor="@color/color_1e1e1e"
             android:textSize="@dimen/sp_12" />
 
