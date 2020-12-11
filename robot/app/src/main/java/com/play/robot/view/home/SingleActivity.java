@@ -230,7 +230,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     LogUtil.e("mapView onClick");
                     mAnimatorHelp.setAnimator();
                 } else {
-                    if (mode == 1 || mode == 2) {//设置途径点
+                    if (mode == 2) {//设置途径点
                         if (isMarkerUn()) {
                             showShortToast("已添加终点，不可再添加");
                             return;
@@ -304,7 +304,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     public void setTaskView(boolean isSufCenter) {
         this.isSufCenter = isSufCenter;
-        if (mode == 1 || mode == 2) {
+        if (mode == 2) {
             ll_task.setVisibility(isSufCenter ? View.GONE : View.VISIBLE);
         } else {
             ll_task.setVisibility(View.GONE);
@@ -556,7 +556,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     showShortToast("请先设置途径点");
                     return;
                 }
-                sendMarker();
+                //TODO
+
                 break;
             case R.id.tv_task_read:
                 showShortToast("读取途径点");
@@ -801,17 +802,17 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
     }
 
-    //发送marker
-    public void sendMarker(){
-        msg.setLength(0);
-        msg.append("$1,2,2");
-        for (int i=0;i<markers.size();i++){
-            msg.append("," + markers.get(i).getLatitude());
-            msg.append("," + markers.get(i).getLongitude());
-        }
-
-        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
-    }
+//    //发送marker
+//    public void sendMarker(){
+//        msg.setLength(0);
+//        msg.append("$1,2,2");
+//        for (int i=0;i<markers.size();i++){
+//            msg.append("," + markers.get(i).getLatitude());
+//            msg.append("," + markers.get(i).getLongitude());
+//        }
+//
+//        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
+//    }
 
 
 
