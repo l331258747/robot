@@ -33,6 +33,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void initView() {
+
+        ipPort = intent.getStringExtra("ipPort");
+
         tv_title = $(R.id.tv_title);
         iv_close = $(R.id.iv_close);
         mViewPager = $(R.id.viewpager);

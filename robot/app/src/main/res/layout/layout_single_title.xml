@@ -64,7 +64,7 @@
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/bg_click"
-        app:iv_drawable="@mipmap/ic_battery_1"
+        app:iv_drawable="@mipmap/ic_battery_2"
         app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_more"
         app:layout_constraintTop_toTopOf="@+id/view_track" />
@@ -75,7 +75,7 @@
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/dp_5"
         android:background="@drawable/bg_click"
-        app:iv_drawable="@mipmap/ic_signal_1"
+        app:iv_drawable="@mipmap/ic_signal_2"
         app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_battery"
         app:layout_constraintTop_toTopOf="@+id/view_track" />

@@ -3,6 +3,7 @@ package com.play.robot.view.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +34,8 @@ import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ChangeEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
+import com.play.robot.util.rxbus.rxbusEvent.ReceiveCarEvent;
+import com.play.robot.util.rxbus.rxbusEvent.ReceiveStatusEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.view.home.help.AnimatorHelp;
@@ -65,13 +68,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     View small_view;
     LinearLayout ll_loc, ll_task;
     TextView tv_task_send, tv_task_read, tv_rocker_inside, tv_rocker_outside;
-    MyRockerView rockerViewLeft, rockerViewRight, rockerViewRound1,rockerViewRound2;
+    MyRockerView rockerViewLeft, rockerViewRight, rockerViewRound1, rockerViewRound2;
     ConstraintLayout cl_rocker;
     View view_stop;
 
     ViewScale view_scale;
 
-    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop, disposableChange;
+    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop, disposableChange, disposableCar,disposableStatus;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -178,6 +181,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     }
 
     private NodePlayer nodePlayer;
+
     //初始化视频SurfaceView控件
     private void initSurfaceView() {
         mSurfaceView = $(R.id.surfaceView);
@@ -188,7 +192,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         //设置视频画面缩放模式
         mSurfaceView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
 
-        nodePlayer =new NodePlayer(this);
+        nodePlayer = new NodePlayer(this);
         //设置播放视图
         nodePlayer.setPlayerView(mSurfaceView);
         //设置RTSP流使用的传输协议,支持的模式有:
@@ -196,7 +200,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    public void setStart(String rtsp){
+    public void setStart(String rtsp) {
         nodePlayer.setInputUrl(rtsp);
         //设置视频是否开启
         nodePlayer.setVideoEnable(true);
@@ -204,15 +208,15 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    public void setPause(){
-        if(nodePlayer != null && nodePlayer.isPlaying()){
+    public void setPause() {
+        if (nodePlayer != null && nodePlayer.isPlaying()) {
             nodePlayer.setVideoEnable(false);
             nodePlayer.pause();
         }
     }
 
-    public void setStop(){
-        if(nodePlayer != null && nodePlayer.isPlaying()){
+    public void setStop() {
+        if (nodePlayer != null && nodePlayer.isPlaying()) {
             nodePlayer.setVideoEnable(false);
             nodePlayer.stop();
         }
@@ -335,7 +339,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 tv_rocker_inside.setVisibility(View.VISIBLE);
                 tv_rocker_outside.setVisibility(View.VISIBLE);
             }
-        } else if(mode == 1){
+        } else if (mode == 1) {
             cl_rocker.setVisibility(View.VISIBLE);
             tv_rocker_inside.setVisibility(View.GONE);
             tv_rocker_outside.setVisibility(View.GONE);
@@ -355,7 +359,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 tv_rocker_inside.setVisibility(View.VISIBLE);
                 tv_rocker_outside.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
             cl_rocker.setVisibility(View.GONE);
         }
     }
@@ -363,13 +367,13 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     //----------------------跟人模式 start----------------
     ConstraintLayout cl_track;
     ImageView iv_track_status;
-    SwitchButton switch_track_gj,switch_track_qs;
-    NumberView nv_track_speed,nv_track_space;
+    SwitchButton switch_track_gj, switch_track_qs;
+    NumberView nv_track_speed, nv_track_space;
 
     int speedNum;
     int spaceNum;
 
-    public void initTrack(){
+    public void initTrack() {
         cl_track = $(R.id.cl_track);
         iv_track_status = $(R.id.iv_track_status);
         switch_track_gj = $(R.id.switch_track_gj);
@@ -380,9 +384,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         cl_track.setVisibility(View.GONE);
 
         iv_track_status.setOnClickListener(v -> {
-            if(mode == 3){
+            if (mode == 3) {
                 SendHelp.sendTrackPeopleStart(mDevice.getIpPort());
-            }else if(mode == 4){
+            } else if (mode == 4) {
                 SendHelp.sendTrackCarStart(mDevice.getIpPort());
             }
         });
@@ -391,33 +395,33 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         switch_track_qs.setChecked(false);
 
         switch_track_gj.setOnCheckedChangeListener((view, isChecked) -> {
-            SendHelp.sendTrackGj(mDevice.getIpPort(),isChecked);
+            SendHelp.sendTrackGj(mDevice.getIpPort(), isChecked);
         });
         switch_track_qs.setOnCheckedChangeListener((view, isChecked) -> {
-            SendHelp.sendTrackQc(mDevice.getIpPort(),isChecked);
+            SendHelp.sendTrackQc(mDevice.getIpPort(), isChecked);
         });
 
         nv_track_speed.setNum(speedNum);
         nv_track_speed.setCallback(num -> {
             speedNum = num;
-            SendHelp.sendTrackSpeed(mDevice.getIpPort(),speedNum);
+            SendHelp.sendTrackSpeed(mDevice.getIpPort(), speedNum);
 
         });
         nv_track_space.setNum(spaceNum);
         nv_track_space.setCallback(num -> {
             spaceNum = num;
-            SendHelp.sendTrackSpace(mDevice.getIpPort(),speedNum);
+            SendHelp.sendTrackSpace(mDevice.getIpPort(), speedNum);
         });
     }
 
-    public void setTrack(boolean isShow){
-        if(isShow){
+    public void setTrack(boolean isShow) {
+        if (isShow) {
             cl_track.setVisibility(View.VISIBLE);
             switch_track_gj.setChecked(false);
             switch_track_qs.setChecked(false);
             nv_track_speed.setNum(speedNum = 0);
             nv_track_space.setNum(spaceNum = 0);
-        }else{
+        } else {
             cl_track.setVisibility(View.GONE);
         }
     }
@@ -459,6 +463,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
+        //急刹车
         disposableStop = RxBus2.getInstance().toObservable(StopShowEvent.class, event -> {
             iv_stop.setAlpha(0f);
             iv_stop.setVisibility(View.VISIBLE);
@@ -468,6 +473,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     .setListener(null);
         });
 
+        //更换无人车
         disposableChange = RxBus2.getInstance().toObservable(ChangeEvent.class, event -> {
             mDevice.setIp(event.getIp());
             mDevice.setPort(event.getPort());
@@ -481,6 +487,47 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             mBaiduHelper.ClearMarkers();
 
             setStart(mDevice.getRtsp());
+        });
+
+        //无人车信息
+        disposableCar = RxBus2.getInstance().toObservable(ReceiveCarEvent.class, event -> {
+            if (!TextUtils.equals(mDevice.getIpPort(), event.getIpPort())) return;
+            deviceInfoStr = "V:" + event.getN1() + "m/s\nD:" + event.getN2() + "m\n精度:" + event.getN6() + "\n维度:" + event.getN7();
+            mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Int());
+
+            iv_battery.setSelect(event.getN4Int() >= 5 ? Constant.BATTERY_5
+                    : event.getN4Int() == 4 ? Constant.BATTERY_4
+                    : event.getN4Int() == 3 ? Constant.BATTERY_3
+                    : event.getN4Int() == 2 ? Constant.BATTERY_2
+                    : Constant.BATTERY_1);
+
+            event.getN1();//速度---------
+            event.getN2();//档位-------
+
+            event.getN3();//底层控制器错误码
+
+            event.getN4();//电量
+            event.getN5();//油量
+
+            event.getN6();//车体当前经度----
+            event.getN7();//车体当前纬度------
+            event.getN8();//车体方向-------
+
+            event.getN9();//车体横滚角
+            event.getN10();//车体俯仰角
+            event.getN11();//当前车辆模型名
+        });
+
+        disposableStatus = RxBus2.getInstance().toObservable(ReceiveStatusEvent.class, event -> {
+            if (!TextUtils.equals(mDevice.getIpPort(), event.getIpPort())) return;
+
+            //n1:
+            //0----有目标
+            //1----目标暂时丢失但还保留历史信息
+            //2----初始化失败
+            //3----确认目标丢失，停车
+
+            //n2: 目标距离
         });
 
         //------------------地图 start----------
@@ -570,8 +617,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         //------------------动画 end----------
 
-
     }
+
+    String deviceInfoStr;
 
 
     //点击事件设置
@@ -584,7 +632,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, SettingActivity.class);
-        intent.putExtra("ipPort",mDevice.getIpPort());
+        intent.putExtra("ipPort", mDevice.getIpPort());
         switch (v.getId()) {
             case R.id.iv_more:
                 intent.putExtra("position", Constant.SETTING_MORE);
@@ -625,20 +673,20 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     showShortToast("请先设置途径点");
                     return;
                 }
-                SendHelp.sendMarker(mDevice.getIpPort(),markers);
+                SendHelp.sendMarker(mDevice.getIpPort(), markers);
                 break;
             case R.id.tv_task_read:
                 showShortToast("读取途径点");
                 break;
             case R.id.iv_sign://信息，指令
-                String str = "V:10m/s\nS:100m\nD:50m\n精度:12.325415\n维度:112.324567";
-                new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(str).show();
+                if (!TextUtils.isEmpty(deviceInfoStr))
+                    new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(deviceInfoStr).show();
                 break;
             case R.id.iv_flameout://启动，熄火
-                new TextDialog(context).setContent(isFlameout?"是否确认熄火":"是否确认启动").setSubmitListener(v1 -> {
-                    if(isFlameout){
+                new TextDialog(context).setContent(isFlameout ? "是否确认熄火" : "是否确认启动").setSubmitListener(v1 -> {
+                    if (isFlameout) {
                         SendHelp.sendXH(mDevice.getIpPort());
-                    }else{
+                    } else {
                         SendHelp.sendQD(mDevice.getIpPort());
                     }
                     isFlameout = !isFlameout;
@@ -658,18 +706,14 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
                     setTrack(false);
 
-                    if(mode == 3){
+                    if (mode == 3) {
                         setTrack(true);
                         SendHelp.sendTrackPeopleInit(mDevice.getIpPort());
                     }
-                    if(mode == 4){
+                    if (mode == 4) {
                         setTrack(true);
                         SendHelp.sendTrackCarInit(mDevice.getIpPort());
                     }
-
-
-                    //TODO
-
 
                 }).show();
                 break;
@@ -682,7 +726,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.iv_sign://信息，指令
                 new InstructDialog(context).setTitle(mDevice.getIpPort()).setSubmitListener(content -> {
-                    SendHelp.sendMsg(mDevice.getIpPort(),content);
+                    SendHelp.sendMsg(mDevice.getIpPort(), content);
                 }).show();
                 break;
         }
@@ -709,7 +753,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     upLevel = level;
-                    SendHelp.sendRocker(mDevice.getIpPort(),upLevel,turnLevel);
+                    SendHelp.sendRocker(mDevice.getIpPort(), upLevel, turnLevel);
                 }
             });
         }
@@ -723,7 +767,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     turnLevel = level;
-                    SendHelp.sendRocker(mDevice.getIpPort(),upLevel,turnLevel);
+                    SendHelp.sendRocker(mDevice.getIpPort(), upLevel, turnLevel);
                 }
 
             });
@@ -737,14 +781,14 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 public void direction(MyRockerView.Direction direction) {
                     super.direction(direction);
 
-                    if(direction == MyRockerView.Direction.DIRECTION_UP){
-                        if(centerY == 0) return;
+                    if (direction == MyRockerView.Direction.DIRECTION_UP) {
+                        if (centerY == 0) return;
                         view_center.setY(centerY = centerY - centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
-                    }else if(direction == MyRockerView.Direction.DIRECTION_DOWN){
-                        if(centerY >= h - AppUtils.dip2px(centerSize)) return;
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
+                    } else if (direction == MyRockerView.Direction.DIRECTION_DOWN) {
+                        if (centerY >= h - AppUtils.dip2px(centerSize)) return;
                         view_center.setY(centerY = centerY + centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
                     }
                 }
             });
@@ -758,14 +802,14 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 public void direction(MyRockerView.Direction direction) {
                     super.direction(direction);
 
-                    if(direction == MyRockerView.Direction.DIRECTION_LEFT){
-                        if(centerW == 0) return;
+                    if (direction == MyRockerView.Direction.DIRECTION_LEFT) {
+                        if (centerW == 0) return;
                         view_center.setX(centerW = centerW - centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
-                    }else if(direction == MyRockerView.Direction.DIRECTION_RIGHT){
-                        if(centerW >= w - AppUtils.dip2px(centerSize)) return;
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
+                    } else if (direction == MyRockerView.Direction.DIRECTION_RIGHT) {
+                        if (centerW >= w - AppUtils.dip2px(centerSize)) return;
                         view_center.setX(centerW = centerW + centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
+                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
                     }
                 }
             });
@@ -775,18 +819,18 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             setCenter();
             view_center.setX(centerW);
             view_center.setY(centerY);
-            SendHelp.sendRockerAngle(mDevice.getIpPort(),centerW, centerY,w,h);
+            SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
         });
 
         setCenter();
     }
 
-    public void setCenter(){
+    public void setCenter() {
         centerW = w / 2 - AppUtils.dip2px(centerSize) / 2;
         centerY = h / 2 - AppUtils.dip2px(centerSize) / 2;
     }
 
-    int w =0;
+    int w = 0;
     int h = 0;
     View view_center;
     ImageView iv_center;
@@ -824,6 +868,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             disposableStop.dispose();
         if (disposableChange != null && !disposableChange.isDisposed())
             disposableChange.dispose();
+        if (disposableCar != null && !disposableCar.isDisposed())
+            disposableCar.dispose();
+        if (disposableStatus != null && !disposableStatus.isDisposed())
+            disposableStatus.dispose();
         mMapView.onDestroy();
 
         MyApplication.getInstance().deviceClear();
@@ -845,7 +893,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 //
 //        MyApplication.getInstance().sendMsg(mDevice.getIpPort(),msg.toString());
 //    }
-
 
 
     //----------------指令 end----------

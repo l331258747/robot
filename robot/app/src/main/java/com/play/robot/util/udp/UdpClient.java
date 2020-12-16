@@ -1,8 +1,12 @@
 package com.play.robot.util.udp;
 
+import android.text.TextUtils;
+
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
+import com.play.robot.util.rxbus.rxbusEvent.ReceiveCarEvent;
+import com.play.robot.util.rxbus.rxbusEvent.ReceiveStatusEvent;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -257,6 +261,44 @@ public class UdpClient {
             @Override
             public void onDataReceive(String buffer, int requestCode) {            //获取有效长度的数据
                 LogUtil.e("buffer" + buffer + ", requestCode = " + requestCode);
+
+                if(TextUtils.isEmpty(buffer)) return;
+                if(!buffer.startsWith("#")) return;
+
+                String[] s = buffer.split(",");
+                if(s.length < 3) return;
+
+
+                if(TextUtils.equals(s[1],"1") && TextUtils.equals(s[2],"1")){
+                    if(s.length < 14) return;
+                    ReceiveCarEvent event = new ReceiveCarEvent();
+                    event.setIp(ip);
+                    event.setPort(port);
+                    event.setMode(s[1]);
+                    event.setTask(s[2]);
+                    event.setN1(s[3]);
+                    event.setN2(s[4]);
+                    event.setN3(s[5]);
+                    event.setN4(s[6]);
+                    event.setN5(s[7]);
+                    event.setN6(s[8]);
+                    event.setN7(s[9]);
+                    event.setN8(s[10]);
+                    event.setN9(s[11]);
+                    event.setN10(s[12]);
+                    event.setN11(s[13]);
+                    RxBus2.getInstance().post(event);
+                }else if(TextUtils.equals(s[1],"3") && TextUtils.equals(s[2],"1")){
+                    if(s.length < 5) return;
+                    ReceiveStatusEvent event = new ReceiveStatusEvent();
+                    event.setIp(ip);
+                    event.setPort(port);
+                    event.setMode(s[1]);
+                    event.setTask(s[2]);
+                    event.setN1(s[3]);
+                    event.setN2(s[4]);
+                    RxBus2.getInstance().post(event);
+                }
             }
         };
     }

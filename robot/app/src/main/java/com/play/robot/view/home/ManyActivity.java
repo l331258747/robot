@@ -20,6 +20,7 @@ import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
 import com.play.robot.bean.MarkerBean;
+import com.play.robot.bean.ReceiveCarBean;
 import com.play.robot.bean.SettingInfo;
 import com.play.robot.constant.Constant;
 import com.play.robot.dialog.DeviceInfoDialog;
@@ -31,6 +32,7 @@ import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
+import com.play.robot.util.rxbus.rxbusEvent.ReceiveCarEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
 import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ZkcEvent;
@@ -38,6 +40,7 @@ import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.home.help.MyOnMarkerClickListener;
 import com.play.robot.view.home.help.MyOnMarkerDragListener;
+import com.play.robot.view.home.help.SendHelp;
 import com.play.robot.view.setting.SettingManyActivity;
 import com.play.robot.widget.ContentDeviceView;
 import com.play.robot.widget.IvBattery;
@@ -70,7 +73,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     ViewScale view_scale;
 
-    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop,disposableZkc;
+    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop,disposableZkc,disposableCar;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -87,6 +90,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     double meLatitude;
 
     List<MarkerBean> markers;
+
+    boolean isFlameout;//启动熄火
 
     @Override
     public int getLayoutId() {
@@ -106,6 +111,11 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 item.setType(MyApplication.getInstance().getDevices().get(i).getType());
                 item.setRtsp(MyApplication.getInstance().getDevices().get(i).getRtsp());
                 mDevices.add(item);
+
+                ReceiveCarBean bean = new ReceiveCarBean();
+                bean.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
+                bean.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
+                infos.add(bean);
             }
         }
 
@@ -175,6 +185,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             }
         });
 
+        //急停
         disposableStop = RxBus2.getInstance().toObservable(StopShowEvent.class, event -> {
             iv_stop.setAlpha(0f);
             iv_stop.setVisibility(View.VISIBLE);
@@ -184,6 +195,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     .setListener(null);
         });
 
+        //主控车
         disposableZkc = RxBus2.getInstance().toObservable(ZkcEvent.class, event->{
             getDeviceZkc();
             if(isInitData){
@@ -192,20 +204,65 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 initData();
             }
         });
+
+        //无人车信息
+        disposableCar = RxBus2.getInstance().toObservable(ReceiveCarEvent.class, event -> {
+            for (int i = 0;i<infos.size();i++){
+                if(infos.get(i).getIpPort().equals(event.getIpPort())){
+                    infos.get(i).setInfo("V:" + event.getN1() + "m/s\nD:" + event.getN2() + "m\n精度:" + event.getN6() + "\n维度:" + event.getN7());
+                }
+            }
+
+            if(mDeviceZkc == null) return;
+            if(TextUtils.isEmpty(mDeviceZkc.getIpPort())) return;
+            if(TextUtils.isEmpty(event.getIpPort())) return;
+
+
+            if (!TextUtils.equals(mDeviceZkc.getIpPort(), event.getIpPort())) return;
+            mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Int());
+
+            iv_battery.setSelect(event.getN4Int() >= 5 ? Constant.BATTERY_5
+                    : event.getN4Int() == 4 ? Constant.BATTERY_4
+                    : event.getN4Int() == 3 ? Constant.BATTERY_3
+                    : event.getN4Int() == 2 ? Constant.BATTERY_2
+                    : Constant.BATTERY_1);
+
+            event.getN1();//速度---------
+            event.getN2();//档位-------
+
+            event.getN3();//底层控制器错误码
+
+            event.getN4();//电量
+            event.getN5();//油量
+
+            event.getN6();//车体当前经度----
+            event.getN7();//车体当前纬度------
+            event.getN8();//车体方向-------
+
+            event.getN9();//车体横滚角
+            event.getN10();//车体俯仰角
+            event.getN11();//当前车辆模型名
+        });
     }
+
+    List<ReceiveCarBean> infos = new ArrayList<>();
 
     private void initDeviceView() {
         view_device.setOnItemClickListener(new ContentDeviceView.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                String str = "V:10m/s\nS:100m\nD:50m\n精度:12.325415\n维度:112.324567";
-                new DeviceInfoDialog(context).setTitle(mDevices.get(position).getIpPort()).setContent(str).show();
+                for (int i=0;i<infos.size();i++){
+                    if(mDevices.get(position).getIpPort().equals(infos.get(i).getIpPort())){
+                        if(!TextUtils.isEmpty(infos.get(i).getInfo()))
+                        new DeviceInfoDialog(context).setTitle(mDevices.get(position).getIpPort()).setContent(infos.get(i).getInfo()).show();
+                    }
+                }
             }
 
             @Override
             public void onLongClick(int position) {
                 new InstructDialog(context).setTitle(mDevices.get(position).getIpPort()).setSubmitListener(content -> {
-                    showShortToast("指令：" + content);
+                    SendHelp.sendMsg(mDevices.get(position).getIpPort(), content);
                 }).show();
             }
         });
@@ -223,6 +280,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     new Handler().postDelayed(() -> {
                         if (isDown) {
                             RxBus2.getInstance().post(new StopShowEvent());
+                            SendHelp.sendJS(mDeviceZkc.getIpPort());
                         }
                     }, 1200);
                     break;
@@ -602,16 +660,21 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     showShortToast("请先设置途径点");
                     return;
                 }
+                SendHelp.sendMarker(mDeviceZkc.getIpPort(), markers);
+
                 break;
             case R.id.tv_task_read:
                 showShortToast("读取途径点");
                 break;
-//            case R.id.iv_sign://信息，指令
-//                String str = "V:10m/s\nS:100m\nD:50m\n精度:12.325415\n维度:112.324567";
-//                new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(str).show();
-//                break;
             case R.id.iv_flameout://启动，熄火
-                new TextDialog(context).setContent("是否确认熄火/启动").show();
+                new TextDialog(context).setContent(isFlameout ? "是否确认熄火" : "是否确认启动").setSubmitListener(v1 -> {
+                    if (isFlameout) {
+                        SendHelp.sendXH(mDeviceZkc.getIpPort());
+                    } else {
+                        SendHelp.sendQD(mDeviceZkc.getIpPort());
+                    }
+                    isFlameout = !isFlameout;
+                }).show();
                 break;
         }
     }
@@ -645,6 +708,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             disposableStop.dispose();
         if (disposableZkc != null && !disposableZkc.isDisposed())
             disposableZkc.dispose();
+        if (disposableCar != null && !disposableCar.isDisposed())
+            disposableCar.dispose();
         mMapView.onDestroy();
 
         MyApplication.getInstance().deviceClear();

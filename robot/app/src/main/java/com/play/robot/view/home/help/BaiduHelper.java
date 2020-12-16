@@ -176,12 +176,12 @@ public class BaiduHelper {
     double latitude;
 
     //设置地图无人车的位置，并显示
-    public void setLocation(double longitude, double latitude) {
+    public void setLocation(double longitude, double latitude, float direction) {
         this.longitude = longitude;
         this.latitude = latitude;
         MyLocationData locData = new MyLocationData.Builder()
                 .accuracy(100)//getRadius 获取定位精度,默认值0.0f
-                .direction(100)//方向 // 此处设置开发者获取到的方向信息，顺时针0-360
+                .direction(direction)//方向 // 此处设置开发者获取到的方向信息，顺时针0-360
                 .latitude(latitude)
                 .longitude(longitude).build();
         mBaiduMap.setMyLocationData(locData);
