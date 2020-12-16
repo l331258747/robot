@@ -29,7 +29,7 @@ public class MySelfInfo {
     }
 
     public boolean isLogin() {
-        if (getUserId() != 0) {
+        if (getUserId() > 0) {
             return true;
         }
         return false;
