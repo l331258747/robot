@@ -316,6 +316,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
 
         mSurfaceView.setOnTouchListener((v, event) -> {
+            if(!mAnimatorHelp.getSurfaceViewCenter()) return false;
             //继承了Activity的onTouchEvent方法，直接监听点击事件
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //当手指按下的时候
