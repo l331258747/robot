@@ -26,7 +26,7 @@ public class UdpClient {
      */
 
 //    public static final int TIME_CALL = 3 * 1000;//报警时间
-    public static final int TIME_CALL = 600 * 1000;//报警时间
+    public static final int TIME_CALL = 20 * 1000;//报警时间
     public static final int TIME_OUT = 12 * 1000;//超时时间
     public static final String wSend = "hello";
 
