@@ -142,10 +142,20 @@ public class SendHelp {
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
+    //自主模式 - 一键返航
+    public static void sendFh(String ipPort,int type,int sort){
+        msg.setLength(0);
+        msg.append("$1,8,2");
+        msg.append("," + type);
+        msg.append("," + sort);
+        MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+    }
+
     public static void sendCamera(String ipPort, int type){
         msg.setLength(0);
         msg.append("$1,9,1");
         msg.append("," + type);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
+
 }

@@ -47,7 +47,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         List<Fragment> mFragments = new ArrayList<>();
         mFragments.add(CameraFragment.newInstance(ipPort));
-        mFragments.add(RouteFragment.newInstance());
+        mFragments.add(RouteFragment.newInstance(ipPort));
         mFragments.add(SignalFragment.newInstance());
         mFragments.add(BatteryFragment.newInstance());
         mFragments.add(MoreFragment.newInstance());

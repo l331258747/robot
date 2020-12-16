@@ -35,79 +35,87 @@
 
 
     <TextView
-        android:id="@+id/tv_jlljjd"
+        android:id="@+id/tv_fh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="记录路径节点"
+        android:text="顺序/逆序返航"
         android:layout_marginTop="@dimen/dp_40"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@+id/line_p5"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.play.robot.widget.SwitchButton
-        android:id="@+id/switch_jlljjd"
+        android:id="@+id/switch_fh"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"
-        app:layout_constraintTop_toTopOf="@+id/tv_jlljjd"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_jlljjd"
+        app:layout_constraintTop_toTopOf="@+id/tv_fh"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_fh"
         app:layout_constraintStart_toStartOf="@+id/line_p30"/>
 
     <TextView
-        android:id="@+id/tv_sxfh"
+        android:id="@+id/tv_ksjl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_40"
-        android:text="顺序返航"
+        android:text="开始记录"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@+id/line_p5"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jlljjd" />
-
-    <com.play.robot.widget.SwitchButton
-        android:id="@+id/switch_sxfh"
-        android:layout_width="@dimen/dp_56"
-        android:layout_height="@dimen/dp_30"
-        app:layout_constraintTop_toTopOf="@+id/tv_sxfh"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_sxfh"
-        app:layout_constraintStart_toStartOf="@+id/line_p30"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_fh" />
 
     <TextView
-        android:id="@+id/tv_nxfh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="逆序返航"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_p50"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.play.robot.widget.SwitchButton
-        android:id="@+id/switch_nxfh"
-        android:layout_width="@dimen/dp_56"
-        android:layout_height="@dimen/dp_30"
-        app:layout_constraintTop_toTopOf="@+id/tv_nxfh"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_nxfh"
-        app:layout_constraintStart_toStartOf="@+id/line_p70"/>
-
-    <TextView
-        android:id="@+id/tv_fslj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="发送指令"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintStart_toStartOf="@+id/line_p50"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nxfh" />
-
-    <TextView
-        android:id="@+id/tv_fslj_v"
+        android:id="@+id/btn_ksjl"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_30"
         android:gravity="center"
         android:text="确认"
         android:textColor="@color/color_c3392d"
         android:background="@drawable/btn_0_00_r40"
-        app:layout_constraintTop_toTopOf="@+id/tv_fslj"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_fslj"
+        app:layout_constraintTop_toTopOf="@+id/tv_ksjl"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_ksjl"
+        app:layout_constraintStart_toStartOf="@+id/line_p30" />
+
+    <TextView
+        android:id="@+id/tv_ljd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发送路径点"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/dp_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btn_ljd"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center"
+        android:text="发送"
+        android:textColor="@color/color_c3392d"
+        android:background="@drawable/btn_0_00_r40"
+        app:layout_constraintTop_toTopOf="@+id/tv_ljd"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_ljd"
+        app:layout_constraintStart_toStartOf="@+id/line_p70" />
+
+    <TextView
+        android:id="@+id/tv_wcjl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="完成记录"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/dp_40"
+        app:layout_constraintStart_toStartOf="@+id/line_p50"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ljd" />
+
+    <TextView
+        android:id="@+id/btn_wcjl"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_30"
+        android:gravity="center"
+        android:text="确认"
+        android:textColor="@color/color_c3392d"
+        android:background="@drawable/btn_0_00_r40"
+        app:layout_constraintTop_toTopOf="@+id/tv_wcjl"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_wcjl"
         app:layout_constraintStart_toStartOf="@+id/line_p70" />
 
 

@@ -30,6 +30,7 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
     int pos;
 
     CameraFragment mCameraFragment;
+    RouteFragment mRouteFragment;
 
     @Override
     public int getLayoutId() {
@@ -53,7 +54,7 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
 
         List<Fragment> mFragments = new ArrayList<>();
         mFragments.add(mCameraFragment = (CameraFragment) CameraFragment.newInstance(SettingInfo.shapeZkc));
-        mFragments.add(RouteFragment.newInstance());
+        mFragments.add(mRouteFragment = (RouteFragment) RouteFragment.newInstance(SettingInfo.shapeZkc));
         mFragments.add(ShapeFragment.newInstance());
         mFragments.add(SignalManyFragment.newInstance());
         mFragments.add(BatteryFragment.newInstance());
@@ -74,6 +75,8 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
     public void initData() {
         disposableZkc = RxBus2.getInstance().toObservable(ZkcEvent.class, event->{
             mCameraFragment.setIpPort(SettingInfo.shapeZkc);
+            mRouteFragment.setIpPort(SettingInfo.shapeZkc);
+
         });
     }
 

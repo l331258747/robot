@@ -110,8 +110,6 @@ public class MarkerDialog  extends Dialog {
             btn_road2.setVisibility(View.VISIBLE);
             btn_end.setVisibility(View.VISIBLE);
             btn_road.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
-            btn_road2.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
-            btn_end.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
         }
     }
 
