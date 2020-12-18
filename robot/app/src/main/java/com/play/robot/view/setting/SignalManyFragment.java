@@ -59,6 +59,7 @@ public class SignalManyFragment extends BaseFragment {
             item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
             item.setType(MyApplication.getInstance().getDevices().get(i).getType());
             item.setRtsp(MyApplication.getInstance().getDevices().get(i).getRtsp());
+            item.setNumber(MyApplication.getInstance().getDevices().get(i).getNumber());
             list.add(item);
         }
         mAdapter.setData(list);

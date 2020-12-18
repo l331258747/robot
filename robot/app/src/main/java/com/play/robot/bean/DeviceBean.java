@@ -10,7 +10,16 @@ public class DeviceBean {
     private int type;
     UdpClient mUdpClient;
     boolean isLead;
+    private String number;
     private String rtsp;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public String getRtsp() {
         return rtsp;

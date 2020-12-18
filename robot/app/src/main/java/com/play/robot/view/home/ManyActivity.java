@@ -110,6 +110,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
                 item.setType(MyApplication.getInstance().getDevices().get(i).getType());
                 item.setRtsp(MyApplication.getInstance().getDevices().get(i).getRtsp());
+                item.setNumber(MyApplication.getInstance().getDevices().get(i).getNumber());
                 mDevices.add(item);
 
                 ReceiveCarBean bean = new ReceiveCarBean();
@@ -388,11 +389,12 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     float y2 = 0;
 
     public void setStart(String rtsp){
-        nodePlayer.setInputUrl(rtsp);
-        //设置视频是否开启
-        nodePlayer.setVideoEnable(true);
-        nodePlayer.start();
-
+        if(nodePlayer != null){
+            nodePlayer.setInputUrl(rtsp);
+            //设置视频是否开启
+            nodePlayer.setVideoEnable(true);
+            nodePlayer.start();
+        }
     }
 
     public void setPause(){
@@ -406,6 +408,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         if(nodePlayer != null && nodePlayer.isPlaying()){
             nodePlayer.setVideoEnable(false);
             nodePlayer.stop();
+            nodePlayer = null;
         }
     }
 

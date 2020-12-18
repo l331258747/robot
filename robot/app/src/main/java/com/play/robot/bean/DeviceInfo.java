@@ -6,6 +6,15 @@ public class DeviceInfo {
     private String ip;
     private int port;
     private String rtsp;
+    private String number;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public String getRtsp() {
         return rtsp;
