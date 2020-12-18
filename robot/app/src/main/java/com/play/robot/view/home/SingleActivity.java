@@ -15,6 +15,7 @@ import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.reflect.TypeToken;
 import com.play.robot.MyApplication;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
@@ -30,7 +31,9 @@ import com.play.robot.dialog.MarkerDialog;
 import com.play.robot.dialog.MarkerModifyDialog;
 import com.play.robot.dialog.TextDialog;
 import com.play.robot.util.AppUtils;
+import com.play.robot.util.GsonUtil;
 import com.play.robot.util.LogUtil;
+import com.play.robot.util.SPUtils;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ChangeEvent;
@@ -679,9 +682,17 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 SendHelp.sendMarker(mDevice.getIpPort(), markers);
+                SPUtils.getInstance().putString("markers", GsonUtil.convertVO2String(markers));
                 break;
             case R.id.tv_task_read:
-                showShortToast("读取途径点");
+                if(TextUtils.isEmpty(SPUtils.getInstance().getString("markers"))){
+                    showShortToast("获取任务点失败");
+                    return;
+                }
+                markers.clear();
+                markers = GsonUtil.convertString2Collection(SPUtils.getInstance().getString("markers"),new TypeToken<List<MarkerBean>>(){});
+                mBaiduHelper.showMarkerLine(markers);
+
                 break;
             case R.id.iv_sign://信息，指令
                 if (mInfoBean != null && !TextUtils.isEmpty(mInfoBean.toString()))
