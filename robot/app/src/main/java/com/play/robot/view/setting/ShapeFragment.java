@@ -98,7 +98,7 @@ public class ShapeFragment extends BaseFragment implements View.OnClickListener 
             if(MyApplication.getInstance().getDevices().get(i).getType() == 1){
                 MyListBean item = new MyListBean();
                 item.setId(MyApplication.getInstance().getDevices().get(i).getType());
-                item.setContent(MyApplication.getInstance().getDevices().get(i).getIpPort());
+                item.setContent(MyApplication.getInstance().getDevices().get(i).getNumber());
                 listDevice.add(item);
             }
         }

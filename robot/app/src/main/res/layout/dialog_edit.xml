@@ -129,7 +129,7 @@
         android:background="@drawable/shape_eeeeeed_r40"
         android:hint="请输入编号"
         android:inputType="number"
-        android:maxLength="3"
+        android:maxLength="4"
         android:textColor="@color/color_1e1e1e"
         android:layout_marginStart="@dimen/dp_56"
         android:maxLines="1"
