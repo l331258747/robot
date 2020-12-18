@@ -19,6 +19,7 @@ import com.play.robot.MyApplication;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
+import com.play.robot.bean.DeviceInfoBean;
 import com.play.robot.bean.MarkerBean;
 import com.play.robot.bean.SettingInfo;
 import com.play.robot.constant.Constant;
@@ -484,7 +485,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         //无人车信息
         disposableCar = RxBus2.getInstance().toObservable(ReceiveCarEvent.class, event -> {
             if (!TextUtils.equals(mDevice.getIpPort(), event.getIpPort())) return;
-            deviceInfoStr = "V:" + event.getN1() + "m/s\nD:" + event.getN2() + "m\n精度:" + event.getN6() + "\n维度:" + event.getN7();
+            mInfoBean.setSpeed(event.getN1());
+            mInfoBean.setGear(event.getN2());
+            mInfoBean.setLat(event.getN6());
+            mInfoBean.setLat(event.getN7());
+
             mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Int());
 
             iv_battery.setSelect(event.getN4Int() >= 5 ? Constant.BATTERY_5
@@ -513,6 +518,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         disposableStatus = RxBus2.getInstance().toObservable(ReceiveStatusEvent.class, event -> {
             if (!TextUtils.equals(mDevice.getIpPort(), event.getIpPort())) return;
 
+            mInfoBean.setStatus(event.getN1());
+            mInfoBean.setDistance(event.getN2());
             //n1:
             //0----有目标
             //1----目标暂时丢失但还保留历史信息
@@ -520,6 +527,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             //3----确认目标丢失，停车
 
             //n2: 目标距离
+
+
         });
 
         //------------------地图 start----------
@@ -611,7 +620,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    String deviceInfoStr;
+    DeviceInfoBean mInfoBean = new DeviceInfoBean();
 
 
     //点击事件设置
@@ -671,8 +680,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 showShortToast("读取途径点");
                 break;
             case R.id.iv_sign://信息，指令
-                if (!TextUtils.isEmpty(deviceInfoStr))
-                    new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(deviceInfoStr).show();
+                if (mInfoBean != null && !TextUtils.isEmpty(mInfoBean.toString()))
+                    new DeviceInfoDialog(context).setTitle(mDevice.getIpPort()).setContent(mInfoBean.toString()).show();
                 break;
             case R.id.iv_flameout://启动，熄火
                 new TextDialog(context).setContent(isFlameout ? "是否确认熄火" : "是否确认启动").setSubmitListener(v1 -> {
