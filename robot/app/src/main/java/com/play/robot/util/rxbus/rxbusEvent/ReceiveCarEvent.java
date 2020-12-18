@@ -143,12 +143,15 @@ public class ReceiveCarEvent {
         return n8;
     }
 
-    public float getN8Int() {
+    public float getN8Float() {
         try {
             return Float.parseFloat(n8);
         } catch (Exception e) {
             return 0;
         }
+    }
+    public int getN8Int() {
+        return (int) getN8Float();
     }
 
     public void setN8(String n8) {

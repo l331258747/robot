@@ -78,7 +78,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     ViewScale view_scale;
 
-    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop, disposableChange, disposableCar,disposableStatus;
+    Disposable disposableAnim, disposableDevice, disposableStop, disposableChange, disposableCar,disposableStatus;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -438,10 +438,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         markers = new ArrayList<>();
         SettingInfo.initData();
 
-        //游标
-        disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
-
-
         //动画 地图和视频视图加载完了之后  设置地图缩小，如果直接设置地图是小图的话，放大视图会变形。
         disposableAnim = RxBus2.getInstance().toObservable(AnimatorEvent.class, animatorEvent -> {
             if (animatorEvent.isBig() && animatorEvent.isSmall()) {
@@ -496,13 +492,18 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             mInfoBean.setLng(event.getN6());
             mInfoBean.setLat(event.getN7());
 
-            mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Int());
+            //地图定位
+            mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Float());
 
+            //电池
             iv_battery.setSelect(event.getN4Int() >= 5 ? Constant.BATTERY_5
                     : event.getN4Int() == 4 ? Constant.BATTERY_4
                     : event.getN4Int() == 3 ? Constant.BATTERY_3
                     : event.getN4Int() == 2 ? Constant.BATTERY_2
                     : Constant.BATTERY_1);
+
+            //游标
+            view_scale.setValues(event.getN8Int());
 
             event.getN1();//速度---------
             event.getN2();//档位-------
@@ -854,8 +855,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onDestroy() {
-        if (disposableRuler != null && !disposableRuler.isDisposed())
-            disposableRuler.dispose();
         if (disposableAnim != null && !disposableAnim.isDisposed())
             disposableAnim.dispose();
         if (disposableDevice != null && !disposableDevice.isDisposed())

@@ -34,7 +34,6 @@ import com.play.robot.util.rxbus.rxbusEvent.AnimatorEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ReceiveCarEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
-import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ZkcEvent;
 import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
@@ -73,7 +72,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     ViewScale view_scale;
 
-    Disposable disposableRuler, disposableAnim, disposableDevice, disposableStop,disposableZkc,disposableCar;
+    Disposable disposableAnim, disposableDevice, disposableStop,disposableZkc,disposableCar;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -160,8 +159,6 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initDisposable() {
-        //游标
-        disposableRuler = RxBus2.getInstance().toObservable(VoteEvent.class, voteEvent -> view_scale.setValues(voteEvent.getVote()));
 
         //动画 地图和视频视图加载完了之后  设置地图缩小，如果直接设置地图是小图的话，放大视图会变形。
         disposableAnim = RxBus2.getInstance().toObservable(AnimatorEvent.class, animatorEvent -> {
@@ -217,16 +214,20 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             if(mDeviceZkc == null) return;
             if(TextUtils.isEmpty(mDeviceZkc.getIpPort())) return;
             if(TextUtils.isEmpty(event.getIpPort())) return;
-
-
             if (!TextUtils.equals(mDeviceZkc.getIpPort(), event.getIpPort())) return;
-            mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Int());
 
+            //定位
+            mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Float());
+
+            //电池
             iv_battery.setSelect(event.getN4Int() >= 5 ? Constant.BATTERY_5
                     : event.getN4Int() == 4 ? Constant.BATTERY_4
                     : event.getN4Int() == 3 ? Constant.BATTERY_3
                     : event.getN4Int() == 2 ? Constant.BATTERY_2
                     : Constant.BATTERY_1);
+
+            //游标
+            view_scale.setValues(event.getN8Int());
 
             event.getN1();//速度---------
             event.getN2();//档位-------
@@ -706,8 +707,6 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        if (disposableRuler != null && !disposableRuler.isDisposed())
-            disposableRuler.dispose();
         if (disposableAnim != null && !disposableAnim.isDisposed())
             disposableAnim.dispose();
         if (disposableDevice != null && !disposableDevice.isDisposed())
