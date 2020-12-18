@@ -76,18 +76,18 @@ public class RouteFragment extends BaseFragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.btn_ljd:
                 new TextDialog(context).setContent("是否发送路径点").setSubmitListener(v1 -> {
-                    SendHelp.sendFh(ipPort, 3, SettingInfo.isRouteFh ? 1 : 2);
+                    SendHelp.sendFh(ipPort, 3, "一键返航-发送路径点",SettingInfo.isRouteFh ? 1 : 2);
                 }).show();
 
                 break;
             case R.id.btn_ksjl:
                 new TextDialog(context).setContent("是否开始记录").setSubmitListener(v1 -> {
-                    SendHelp.sendFh(ipPort, 1, SettingInfo.isRouteFh ? 1 : 2);
+                    SendHelp.sendFh(ipPort, 1,"一键返航-开始记录", SettingInfo.isRouteFh ? 1 : 2);
                 }).show();
                 break;
             case R.id.btn_wcjl:
                 new TextDialog(context).setContent("是否完成记录").setSubmitListener(v1 -> {
-                    SendHelp.sendFh(ipPort, 2, SettingInfo.isRouteFh ? 1 : 2);
+                    SendHelp.sendFh(ipPort, 2,"一键返航-完成记录", SettingInfo.isRouteFh ? 1 : 2);
                 }).show();
                 break;
         }

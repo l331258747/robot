@@ -155,13 +155,13 @@ public class SendHelp {
     }
 
     //自主模式 - 一键返航
-    public static void sendFh(String ipPort,int type,int sort){
+    public static void sendFh(String ipPort,int type,String typeStr,int sort){
         msg.setLength(0);
         msg.append("$1,8,2");
         msg.append("," + type);
         msg.append("," + sort);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
-        ToastUtil.showShortToast(AppUtils.getContext(),"一键返航-发送成功");
+        ToastUtil.showShortToast(AppUtils.getContext(),typeStr);
     }
 
     public static void sendCamera(String ipPort, int type){
