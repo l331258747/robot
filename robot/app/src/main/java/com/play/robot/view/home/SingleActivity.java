@@ -493,7 +493,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             if (!TextUtils.equals(mDevice.getIpPort(), event.getIpPort())) return;
             mInfoBean.setSpeed(event.getN1());
             mInfoBean.setGear(event.getN2());
-            mInfoBean.setLat(event.getN6());
+            mInfoBean.setLng(event.getN6());
             mInfoBean.setLat(event.getN7());
 
             mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Int());
