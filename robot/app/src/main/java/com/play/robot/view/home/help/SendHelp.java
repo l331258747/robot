@@ -2,6 +2,8 @@ package com.play.robot.view.home.help;
 
 import com.play.robot.MyApplication;
 import com.play.robot.bean.MarkerBean;
+import com.play.robot.util.AppUtils;
+import com.play.robot.util.ToastUtil;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class SendHelp {
         msg.setLength(0);
         msg.append("$1,1,3");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //熄火 $1,1,6,0
@@ -33,6 +36,7 @@ public class SendHelp {
         msg.setLength(0);
         msg.append("$1,1,6,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //启动 $1,1,6,1
@@ -40,12 +44,14 @@ public class SendHelp {
         msg.setLength(0);
         msg.append("$1,1,6,1");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     public static void sendMsg(String ipPort, String str) {
         msg.setLength(0);
         msg.append(str);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //智能控车模式 摇杆
@@ -57,6 +63,7 @@ public class SendHelp {
         msg.append("," + w);
         msg.append("," + h);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //跟随模式
@@ -86,6 +93,7 @@ public class SendHelp {
         msg.setLength(0);
         msg.append("$1,6,1,4,0,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //一键清除
@@ -94,6 +102,7 @@ public class SendHelp {
         msg.append("$1,6,2");
         msg.append(isOK ? ",1" : ",0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //跟踪轨迹
@@ -102,6 +111,7 @@ public class SendHelp {
         msg.append("$1,6,6");
         msg.append(isOK ? ",1" : ",0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //自主跟随模式下的加减速
@@ -140,6 +150,7 @@ public class SendHelp {
             msg.append("," + typeStr);
         }
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     //自主模式 - 一键返航
@@ -149,6 +160,7 @@ public class SendHelp {
         msg.append("," + type);
         msg.append("," + sort);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
     public static void sendCamera(String ipPort, int type){
@@ -156,6 +168,7 @@ public class SendHelp {
         msg.append("$1,9,1");
         msg.append("," + type);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+        ToastUtil.showShortToast(AppUtils.getContext(),"发送成功");
     }
 
 }
