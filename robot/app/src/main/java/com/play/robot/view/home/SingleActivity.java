@@ -68,7 +68,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     View small_view;
     LinearLayout ll_loc, ll_task;
     TextView tv_task_send, tv_task_read, tv_rocker_inside, tv_rocker_outside;
-    MyRockerView rockerViewLeft, rockerViewRight, rockerViewRound1, rockerViewRound2;
+    MyRockerView rockerViewLeft, rockerViewRight;
     ConstraintLayout cl_rocker;
     View view_stop;
 
@@ -201,11 +201,12 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void setStart(String rtsp) {
-        nodePlayer.setInputUrl(rtsp);
-        //设置视频是否开启
-        nodePlayer.setVideoEnable(true);
-        nodePlayer.start();
-
+        if(nodePlayer != null){
+            nodePlayer.setInputUrl(rtsp);
+            //设置视频是否开启
+            nodePlayer.setVideoEnable(true);
+            nodePlayer.start();
+        }
     }
 
     public void setPause() {
@@ -219,6 +220,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         if (nodePlayer != null && nodePlayer.isPlaying()) {
             nodePlayer.setVideoEnable(false);
             nodePlayer.stop();
+            nodePlayer = null;
         }
     }
 
@@ -327,8 +329,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             tv_rocker_outside.setVisibility(View.GONE);
             rockerViewLeft.setVisibility(View.GONE);
             rockerViewRight.setVisibility(View.GONE);
-            rockerViewRound1.setVisibility(View.GONE);
-            rockerViewRound2.setVisibility(View.GONE);
             view_center.setVisibility(View.GONE);
             iv_center.setVisibility(View.GONE);
             if (rockerType == 1) {
@@ -340,27 +340,19 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 tv_rocker_outside.setVisibility(View.VISIBLE);
             }
         } else if (mode == 1) {
-            cl_rocker.setVisibility(View.VISIBLE);
+            cl_rocker.setVisibility(View.GONE);
             tv_rocker_inside.setVisibility(View.GONE);
             tv_rocker_outside.setVisibility(View.GONE);
             rockerViewLeft.setVisibility(View.GONE);
             rockerViewRight.setVisibility(View.GONE);
-            rockerViewRound1.setVisibility(View.GONE);
-            rockerViewRound2.setVisibility(View.GONE);
-            view_center.setVisibility(View.GONE);
-            iv_center.setVisibility(View.GONE);
-            if (rockerType == 1) {
-                rockerViewRound1.setVisibility(View.VISIBLE);
-                rockerViewRound2.setVisibility(View.VISIBLE);
-                view_center.setVisibility(View.VISIBLE);
-                iv_center.setVisibility(View.VISIBLE);
-            } else if (rockerType == 2) {
-            } else {
-                tv_rocker_inside.setVisibility(View.VISIBLE);
-                tv_rocker_outside.setVisibility(View.VISIBLE);
-            }
+
+            view_center.setVisibility(View.VISIBLE);
+            iv_center.setVisibility(View.VISIBLE);
         } else {
             cl_rocker.setVisibility(View.GONE);
+
+            view_center.setVisibility(View.GONE);
+            iv_center.setVisibility(View.GONE);
         }
     }
 
@@ -773,65 +765,39 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             });
         }
 
-        rockerViewRound1 = findViewById(R.id.rocker_view_round1);
-        if (rockerViewRound1 != null) {
-            rockerViewRound1.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_STATE_CHANGE);
-            rockerViewRound1.setOnShakeListener(MyRockerView.DirectionMode.DIRECTION_2_VERTICAL, new MyRockerShakeListener() {
-                @Override
-                public void direction(MyRockerView.Direction direction) {
-                    super.direction(direction);
+        view_center.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:// 获取手指第一次接触屏幕
+                    sx = (int) event.getRawX();
+                    sy = (int) event.getRawY();
+                    break;
+                case MotionEvent.ACTION_MOVE:// 手指在屏幕上移动对应的事件
+                    sx = (int) event.getRawX();
+                    sy = (int) event.getRawY();
+                    view_center.setY(sy-view_center.getHeight()/2);
+                    view_center.setX(sx-view_center.getWidth()/2);
 
-                    if (direction == MyRockerView.Direction.DIRECTION_UP) {
-                        if (centerY == 0) return;
-                        view_center.setY(centerY = centerY - centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
-                    } else if (direction == MyRockerView.Direction.DIRECTION_DOWN) {
-                        if (centerY >= h - AppUtils.dip2px(centerSize)) return;
-                        view_center.setY(centerY = centerY + centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
-                    }
-                }
-            });
-        }
-
-        rockerViewRound2 = findViewById(R.id.rocker_view_round2);
-        if (rockerViewRound2 != null) {
-            rockerViewRound2.setCallBackMode(MyRockerView.CallBackMode.CALL_BACK_MODE_STATE_CHANGE);
-            rockerViewRound2.setOnShakeListener(MyRockerView.DirectionMode.DIRECTION_2_HORIZONTAL, new MyRockerShakeListener() {
-                @Override
-                public void direction(MyRockerView.Direction direction) {
-                    super.direction(direction);
-
-                    if (direction == MyRockerView.Direction.DIRECTION_LEFT) {
-                        if (centerW == 0) return;
-                        view_center.setX(centerW = centerW - centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
-                    } else if (direction == MyRockerView.Direction.DIRECTION_RIGHT) {
-                        if (centerW >= w - AppUtils.dip2px(centerSize)) return;
-                        view_center.setX(centerW = centerW + centerMove);
-                        SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
-                    }
-                }
-            });
-        }
-
-        iv_center.setOnClickListener(v -> {
-            setCenter();
-            view_center.setX(centerW);
-            view_center.setY(centerY);
-            SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, w, h);
+                    break;
+                case MotionEvent.ACTION_UP:// 手指离开屏幕对应事件
+                    setCenter();
+                    SendHelp.sendRockerAngle(mDevice.getIpPort(), sx, sy, w, h);
+                    break;
+            }
+            return true;
         });
-
-        setCenter();
     }
 
     public void setCenter() {
         centerW = w / 2 - AppUtils.dip2px(centerSize) / 2;
         centerY = h / 2 - AppUtils.dip2px(centerSize) / 2;
+        view_center.setX(centerW);
+        view_center.setY(centerY);
     }
 
-    int w = 0;
-    int h = 0;
+
+    int sx,sy;//其实位置
+    int w = 0;//屏幕宽度
+    int h = 0;//屏幕高度
     View view_center;
     ImageView iv_center;
     int centerW = 0;

@@ -211,28 +211,6 @@
             rocker:rockerScale="0.3"
             rocker:rockerSpeedLevel="100" />
 
-        <com.play.robot.widget.rocherView.MyRockerView
-            android:id="@+id/rocker_view_round1"
-            android:layout_width="@dimen/dp_120"
-            android:layout_height="@dimen/dp_120"
-            android:layout_alignParentBottom="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            rocker:rockerCallBackMode="CALL_BACK_MODE_STATE_CHANGE"
-            rocker:rockerScale="0.3"
-            rocker:rockerSpeedLevel="100" />
-
-        <com.play.robot.widget.rocherView.MyRockerView
-            android:id="@+id/rocker_view_round2"
-            android:layout_width="@dimen/dp_120"
-            android:layout_height="@dimen/dp_120"
-            android:layout_alignParentBottom="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            rocker:rockerCallBackMode="CALL_BACK_MODE_STATE_CHANGE"
-            rocker:rockerScale="0.3"
-            rocker:rockerSpeedLevel="100" />
-
         <TextView
             android:id="@+id/tv_rocker_inside"
             android:layout_width="wrap_content"
