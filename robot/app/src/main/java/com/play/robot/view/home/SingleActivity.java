@@ -41,7 +41,6 @@ import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ReceiveCarEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ReceiveStatusEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
-import com.play.robot.util.rxbus.rxbusEvent.VoteEvent;
 import com.play.robot.view.home.help.AnimatorHelp;
 import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.home.help.MyOnMarkerClickListener;
