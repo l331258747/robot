@@ -170,7 +170,8 @@ public class MyApplication extends Application {
         for (int i = 0; i < mDeviceBeans.size(); i++) {
             if (mDeviceBeans.get(i).getIpPort().equals(ipPort)) {
                 byte[] mBuffer = msg.getBytes();
-                mDeviceBeans.get(i).getUdpClient().sendByteCmd(mBuffer, -1);
+                if (mDeviceBeans.get(i).getUdpClient() != null)
+                    mDeviceBeans.get(i).getUdpClient().sendByteCmd(mBuffer, -1);
             }
         }
     }
