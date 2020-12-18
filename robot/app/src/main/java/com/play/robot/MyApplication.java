@@ -94,7 +94,7 @@ public class MyApplication extends Application {
             for (int i = 0; i < mDeviceBeans.size(); i++) {
                 if (mDeviceBeans.get(i).getIpPort().equals(event.getIpPort())) {
                     if (event.getType() == -1) {
-                        setDeviceType(2, event.getIp(),event.getPort());
+                        setDeviceType(2, event.getIp(), event.getPort());
                     }
                 }
             }
@@ -104,7 +104,7 @@ public class MyApplication extends Application {
     //添加设备，缓存和全局变量中添加
     public void addDevice(DeviceBean item) {
         mDeviceBeans.add(item);
-        MySelfInfo.getInstance().addDevice(item.getIp(),item.getPort(),item.getNumber(),item.getRtsp());
+        MySelfInfo.getInstance().addDevice(item.getIp(), item.getPort(), item.getNumber(), item.getRtsp());
     }
 
     //删除设备，缓存和全局变量中删除
@@ -112,7 +112,7 @@ public class MyApplication extends Application {
         for (int i = 0; i < mDeviceBeans.size(); i++) {
             if (mDeviceBeans.get(i).getIpPort().equals(item.getIpPort())) {
                 mDeviceBeans.remove(i);
-                MySelfInfo.getInstance().removeDevice(item.getIp(),item.getPort());
+                MySelfInfo.getInstance().removeDevice(item.getIp(), item.getPort());
             }
 
         }
@@ -164,7 +164,7 @@ public class MyApplication extends Application {
         return null;
     }
 
-    public void sendMsg(String ipPort,String msg){
+    public void sendMsg(String ipPort, String msg) {
         LogUtil.e("sendMsg：" + msg);
 
         for (int i = 0; i < mDeviceBeans.size(); i++) {
@@ -175,10 +175,14 @@ public class MyApplication extends Application {
         }
     }
 
-    public void deviceClear(){
+    public void deviceClear() {
+        if (mDeviceBeans == null) return;
         for (int i = 0; i < mDeviceBeans.size(); i++) {
-            mDeviceBeans.get(i).setType(0);
-            mDeviceBeans.get(i).getUdpClient().disconnect();
+            if (mDeviceBeans.get(i) != null) {
+                mDeviceBeans.get(i).setType(0);
+                if (mDeviceBeans.get(i).getUdpClient() != null)
+                    mDeviceBeans.get(i).getUdpClient().disconnect();
+            }
         }
     }
 }
