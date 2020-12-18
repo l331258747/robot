@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.play.robot.R;
@@ -15,8 +16,9 @@ import com.play.robot.util.ToastUtil;
 public class MarkerModifyDialog extends Dialog {
 
     Context mContext;
-    TextView tv_btn;
+    TextView tv_btn,btn_road,btn_road2;
     EditText et_account,et_password;
+    LinearLayout view_btn;
 
     public MarkerModifyDialog(Context context) {
         super(context, R.style.mdialog);
@@ -35,6 +37,10 @@ public class MarkerModifyDialog extends Dialog {
         et_account = layout.findViewById(R.id.et_account);
         et_password = layout.findViewById(R.id.et_password);
 
+        view_btn = layout.findViewById(R.id.view_btn);
+        btn_road = layout.findViewById(R.id.btn_road);
+        btn_road2 = layout.findViewById(R.id.btn_road2);
+
         tv_btn.setOnClickListener(view -> {
             if (submitListener != null) {
 
@@ -48,28 +54,57 @@ public class MarkerModifyDialog extends Dialog {
                     return;
                 }
 
-                submitListener.onClick(Double.parseDouble(et_account.getText().toString()), Double.parseDouble(et_password.getText().toString()));
+                submitListener.onClick(Double.parseDouble(et_account.getText().toString()), Double.parseDouble(et_password.getText().toString()),type);
             }
             dismiss();
+        });
+
+        if(type == 1 || type == 2){
+            view_btn.setVisibility(View.VISIBLE);
+        }else{
+            view_btn.setVisibility(View.GONE);
+        }
+
+        setBtn(type);
+
+        btn_road.setOnClickListener(v -> {
+            setBtn(1);
+        });
+        btn_road2.setOnClickListener(v -> {
+            setBtn(2);
         });
 
         if(latitude != 0){
             et_account.setText(latitude + "");
             et_password.setText(longitude + "");
         }
+    }
 
+    private void setBtn(int type){
+        this.type = type;
+
+        btn_road.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
+        btn_road2.setBackgroundResource(R.drawable.btn_0_1e1e1e_r40);
+
+        if(type == 1){
+            btn_road.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
+        }else if(type == 2){
+            btn_road2.setBackgroundResource(R.drawable.btn_0_c3392d_r40);
+        }
     }
 
     double latitude;
     double longitude;
-    public MarkerModifyDialog setLatLng(double latitude, double longitude){
+    int type;
+    public MarkerModifyDialog setLatLng(double latitude, double longitude, int type){
         this.latitude = latitude;
         this.longitude = longitude;
+        this.type = type;
         return this;
     }
 
     public interface OnItemClickListener {
-        void onClick(double latitude, double longitude);
+        void onClick(double latitude, double longitude, int type);
     }
 
     OnItemClickListener submitListener;

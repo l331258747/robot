@@ -439,9 +439,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                                 mBean.setLatitude(latitude);
                                 mBean.setLongitude(longitude);
                                 mBean.setType(type);
-                                mBean.setNum(type == 1 ? markers.size() : 0);
+                                mBean.setNum((type == 1 || type == 2) ? markers.size() : 0);
                                 markers.add(mBean);
-                                mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr(), markers.size() - 1);
+                                mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr(),type, markers.size() - 1);
 
                                 if (type == -1) {
                                     mBaiduHelper.showMarkerLine(markers);
@@ -530,12 +530,15 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         MyOnMarkerClickListener markerClickListener = new MyOnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                int pos = marker.getExtraInfo().getInt("markerPos");
+
                 new MarkerModifyDialog(context)
-                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude)
-                        .setSubmitListener((latitude, longitude) -> {
-                            int pos = marker.getExtraInfo().getInt("markerPos");
+                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude,markers.get(pos).getType())
+                        .setSubmitListener((latitude, longitude,type) -> {
+
                             markers.get(pos).setLatitude(latitude);
                             markers.get(pos).setLongitude(longitude);
+                            markers.get(pos).setLongitude(type);
 
                             if (isMarkerUn()) {
                                 mBaiduHelper.showMarkerLine(markers);
@@ -581,10 +584,11 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     //拖拽
                     new MarkerModifyDialog(context)
-                            .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude)
-                            .setSubmitListener((latitude, longitude) -> {
+                            .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude,markers.get(pos).getType())
+                            .setSubmitListener((latitude, longitude,type) -> {
                                 markers.get(pos).setLatitude(latitude);
                                 markers.get(pos).setLongitude(longitude);
+                                markers.get(pos).setType(type);
 
                                 if (isMarkerUn()) {
                                     mBaiduHelper.showMarkerLine(markers);

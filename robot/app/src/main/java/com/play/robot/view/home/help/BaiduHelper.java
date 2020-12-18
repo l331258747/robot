@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
@@ -95,7 +96,7 @@ public class BaiduHelper {
             bundle.putInt("markerPos",i);
 
             markers.get(i).setNum(i);
-            BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr());
+            BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr(),markers.get(i).getType());
             //获取经纬度
             double latitude = markers.get(i).getLatitude();
             double longitude = markers.get(i).getLongitude();
@@ -129,7 +130,7 @@ public class BaiduHelper {
             bundle.putInt("markerPos",i);
 
             markers.get(i).setNum(i);
-            BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr());
+            BitmapDescriptor bitmap = getMarkerBitMap(markers.get(i).getNumStr(),markers.get(i).getType());
             //获取经纬度
             double latitude = markers.get(i).getLatitude();
             double longitude = markers.get(i).getLongitude();
@@ -147,18 +148,26 @@ public class BaiduHelper {
     }
 
     //获取marker的bitmap
-    public BitmapDescriptor getMarkerBitMap(String str){
+    public BitmapDescriptor getMarkerBitMap(String str,int type){
         View view = LayoutInflater.from(context).inflate(R.layout.view_mark, null, true);
         TextView tv_num = view.findViewById(R.id.tv_text);//获取自定义布局中的textview
+        ImageView iv_img = view.findViewById(R.id.iv_img);
+        if(type == 1){
+            iv_img.setImageResource(R.mipmap.ic_mark1);
+        }else if(type == 2){
+            iv_img.setImageResource(R.mipmap.ic_mark2);
+        }else{
+            iv_img.setImageResource(R.mipmap.ic_mark);
+        }
         tv_num.setText(str);//设置要显示的文本
         return BitmapDescriptorFactory.fromView(view);
     }
 
     //地图的点击事件，添加marker点
-    public void onMapClick(LatLng latLng, String str,int markerPos) {
+    public void onMapClick(LatLng latLng, String str,int type, int markerPos) {
         Bundle bundle = new Bundle();
         bundle.putInt("markerPos",markerPos);
-        BitmapDescriptor bitmap = getMarkerBitMap(str);
+        BitmapDescriptor bitmap = getMarkerBitMap(str,type);
         //先清除图层
 //        mBaiduMap.clear();
         // 定义Maker坐标点
