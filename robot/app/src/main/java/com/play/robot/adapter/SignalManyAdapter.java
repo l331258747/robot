@@ -45,6 +45,7 @@ public class SignalManyAdapter extends RecyclerView.Adapter<SignalManyAdapter.Vi
         holder.tv_status.setText("未连接");
         holder.tv_status.setTextColor(ContextCompat.getColor(mContext,R.color.color_text));
         holder.tv_ip.setTextColor(ContextCompat.getColor(mContext,R.color.color_text));
+        holder.tv_num.setText(data.getNumber());
 
         if(data.getType() == 1){
             holder.iv_head.setImageResource(R.mipmap.ic_device_in);
@@ -81,7 +82,7 @@ public class SignalManyAdapter extends RecyclerView.Adapter<SignalManyAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView iv_head;
-        TextView tv_ip,tv_status;
+        TextView tv_ip,tv_status,tv_num;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +90,7 @@ public class SignalManyAdapter extends RecyclerView.Adapter<SignalManyAdapter.Vi
             tv_ip = itemView.findViewById(R.id.tv_ip);
             tv_status = itemView.findViewById(R.id.tv_status);
             iv_head = itemView.findViewById(R.id.iv_head);
+            tv_num = itemView.findViewById(R.id.tv_num);
         }
     }
 

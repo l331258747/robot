@@ -485,6 +485,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             mBaiduHelper.ClearMarkers();
 
             setStart(mDevice.getRtsp());
+
         });
 
         //无人车信息
