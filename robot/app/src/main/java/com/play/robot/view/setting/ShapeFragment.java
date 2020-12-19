@@ -99,6 +99,8 @@ public class ShapeFragment extends BaseFragment implements View.OnClickListener 
                 MyListBean item = new MyListBean();
                 item.setId(MyApplication.getInstance().getDevices().get(i).getType());
                 item.setContent(MyApplication.getInstance().getDevices().get(i).getNumber());
+                item.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
+                item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
                 listDevice.add(item);
             }
         }
@@ -126,7 +128,8 @@ public class ShapeFragment extends BaseFragment implements View.OnClickListener 
                 break;
             case R.id.btn_zkcxz:
                 new MyListDialog(context).setData(listDevice).setOnItemClickListener(position -> {
-                    btn_zkcxz.setText(SettingInfo.shapeZkc = listDevice.get(position).getContent());
+                    SettingInfo.shapeZkc = listDevice.get(position).getIpPort();
+                    btn_zkcxz.setText(listDevice.get(position).getContent());
 
                     if(!TextUtils.isEmpty(SettingInfo.shapeMode) && !TextUtils.isEmpty(SettingInfo.shapeZkc)){
                         RxBus2.getInstance().post(new ZkcEvent());

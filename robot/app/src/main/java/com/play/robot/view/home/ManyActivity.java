@@ -506,7 +506,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     public void setZkcChange(){
         setStatusView();
-        setStart(mDeviceZkc.getRtsp());
+        if(mDeviceZkc != null)
+            setStart(mDeviceZkc.getRtsp());
     }
 
     boolean isInitData = false;
@@ -525,7 +526,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         setTaskView(isSufCenter);
 
         if(mDeviceZkc != null)
-        setStart(mDeviceZkc.getRtsp());
+            setStart(mDeviceZkc.getRtsp());
 
         markers = new ArrayList<>();
 

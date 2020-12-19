@@ -131,7 +131,7 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
                 iv_route.setImageResource(R.mipmap.setting_route);
                 break;
             case Constant.SETTING_MANY_SHAPE:
-                tv_title.setText("无人机编队");
+                tv_title.setText("无人车编队");
                 iv_shape.setImageResource(R.mipmap.setting_shape);
                 break;
             case Constant.SETTING_MANY_SIGNAL:
