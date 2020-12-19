@@ -169,7 +169,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                             RxBus2.getInstance().post(new StopShowEvent());
                             SendHelp.sendJS(mDevice.getIpPort());
                         }
-                    }, 1200);
+                    }, 800);
                     break;
                 case MotionEvent.ACTION_MOVE:// 移动
 
