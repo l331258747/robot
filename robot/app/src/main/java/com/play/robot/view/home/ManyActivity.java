@@ -284,7 +284,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                             RxBus2.getInstance().post(new StopShowEvent());
                             SendHelp.sendJS(mDeviceZkc.getIpPort());
                         }
-                    }, 1200);
+                    }, 500);
                     break;
                 case MotionEvent.ACTION_MOVE:// 移动
 
