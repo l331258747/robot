@@ -106,7 +106,7 @@
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/bg_click"
-        app:iv_drawable="@mipmap/ic_shape_square"
+        app:iv_drawable="@mipmap/setting_shape_un"
         app:layout_constraintBottom_toBottomOf="@+id/view_track"
         app:layout_constraintEnd_toStartOf="@+id/iv_camera"
         app:layout_constraintTop_toTopOf="@+id/view_track"/>

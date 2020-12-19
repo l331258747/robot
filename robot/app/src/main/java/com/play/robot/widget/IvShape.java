@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.play.robot.R;
-import com.play.robot.constant.Constant;
 
 import androidx.annotation.Nullable;
 
@@ -52,17 +51,17 @@ public class IvShape extends LinearLayout {
     }
 
 
-    public void setSelect(String imgId) {
-        switch (imgId) {
-            case Constant.SHAPE_CIRCULAR:
-                iv_img.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_shape_circular));
-                break;
-            case Constant.SHAPE_SQUARE:
-                iv_img.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_shape_square));
-                break;
-            case Constant.SHAPE_TRIANGLE:
-                iv_img.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_shape_triangle));
-                break;
-        }
-    }
+//    public void setSelect(String imgId) {
+//        switch (imgId) {
+//            case Constant.SHAPE_CIRCULAR:
+//                iv_img.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_shape_circular));
+//                break;
+//            case Constant.SHAPE_SQUARE:
+//                iv_img.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_shape_square));
+//                break;
+//            case Constant.SHAPE_TRIANGLE:
+//                iv_img.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_shape_triangle));
+//                break;
+//        }
+//    }
 }
