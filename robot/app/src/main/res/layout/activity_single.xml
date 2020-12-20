@@ -10,22 +10,10 @@
     <!--    标题-->
     <include layout="@layout/layout_single_title" />
 
-    <!--    尺标-->
-    <com.play.robot.widget.scale.ViewScale
-        android:id="@+id/view_scale"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_160"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_title" />
-
     <View
         android:id="@+id/small_view"
-        android:layout_width="@dimen/dp_140"
-        android:layout_height="@dimen/dp_140"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_10"
         android:visibility="invisible"
@@ -40,28 +28,15 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_160"
+        android:layout_marginEnd="@dimen/dp_120"
         android:layout_marginBottom="@dimen/dp_10"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/view_left"
-        app:layout_constraintTop_toBottomOf="@+id/view_scale" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_title" />
 
     <!--    视屏-->
-
-<!--    <SurfaceView-->
-<!--        android:id="@+id/surfaceView"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginStart="@dimen/dp_10"-->
-<!--        android:layout_marginTop="@dimen/dp_10"-->
-<!--        android:layout_marginEnd="@dimen/dp_160"-->
-<!--        android:layout_marginBottom="@dimen/dp_10"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/view_left"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/view_scale" />-->
 
     <cn.nodemedia.NodePlayerView
         android:id="@+id/surfaceView"
@@ -69,12 +44,24 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_160"
+        android:layout_marginEnd="@dimen/dp_120"
         android:layout_marginBottom="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/view_left"
-        app:layout_constraintTop_toBottomOf="@+id/view_scale"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_title"/>
+
+    <!--    尺标-->
+    <com.play.robot.widget.scale.ViewScale
+        android:id="@+id/view_scale"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_120"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_title" />
 
     <LinearLayout
         android:id="@+id/ll_loc"
@@ -84,7 +71,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@+id/bmapView"
+        app:layout_constraintTop_toBottomOf="@+id/view_scale"
         app:layout_constraintEnd_toEndOf="@+id/bmapView"
         tools:visibility="visible">
 
@@ -186,7 +173,7 @@
         tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/surfaceView"
         app:layout_constraintEnd_toEndOf="@id/surfaceView"
-        app:layout_constraintStart_toStartOf="@id/surfaceView">
+        app:layout_constraintStart_toEndOf="@id/view_left">
 
         <!--摇杆-->
         <com.play.robot.widget.rocherView.MyRockerView

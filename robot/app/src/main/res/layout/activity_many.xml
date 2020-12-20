@@ -9,22 +9,10 @@
 <!--    标题-->
     <include layout="@layout/layout_many_title" />
 
-<!--    尺标-->
-    <com.play.robot.widget.scale.ViewScale
-        android:id="@+id/view_scale"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_160"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_title" />
-
     <View
         android:id="@+id/small_view"
-        android:layout_width="@dimen/dp_140"
-        android:layout_height="@dimen/dp_140"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100"
         app:layout_constraintTop_toBottomOf="@+id/cl_title"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/dp_10"
@@ -37,43 +25,42 @@
         android:id="@+id/bmapView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/view_scale"
         android:layout_marginTop="@dimen/dp_10"
-        app:layout_constraintStart_toEndOf="@+id/view_device"
         android:layout_marginStart="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_160"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="@dimen/dp_120"
         android:layout_marginBottom="@dimen/dp_10"
-        android:clickable="true" />
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_title"/>
 
     <!--    视屏-->
-
-<!--    <SurfaceView-->
-<!--        android:id="@+id/surfaceView"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/view_scale"-->
-<!--        android:layout_marginTop="@dimen/dp_10"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/view_device"-->
-<!--        android:layout_marginStart="@dimen/dp_10"-->
-<!--        android:layout_marginEnd="@dimen/dp_160"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        android:layout_marginBottom="@dimen/dp_10"/>-->
 
     <cn.nodemedia.NodePlayerView
         android:id="@+id/surfaceView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/view_scale"
         android:layout_marginTop="@dimen/dp_10"
-        app:layout_constraintStart_toEndOf="@+id/view_device"
         android:layout_marginStart="@dimen/dp_10"
-        android:layout_marginEnd="@dimen/dp_160"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/dp_120"
+        android:layout_marginBottom="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/dp_10"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_title"/>
+
+    <!--    尺标-->
+    <com.play.robot.widget.scale.ViewScale
+        android:id="@+id/view_scale"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_120"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_title" />
 
     <LinearLayout
         android:id="@+id/ll_loc"
@@ -83,7 +70,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@+id/bmapView"
+        app:layout_constraintTop_toBottomOf="@+id/view_scale"
         app:layout_constraintEnd_toEndOf="@+id/bmapView"
         tools:visibility="visible">
 
