@@ -557,18 +557,55 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
                 new MarkerModifyDialog(context)
                         .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude,markers.get(pos).getType())
-                        .setSubmitListener((latitude, longitude,type) -> {
+                        .setSubmitListener(new MarkerModifyDialog.OnItemClickListener() {
+                            @Override
+                            public void onClick(double latitude, double longitude, int type) {
+                                markers.get(pos).setLatitude(latitude);
+                                markers.get(pos).setLongitude(longitude);
+                                markers.get(pos).setLongitude(type);
 
-                            markers.get(pos).setLatitude(latitude);
-                            markers.get(pos).setLongitude(longitude);
-                            markers.get(pos).setLongitude(type);
-
-                            if (isMarkerUn()) {
-                                mBaiduHelper.showMarkerLine(markers);
-                            } else {
-                                mBaiduHelper.showMarkers(markers);
+                                if (isMarkerUn()) {
+                                    mBaiduHelper.showMarkerLine(markers);
+                                } else {
+                                    mBaiduHelper.showMarkers(markers);
+                                }
                             }
 
+                            @Override
+                            public void onDel() {
+                                new TextDialog(context)
+                                        .setTitle("删除")
+                                        .setContent(pos == 0 ? "如果删除起点，将清除所有点。" : "是否删除途径点")
+                                        .setSubmitListener(v -> {
+                                            if (pos == 0) {
+                                                markers.clear();
+                                                mBaiduHelper.ClearMarkers();
+                                            } else {
+                                                markers.remove(pos);
+                                                if (isMarkerUn()) {
+                                                    mBaiduHelper.showMarkerLine(markers);
+                                                } else {
+                                                    mBaiduHelper.showMarkers(markers);
+                                                }
+                                            }
+                                        })
+                                        .setCancelListener(v -> {
+                                            if (isMarkerUn()) {
+                                                mBaiduHelper.showMarkerLine(markers);
+                                            } else {
+                                                mBaiduHelper.showMarkers(markers);
+                                            }
+                                        }).show();
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                if (isMarkerUn()) {
+                                    mBaiduHelper.showMarkerLine(markers);
+                                } else {
+                                    mBaiduHelper.showMarkers(markers);
+                                }
+                            }
                         }).show();
                 return false;
             }
@@ -578,37 +615,16 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             public void onMarkerDragEnd(Marker marker) {
                 int pos = marker.getExtraInfo().getInt("markerPos");
                 //拖拽结束
-                if (!isMove()) {
-                    //删除
-                    new TextDialog(context)
-                            .setTitle("删除")
-                            .setContent(pos == 0 ? "如果删除起点，将清除所有点。" : "是否删除途径点")
-                            .setSubmitListener(v -> {
-                                if (pos == 0) {
-                                    markers.clear();
-                                    mBaiduHelper.ClearMarkers();
-                                } else {
-                                    markers.remove(pos);
-                                    if (isMarkerUn()) {
-                                        mBaiduHelper.showMarkerLine(markers);
-                                    } else {
-                                        mBaiduHelper.showMarkers(markers);
-                                    }
-                                }
-                            })
-                            .setCancelListener(v -> {
-                                if (isMarkerUn()) {
-                                    mBaiduHelper.showMarkerLine(markers);
-                                } else {
-                                    mBaiduHelper.showMarkers(markers);
-                                }
-                            }).show();
-
-                } else {
-                    //拖拽
-                    new MarkerModifyDialog(context)
-                            .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude,markers.get(pos).getType())
-                            .setSubmitListener((latitude, longitude,type) -> {
+//                if (!isMove()) {
+//                    //删除
+//                } else {
+//                    //拖拽
+//                }
+                new MarkerModifyDialog(context)
+                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude,markers.get(pos).getType())
+                        .setSubmitListener(new MarkerModifyDialog.OnItemClickListener() {
+                            @Override
+                            public void onClick(double latitude, double longitude, int type) {
                                 markers.get(pos).setLatitude(latitude);
                                 markers.get(pos).setLongitude(longitude);
                                 markers.get(pos).setType(type);
@@ -618,9 +634,44 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                                 } else {
                                     mBaiduHelper.showMarkers(markers);
                                 }
+                            }
 
-                            }).show();
-                }
+                            @Override
+                            public void onDel() {
+                                new TextDialog(context)
+                                        .setTitle("删除")
+                                        .setContent(pos == 0 ? "如果删除起点，将清除所有点。" : "是否删除途径点")
+                                        .setSubmitListener(v -> {
+                                            if (pos == 0) {
+                                                markers.clear();
+                                                mBaiduHelper.ClearMarkers();
+                                            } else {
+                                                markers.remove(pos);
+                                                if (isMarkerUn()) {
+                                                    mBaiduHelper.showMarkerLine(markers);
+                                                } else {
+                                                    mBaiduHelper.showMarkers(markers);
+                                                }
+                                            }
+                                        })
+                                        .setCancelListener(v -> {
+                                            if (isMarkerUn()) {
+                                                mBaiduHelper.showMarkerLine(markers);
+                                            } else {
+                                                mBaiduHelper.showMarkers(markers);
+                                            }
+                                        }).show();
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                if (isMarkerUn()) {
+                                    mBaiduHelper.showMarkerLine(markers);
+                                } else {
+                                    mBaiduHelper.showMarkers(markers);
+                                }
+                            }
+                        }).show();
             }
         };
 

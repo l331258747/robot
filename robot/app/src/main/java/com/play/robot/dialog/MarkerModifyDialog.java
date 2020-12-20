@@ -16,7 +16,7 @@ import com.play.robot.util.ToastUtil;
 public class MarkerModifyDialog extends Dialog {
 
     Context mContext;
-    TextView tv_btn,btn_road,btn_road2;
+    TextView tv_btn,btn_road,btn_road2,tv_del,tv_cancel;
     EditText et_account,et_password;
     LinearLayout view_btn;
 
@@ -33,7 +33,11 @@ public class MarkerModifyDialog extends Dialog {
         View layout = inflater.inflate(R.layout.dialog_marker_modify, null);
         this.setContentView(layout);
 
+        setCancelable(false);
+
         tv_btn = layout.findViewById(R.id.tv_btn);
+        tv_del = layout.findViewById(R.id.tv_del);
+        tv_cancel = layout.findViewById(R.id.tv_cancel);
         et_account = layout.findViewById(R.id.et_account);
         et_password = layout.findViewById(R.id.et_password);
 
@@ -55,6 +59,20 @@ public class MarkerModifyDialog extends Dialog {
                 }
 
                 submitListener.onClick(Double.parseDouble(et_account.getText().toString()), Double.parseDouble(et_password.getText().toString()),type);
+            }
+            dismiss();
+        });
+
+        tv_cancel.setOnClickListener(view -> {
+            if (submitListener != null) {
+                submitListener.onCancel();
+            }
+            dismiss();
+        });
+
+        tv_del.setOnClickListener(view -> {
+            if (submitListener != null) {
+                submitListener.onDel();
             }
             dismiss();
         });
@@ -105,6 +123,8 @@ public class MarkerModifyDialog extends Dialog {
 
     public interface OnItemClickListener {
         void onClick(double latitude, double longitude, int type);
+        void onDel();
+        void onCancel();
     }
 
     OnItemClickListener submitListener;

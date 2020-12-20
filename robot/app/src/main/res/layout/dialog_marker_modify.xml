@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_parent"
-    android:layout_width="@dimen/dp_240"
+    android:layout_width="@dimen/dp_320"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_00_664b4b4b_r5"
     android:orientation="vertical">
@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="@dimen/dp_240"
+        android:layout_width="@dimen/dp_320"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:includeFontPadding="false"
@@ -160,6 +160,32 @@
         android:textColor="@color/color_1e1e1e"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_password" />
+
+    <TextView
+        android:id="@+id/tv_del"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/btn_0_1e1e1e_r40"
+        android:gravity="center"
+        android:text="删除"
+        android:layout_marginEnd="@dimen/sp_10"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintEnd_toStartOf="@+id/tv_btn"
+        app:layout_constraintTop_toBottomOf="@+id/view_password" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/btn_0_1e1e1e_r40"
+        android:gravity="center"
+        android:text="取消"
+        android:layout_marginStart="@dimen/sp_10"
+        android:textColor="@color/color_1e1e1e"
+        app:layout_constraintStart_toEndOf="@+id/tv_btn"
         app:layout_constraintTop_toBottomOf="@+id/view_password" />
 
     <View
