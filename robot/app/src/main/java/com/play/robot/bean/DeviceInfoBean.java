@@ -79,7 +79,7 @@ public class DeviceInfoBean {
             str = str  + "\nD:" + gear + "m";
         }
         if(!TextUtils.isEmpty(lng)){
-            str = str  + "\n精度:" + lng;
+            str = str  + "\n经度:" + lng;
         }
         if(!TextUtils.isEmpty(lat)){
             str = str  + "\n维度:" + lat;

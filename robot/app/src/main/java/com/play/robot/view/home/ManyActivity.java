@@ -62,7 +62,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     IvSignal iv_signal;
     IvShape iv_shape;
     View small_view, view_stop;
-    TextView tv_task_send, tv_task_read;
+    TextView tv_task_send, tv_task_read,tv_info;
     LinearLayout ll_loc, ll_task;
 
     TitleDeviceView iv_status;
@@ -119,6 +119,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             }
         }
 
+        tv_info = $(R.id.tv_info);
         tv_task_send = $(R.id.tv_task_send);
         tv_task_read = $(R.id.tv_task_read);
         ll_task = $(R.id.ll_task);
@@ -158,6 +159,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initDisposable() {
 
         //动画 地图和视频视图加载完了之后  设置地图缩小，如果直接设置地图是小图的话，放大视图会变形。
@@ -207,7 +209,24 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         disposableCar = RxBus2.getInstance().toObservable(ReceiveCarEvent.class, event -> {
             for (int i = 0;i<infos.size();i++){
                 if(infos.get(i).getIpPort().equals(event.getIpPort())){
-                    infos.get(i).setInfo("V:" + event.getN1() + "m/s\nD:" + event.getN2() + "m\n精度:" + event.getN6() + "\n维度:" + event.getN7());
+                    infos.get(i).setInfo("V:" + event.getN1() + "m/s\nD:" + event.getN2() + "m\n经度:" + event.getN6() + "\n维度:" + event.getN7());
+                }
+            }
+
+            for (int i=0;i<mDevices.size();i++){
+                if(mDevices.get(currentPos).getIpPort().equals(event.getIpPort())){
+                    tv_info.setText("速度:"+event.getN1()
+                            +"\n档位:"+event.getN2()
+                            +"\n错误:"+event.getN3()
+                            +"\n电量:"+event.getN4()
+                            +"\n油量:"+event.getN5()
+                            +"\n经度:"+event.getN6()
+                            +"\n纬度:"+event.getN7()
+                            +"\n方向:"+event.getN8()
+                            +"\n横滚角:"+event.getN9()
+                            +"\n俯仰角:"+event.getN10()
+                            +"\n车辆:"+event.getN11()
+                    );
                 }
             }
 
@@ -244,6 +263,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             event.getN9();//车体横滚角
             event.getN10();//车体俯仰角
             event.getN11();//当前车辆模型名
+
         });
     }
 
@@ -334,15 +354,15 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     if(currentPos < mDevices.size() - 1){
                         currentPos = currentPos + 1;
                         setStatusView();
-
+                        tv_info.setText("");
                         mAnimatorHelp.moveUp();
                     }
                 } else if(y2 - y1 > 100) {
                     LogUtil.e("向下滑");
                     if(currentPos > 0){
                         currentPos = currentPos - 1;
+                        tv_info.setText("");
                         setStatusView();
-
                         mAnimatorHelp.moveDown();
                     }
                 } else if(x1 - x2 > 100) {
@@ -350,12 +370,10 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     if(leftCentreRight == 0){
                         //左边
                         leftCentreRight = 1;
-
                         mAnimatorHelp.moveLeft();
                     }else if(leftCentreRight == 1){
                         //中间
                         leftCentreRight = 2;
-
                         mAnimatorHelp.moveLeft();
                     }
 

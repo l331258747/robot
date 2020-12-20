@@ -70,7 +70,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     IvSignal iv_signal;
     View small_view;
     LinearLayout ll_loc, ll_task;
-    TextView tv_task_send, tv_task_read, tv_rocker_inside, tv_rocker_outside;
+    TextView tv_task_send, tv_task_read, tv_rocker_inside, tv_rocker_outside,tv_info;
     MyRockerView rockerViewLeft, rockerViewRight;
     ConstraintLayout cl_rocker;
     View view_stop;
@@ -115,6 +115,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         meLatitude = intent.getDoubleExtra("meLatitude", 0);
 
         small_view = $(R.id.small_view);
+        tv_info = $(R.id.tv_info);
         cl_rocker = $(R.id.cl_rocker);
         iv_status = $(R.id.iv_status);
         iv_more = $(R.id.iv_more);
@@ -424,6 +425,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
 
     //----------------------跟人模式 end----------------
+    @SuppressLint("SetTextI18n")
     @Override
     public void initData() {
 
@@ -481,6 +483,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
             setStart(mDevice.getRtsp());
 
+            tv_info.setText("");
+
         });
 
         //无人车信息
@@ -519,6 +523,19 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             event.getN9();//车体横滚角
             event.getN10();//车体俯仰角
             event.getN11();//当前车辆模型名
+
+            tv_info.setText("速度:"+event.getN1()
+                    +"\n档位:"+event.getN2()
+                    +"\n错误:"+event.getN3()
+                    +"\n电量:"+event.getN4()
+                    +"\n油量:"+event.getN5()
+                    +"\n经度:"+event.getN6()
+                    +"\n纬度:"+event.getN7()
+                    +"\n方向:"+event.getN8()
+                    +"\n横滚角:"+event.getN9()
+                    +"\n俯仰角:"+event.getN10()
+                    +"\n车辆:"+event.getN11()
+            );
         });
 
         disposableStatus = RxBus2.getInstance().toObservable(ReceiveStatusEvent.class, event -> {
@@ -759,6 +776,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     int upLevel;
     int turnLevel;
 
+    @SuppressLint("ClickableViewAccessibility")
     public void initRockerView() {
         w = AppUtils.getDisplayWidth(activity);
         h = AppUtils.getDisplayHeight(activity);
