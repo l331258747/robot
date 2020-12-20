@@ -335,7 +335,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             rockerViewLeft.setVisibility(View.GONE);
             rockerViewRight.setVisibility(View.GONE);
             view_center.setVisibility(View.GONE);
-            iv_center.setVisibility(View.GONE);
             if (rockerType == 1) {
                 rockerViewLeft.setVisibility(View.VISIBLE);
                 rockerViewRight.setVisibility(View.VISIBLE);
@@ -352,12 +351,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             rockerViewRight.setVisibility(View.GONE);
 
             view_center.setVisibility(View.VISIBLE);
-            iv_center.setVisibility(View.VISIBLE);
         } else {
             cl_rocker.setVisibility(View.GONE);
 
             view_center.setVisibility(View.GONE);
-            iv_center.setVisibility(View.GONE);
         }
     }
 
@@ -761,7 +758,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     showShortToast("获取任务点失败");
                     return;
                 }
-                
+
                 showShortToast("获取任务点成功");
                 markers.clear();
                 markers = GsonUtil.convertString2Collection(SPUtils.getInstance().getString("markers"),new TypeToken<List<MarkerBean>>(){});
@@ -836,7 +833,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         h = AppUtils.getDisplayHeight(activity);
 
         view_center = findViewById(R.id.view_center);
-        iv_center = findViewById(R.id.iv_center);
 
         //前后
         rockerViewLeft = findViewById(R.id.rocker_view_left);
@@ -900,11 +896,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     int sx,sy;//其实位置
     int w = 0;//屏幕宽度
     int h = 0;//屏幕高度
-    View view_center;
-    ImageView iv_center;
+    ImageView view_center;
     int centerW = 0;
     int centerY = 0;
-    int centerSize = 16;
+    int centerSize = 30;
     int centerMove = 5;
     //----------------------------------- 遥控 end-----------------
 
