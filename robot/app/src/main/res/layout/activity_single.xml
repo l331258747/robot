@@ -271,12 +271,12 @@
         android:id="@+id/view_center"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/surfaceView"
+        app:layout_constraintEnd_toEndOf="@+id/surfaceView"
+        app:layout_constraintTop_toTopOf="@+id/surfaceView"
         android:visibility="gone"
         tools:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/surfaceView"
         android:src="@mipmap/ic_center"/>
 
     <include layout="@layout/layout_single_track"/>

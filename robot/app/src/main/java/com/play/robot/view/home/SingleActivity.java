@@ -872,13 +872,30 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 case MotionEvent.ACTION_MOVE:// 手指在屏幕上移动对应的事件
                     sx = (int) event.getRawX();
                     sy = (int) event.getRawY();
+
+                    if(sy < AppUtils.dip2px(40)){
+                        sy = AppUtils.dip2px(40);
+                    }
+                    if(sy > h - AppUtils.dip2px(10)){
+                        sy = h - AppUtils.dip2px(10);
+                    }
+                    if(sx < AppUtils.dip2px(10)){
+                        sx = AppUtils.dip2px(10);
+                    }
+                    if(sx > w - AppUtils.dip2px(120)){
+                        sx = w - AppUtils.dip2px(120);
+                    }
+
                     view_center.setY(sy-view_center.getHeight()/2);
                     view_center.setX(sx-view_center.getWidth()/2);
 
                     break;
                 case MotionEvent.ACTION_UP:// 手指离开屏幕对应事件
                     setCenter();
-                    SendHelp.sendRockerAngle(mDevice.getIpPort(), sx, sy, w, h);
+                    int msx = sx - AppUtils.dip2px(10);
+                    int msy = sy - AppUtils.dip2px(40);
+
+                    SendHelp.sendRockerAngle(mDevice.getIpPort(), msx, msy, mSurfaceView.getWidth(), mSurfaceView.getHeight());
                     break;
             }
             return true;
@@ -886,8 +903,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void setCenter() {
-        centerW = w / 2 - AppUtils.dip2px(centerSize) / 2;
-        centerY = h / 2 - AppUtils.dip2px(centerSize) / 2;
+        LogUtil.e("mSurfaceView.getWidth():" + mSurfaceView.getWidth());
+        LogUtil.e("mSurfaceView.getHeight():" + mSurfaceView.getHeight());
+
+        centerW = AppUtils.dip2px(10) + mSurfaceView.getWidth()/2 - AppUtils.dip2px(centerSize) / 2;
+        centerY = AppUtils.dip2px(40) + mSurfaceView.getHeight()/2 - AppUtils.dip2px(centerSize) / 2;
         view_center.setX(centerW);
         view_center.setY(centerY);
     }
