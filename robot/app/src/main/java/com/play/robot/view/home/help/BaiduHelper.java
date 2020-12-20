@@ -16,6 +16,7 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
@@ -63,6 +64,7 @@ public class BaiduHelper {
 
         // 开启定位图层，一定不要少了这句，否则对在地图的设置、绘制定位点将无效
         mBaiduMap.setMyLocationEnabled(true);
+        mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL,true,null));
 
         mBaiduMap.setOnMarkerClickListener(markerClickListener);
         mBaiduMap.setOnMarkerDragListener(markerDragListener);
