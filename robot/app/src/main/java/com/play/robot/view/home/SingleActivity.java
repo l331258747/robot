@@ -755,13 +755,14 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 SendHelp.sendMarker(mDevice.getIpPort(), markers);
-                SPUtils.getInstance().putString("markers", GsonUtil.convertVO2String(markers));
                 break;
             case R.id.tv_task_read:
                 if(TextUtils.isEmpty(SPUtils.getInstance().getString("markers"))){
                     showShortToast("获取任务点失败");
                     return;
                 }
+                
+                showShortToast("获取任务点成功");
                 markers.clear();
                 markers = GsonUtil.convertString2Collection(SPUtils.getInstance().getString("markers"),new TypeToken<List<MarkerBean>>(){});
                 mBaiduHelper.showMarkerLine(markers);

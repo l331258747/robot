@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">无人车</string>
+    <string name="set_marker_tip">请严格按照下方json格式输入\ntype：0起点，-1终点，1必经点，2约束点\n起点0开始，终点-1结束\n点击复制\n[{"longitude":114.419825,"latitude":30.518659,"type":0},\n{"longitude":114.519825,"latitude":30.518659,"type":1},\n{"longitude":114.619825,"latitude":30.518659,"type":2},\n{"longitude":114.719825,"latitude":30.518659,"type":-1}]</string>
+    <string name="set_marker_tip2">[{"longitude":114.419825,"latitude":30.518659,"type":0},{"longitude":114.519825,"latitude":30.518659,"type":1},{"longitude":114.619825,"latitude":30.518659,"type":2},{"longitude":114.719825,"latitude":30.518659,"type":-1}]</string>
 </resources>

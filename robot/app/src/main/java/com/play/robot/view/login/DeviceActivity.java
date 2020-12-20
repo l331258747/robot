@@ -11,6 +11,7 @@ import com.play.robot.adapter.DeviceAdapter;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.DeviceBean;
 import com.play.robot.dialog.EditDialog;
+import com.play.robot.dialog.SetMarkerDialog;
 import com.play.robot.dialog.TextDialog;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
@@ -26,7 +27,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
     ImageView iv_back;
     RecyclerView recyclerView;
-    TextView tv_btn;
+    TextView tv_btn,tv_marker;
 
     DeviceAdapter mAdapter;
     List<DeviceBean> list;
@@ -43,9 +44,11 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         iv_back = $(R.id.iv_back);
         recyclerView = $(R.id.recycler_view);
         tv_btn = $(R.id.tv_btn);
+        tv_marker = $(R.id.tv_marker);
 
         iv_back.setOnClickListener(this);
         tv_btn.setOnClickListener(this);
+        tv_marker.setOnClickListener(this);
 
         initRecycler();
     }
@@ -152,6 +155,9 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     list.add(item);
                     mAdapter.setData(list);
                 }).show();
+                break;
+            case R.id.tv_marker:
+                new SetMarkerDialog(context).show();
                 break;
         }
     }

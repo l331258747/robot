@@ -158,9 +158,9 @@
         android:gravity="center"
         android:text="确定"
         android:textColor="@color/color_1e1e1e"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_password" />
+        android:layout_marginStart="@dimen/dp_10"
+        app:layout_constraintTop_toBottomOf="@+id/view_password"
+        app:layout_constraintStart_toEndOf="@+id/tv_del" />
 
     <TextView
         android:id="@+id/tv_del"
@@ -170,9 +170,9 @@
         android:background="@drawable/btn_0_1e1e1e_r40"
         android:gravity="center"
         android:text="删除"
-        android:layout_marginEnd="@dimen/sp_10"
         android:textColor="@color/color_1e1e1e"
-        app:layout_constraintEnd_toStartOf="@+id/tv_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_password" />
 
     <TextView
@@ -183,9 +183,9 @@
         android:background="@drawable/btn_0_1e1e1e_r40"
         android:gravity="center"
         android:text="取消"
-        android:layout_marginStart="@dimen/sp_10"
+        android:layout_marginEnd="@dimen/sp_10"
         android:textColor="@color/color_1e1e1e"
-        app:layout_constraintStart_toEndOf="@+id/tv_btn"
+        app:layout_constraintEnd_toStartOf="@+id/tv_del"
         app:layout_constraintTop_toBottomOf="@+id/view_password" />
 
     <View
