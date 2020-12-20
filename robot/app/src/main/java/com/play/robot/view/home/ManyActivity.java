@@ -359,6 +359,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         setStatusView();
                         tv_info.setText("");
                         mAnimatorHelp.moveUp();
+
+                        setStart(mDevices.get(currentPos).getRtsp());
+
                     }
                 } else if(y2 - y1 > 100) {
                     LogUtil.e("向下滑");
@@ -367,6 +370,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         tv_info.setText("");
                         setStatusView();
                         mAnimatorHelp.moveDown();
+
+                        setStart(mDevices.get(currentPos).getRtsp());
                     }
                 } else if(x1 - x2 > 100) {
                     LogUtil.e("向左滑");
@@ -374,24 +379,44 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         //左边
                         leftCentreRight = 1;
                         mAnimatorHelp.moveLeft();
+
+                        clearCamera();
+                        SettingInfo.isCameraSide = true;
+
+                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 4);
+
                     }else if(leftCentreRight == 1){
                         //中间
                         leftCentreRight = 2;
                         mAnimatorHelp.moveLeft();
+
+                        clearCamera();
+                        SettingInfo.isCameraUp = true;
+
+                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 1);
                     }
 
                 } else if(x2 - x1 > 100) {
                     LogUtil.e( "向右滑");
                     if(leftCentreRight == 1){
-                        //左边
+                        //右边
                         leftCentreRight = 0;
-
                         mAnimatorHelp.moveRight();
+
+                        clearCamera();
+                        SettingInfo.isCameraAfter = true;
+
+                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 5);
+
                     }else if(leftCentreRight == 2){
                         //中间
                         leftCentreRight = 1;
-
                         mAnimatorHelp.moveRight();
+
+                        clearCamera();
+                        SettingInfo.isCameraUp = true;
+
+                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 1);
                     }
 
                 }
@@ -400,6 +425,14 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+
+    public void clearCamera(){
+        SettingInfo.isCameraUp = false;
+        SettingInfo.isCameraSide = false;
+        SettingInfo.isCameraAfter = false;
+        SettingInfo.isCameraUpZt = false;
+        SettingInfo.isCameraUpZtSb = false;
+    }
 
 
     int leftCentreRight = 1;
@@ -773,8 +806,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
-        if(mDeviceZkc != null)
-            setStart(mDeviceZkc.getRtsp());
+        if(mDeviceZkc != null){
+            setStart(mDevices.get(currentPos).getRtsp());
+        }
     }
 
     @Override
