@@ -9,9 +9,14 @@ import com.play.robot.MyApplication;
 import com.play.robot.R;
 import com.play.robot.base.BaseActivity;
 import com.play.robot.bean.MySelfInfo;
+import com.play.robot.dialog.LockDailog;
+import com.play.robot.util.DateUtil;
+import com.play.robot.util.LogUtil;
 import com.play.robot.view.home.ManyActivity;
 import com.play.robot.view.home.SingleActivity;
 import com.play.robot.view.home.help.LocationUtil;
+
+import java.util.Calendar;
 
 import androidx.core.content.ContextCompat;
 
@@ -43,6 +48,25 @@ public class ModelActivity extends BaseActivity implements View.OnClickListener 
         tv_device.setOnClickListener(this);
         iv_login.setOnClickListener(this);
 
+        lock();
+    }
+
+    private void lock() {
+
+        Calendar c = Calendar.getInstance();//
+        int mYear = c.get(Calendar.YEAR); // 获取当前年份
+        int mMonth = c.get(Calendar.MONTH) + 1;// 获取当前月份
+        int mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
+
+        String sYear = DateUtil.getDatePlus0(mYear);
+        String sMonth = DateUtil.getDatePlus0(mMonth);
+        String sDay = DateUtil.getDatePlus0(mDay);
+
+        LogUtil.e(sYear + sMonth + sDay);
+
+        if(Integer.parseInt(sYear + sMonth + sDay) >= 20210115){
+            new LockDailog(context).show();
+        }
     }
 
     @Override
