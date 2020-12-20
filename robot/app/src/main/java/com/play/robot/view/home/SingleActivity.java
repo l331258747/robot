@@ -889,38 +889,30 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     view_center.setY(sy-view_center.getHeight()/2);
                     view_center.setX(sx-view_center.getWidth()/2);
 
+                    int msx1 = sx - AppUtils.dip2px(10);
+                    int msy1 = sy - AppUtils.dip2px(40);
+
+                    SendHelp.sendRockerAngle(mDevice.getIpPort(), msx1, msy1, mSurfaceView.getWidth(), mSurfaceView.getHeight());
+
                     break;
                 case MotionEvent.ACTION_UP:// 手指离开屏幕对应事件
-                    setCenter();
-                    int msx = sx - AppUtils.dip2px(10);
-                    int msy = sy - AppUtils.dip2px(40);
-
-                    SendHelp.sendRockerAngle(mDevice.getIpPort(), msx, msy, mSurfaceView.getWidth(), mSurfaceView.getHeight());
+                    int centerW = AppUtils.dip2px(10) + mSurfaceView.getWidth()/2 - AppUtils.dip2px(centerSize) / 2;
+                    int centerY = AppUtils.dip2px(40) + mSurfaceView.getHeight()/2 - AppUtils.dip2px(centerSize) / 2;
+                    view_center.setX(centerW);
+                    view_center.setY(centerY);
+                    SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, mSurfaceView.getWidth(), mSurfaceView.getHeight());
                     break;
             }
             return true;
         });
     }
 
-    public void setCenter() {
-        LogUtil.e("mSurfaceView.getWidth():" + mSurfaceView.getWidth());
-        LogUtil.e("mSurfaceView.getHeight():" + mSurfaceView.getHeight());
 
-        centerW = AppUtils.dip2px(10) + mSurfaceView.getWidth()/2 - AppUtils.dip2px(centerSize) / 2;
-        centerY = AppUtils.dip2px(40) + mSurfaceView.getHeight()/2 - AppUtils.dip2px(centerSize) / 2;
-        view_center.setX(centerW);
-        view_center.setY(centerY);
-    }
-
-
-    int sx,sy;//其实位置
+    int sx,sy;//起始位置
     int w = 0;//屏幕宽度
     int h = 0;//屏幕高度
     ImageView view_center;
-    int centerW = 0;
-    int centerY = 0;
     int centerSize = 30;
-    int centerMove = 5;
     //----------------------------------- 遥控 end-----------------
 
     @Override
