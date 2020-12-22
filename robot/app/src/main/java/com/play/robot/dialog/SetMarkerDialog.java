@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import com.play.robot.R;
 import com.play.robot.bean.MarkerBean;
 import com.play.robot.util.GsonUtil;
+import com.play.robot.util.LngLonUtil;
 import com.play.robot.util.SPUtils;
 import com.play.robot.util.ToastUtil;
 
@@ -24,7 +25,7 @@ public class SetMarkerDialog extends Dialog {
 
     Context mContext;
 
-    TextView tv_btn,tv_cancel,tv_tip;
+    TextView tv_btn, tv_cancel, tv_tip;
 
     EditText et_content;
 
@@ -46,7 +47,7 @@ public class SetMarkerDialog extends Dialog {
         tv_cancel = layout.findViewById(R.id.tv_cancel);
         tv_tip = layout.findViewById(R.id.tv_tip);
 
-        tv_tip.setOnClickListener(view->{
+        tv_tip.setOnClickListener(view -> {
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
@@ -54,14 +55,14 @@ public class SetMarkerDialog extends Dialog {
             // 将ClipData内容放到系统剪贴板里。
             cm.setPrimaryClip(mClipData);
 
-            ToastUtil.showShortToast(mContext,"复制成功");
+            ToastUtil.showShortToast(mContext, "复制成功");
         });
 
-        tv_cancel.setOnClickListener(View->{
+        tv_cancel.setOnClickListener(View -> {
             dismiss();
         });
 
-        if(!TextUtils.isEmpty(SPUtils.getInstance().getString("markers"))){
+        if (!TextUtils.isEmpty(SPUtils.getInstance().getString("markers"))) {
             et_content.setText(SPUtils.getInstance().getString("markers"));
         }
 
@@ -94,6 +95,12 @@ public class SetMarkerDialog extends Dialog {
 
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).setNum(i);
+            }
+
+            for (int i = 0; i < list.size(); i++) {
+                double[] ds = LngLonUtil.gps84_To_bd09(list.get(i).getLatitude(), list.get(i).getLongitude());
+                list.get(i).setLongitude(ds[1]);
+                list.get(i).setLatitude(ds[0]);
             }
 
             SPUtils.getInstance().putString("markers", GsonUtil.convertVO2String(list));
