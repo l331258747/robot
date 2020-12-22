@@ -122,7 +122,11 @@ public class LngLonUtil {
      */  
     public static double[] gps84_To_bd09(double lat,double lon){  
         double[] gcj02 = gps84_To_Gcj02(lat,lon);  
-        double[] bd09 = gcj02_To_Bd09(gcj02[0],gcj02[1]);  
+        double[] bd09 = gcj02_To_Bd09(gcj02[0],gcj02[1]);
+
+        bd09[0] = retain6(bd09[0]);
+        bd09[1] = retain6(bd09[1]);
+
         return bd09;  
     }  
 
