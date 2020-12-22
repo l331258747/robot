@@ -19,11 +19,13 @@ public class RouteFragment extends BaseFragment implements View.OnClickListener 
     SwitchButton switch_fh;
     TextView btn_ljd, btn_ksjl, btn_wcjl;
     String ipPort;
+    String number;
 
-    public static Fragment newInstance(String ipPort) {
+    public static Fragment newInstance(String ipPort, String number) {
         RouteFragment fragment = new RouteFragment();
         Bundle bundle = new Bundle();
         bundle.putString("ipPort", ipPort);
+        bundle.putString("number", number);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -34,11 +36,13 @@ public class RouteFragment extends BaseFragment implements View.OnClickListener 
         Bundle bundle = getArguments();
         if (bundle != null) {
             ipPort = bundle.getString("ipPort");
+            number = bundle.getString("number");
         }
     }
 
-    public void setIpPort(String ipPort) {
+    public void setIpPort(String ipPort,String number) {
         this.ipPort = ipPort;
+        this.number = number;
     }
 
     @Override
@@ -76,18 +80,18 @@ public class RouteFragment extends BaseFragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.btn_ljd:
                 new TextDialog(context).setContent("是否发送路径点").setSubmitListener(v1 -> {
-                    SendHelp.sendFh(ipPort, 3, "一键返航-发送路径点",SettingInfo.isRouteFh ? 1 : 2);
+                    SendHelp.sendFh(number,ipPort, 3, "一键返航-发送路径点",SettingInfo.isRouteFh ? 1 : 2);
                 }).show();
 
                 break;
             case R.id.btn_ksjl:
                 new TextDialog(context).setContent("是否开始记录").setSubmitListener(v1 -> {
-                    SendHelp.sendFh(ipPort, 1,"一键返航-开始记录", SettingInfo.isRouteFh ? 1 : 2);
+                    SendHelp.sendFh(number,ipPort, 1,"一键返航-开始记录", SettingInfo.isRouteFh ? 1 : 2);
                 }).show();
                 break;
             case R.id.btn_wcjl:
                 new TextDialog(context).setContent("是否完成记录").setSubmitListener(v1 -> {
-                    SendHelp.sendFh(ipPort, 2,"一键返航-完成记录", SettingInfo.isRouteFh ? 1 : 2);
+                    SendHelp.sendFh(number,ipPort, 2,"一键返航-完成记录", SettingInfo.isRouteFh ? 1 : 2);
                 }).show();
                 break;
         }

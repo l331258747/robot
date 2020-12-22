@@ -168,7 +168,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     new Handler().postDelayed(() -> {
                         if (isDown) {
                             RxBus2.getInstance().post(new StopShowEvent());
-                            SendHelp.sendJS(mDevice.getIpPort());
+                            SendHelp.sendJS(mDevice.getNumber(),mDevice.getIpPort());
                         }
                     }, 500);
                     break;
@@ -379,9 +379,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         iv_track_status.setOnClickListener(v -> {
             if (mode == 3) {
-                SendHelp.sendTrackPeopleStart(mDevice.getIpPort());
+                SendHelp.sendTrackPeopleStart(mDevice.getNumber(), mDevice.getIpPort());
             } else if (mode == 4) {
-                SendHelp.sendTrackCarStart(mDevice.getIpPort());
+                SendHelp.sendTrackCarStart(mDevice.getNumber(), mDevice.getIpPort());
             }
         });
 
@@ -389,22 +389,22 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         switch_track_qs.setChecked(false);
 
         switch_track_gj.setOnCheckedChangeListener((view, isChecked) -> {
-            SendHelp.sendTrackGj(mDevice.getIpPort(), isChecked);
+            SendHelp.sendTrackGj(mDevice.getNumber(), mDevice.getIpPort(), isChecked);
         });
         switch_track_qs.setOnCheckedChangeListener((view, isChecked) -> {
-            SendHelp.sendTrackQc(mDevice.getIpPort(), isChecked);
+            SendHelp.sendTrackQc(mDevice.getNumber(), mDevice.getIpPort(), isChecked);
         });
 
         nv_track_speed.setNum(speedNum);
         nv_track_speed.setCallback(num -> {
             speedNum = num;
-            SendHelp.sendTrackSpeed(mDevice.getIpPort(), speedNum);
+            SendHelp.sendTrackSpeed(mDevice.getNumber(), mDevice.getIpPort(), speedNum);
 
         });
         nv_track_space.setNum(spaceNum);
         nv_track_space.setCallback(num -> {
             spaceNum = num;
-            SendHelp.sendTrackSpace(mDevice.getIpPort(), speedNum);
+            SendHelp.sendTrackSpace(mDevice.getNumber(), mDevice.getIpPort(), spaceNum);
         });
     }
 
@@ -711,6 +711,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         Intent intent = new Intent(context, SettingActivity.class);
         intent.putExtra("ipPort", mDevice.getIpPort());
+        intent.putExtra("number", mDevice.getNumber());
         switch (v.getId()) {
             case R.id.iv_more:
                 intent.putExtra("position", Constant.SETTING_MORE);
@@ -751,7 +752,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     showShortToast("请先设置途径点");
                     return;
                 }
-                SendHelp.sendMarker(mDevice.getIpPort(), markers);
+                SendHelp.sendMarker(mDevice.getNumber(), mDevice.getIpPort(), markers);
                 break;
             case R.id.tv_task_read:
                 if(TextUtils.isEmpty(SPUtils.getInstance().getString("markers"))){
@@ -772,9 +773,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             case R.id.iv_flameout://启动，熄火
                 new TextDialog(context).setContent(isFlameout ? "是否确认熄火" : "是否确认启动").setSubmitListener(v1 -> {
                     if (isFlameout) {
-                        SendHelp.sendXH(mDevice.getIpPort());
+                        SendHelp.sendXH(mDevice.getNumber(), mDevice.getIpPort());
                     } else {
-                        SendHelp.sendQD(mDevice.getIpPort());
+                        SendHelp.sendQD(mDevice.getNumber(), mDevice.getIpPort());
                     }
                     isFlameout = !isFlameout;
                 }).show();
@@ -798,11 +799,11 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
                     if (mode == 3) {
                         setTrack(true);
-                        SendHelp.sendTrackPeopleInit(mDevice.getIpPort());
+                        SendHelp.sendTrackPeopleInit(mDevice.getNumber(), mDevice.getIpPort());
                     }
                     if (mode == 4) {
                         setTrack(true);
-                        SendHelp.sendTrackCarInit(mDevice.getIpPort());
+                        SendHelp.sendTrackCarInit(mDevice.getNumber(), mDevice.getIpPort());
                     }
 
                 }).show();
@@ -843,7 +844,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     upLevel = level;
-                    SendHelp.sendRocker(mDevice.getIpPort(), upLevel, turnLevel);
+                    SendHelp.sendRocker(mDevice.getNumber(),mDevice.getIpPort(), upLevel, turnLevel);
                 }
             });
         }
@@ -857,7 +858,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     turnLevel = level;
-                    SendHelp.sendRocker(mDevice.getIpPort(), upLevel, turnLevel);
+                    SendHelp.sendRocker(mDevice.getNumber(),mDevice.getIpPort(), upLevel, turnLevel);
                 }
 
             });
@@ -892,7 +893,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     int msx1 = sx - AppUtils.dip2px(10);
                     int msy1 = sy - AppUtils.dip2px(40);
 
-                    SendHelp.sendRockerAngle(mDevice.getIpPort(), msx1, msy1, mSurfaceView.getWidth(), mSurfaceView.getHeight());
+                    SendHelp.sendRockerAngle(mDevice.getNumber(), mDevice.getIpPort(), msx1, msy1, mSurfaceView.getWidth(), mSurfaceView.getHeight());
 
                     break;
                 case MotionEvent.ACTION_UP:// 手指离开屏幕对应事件
@@ -900,7 +901,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     int centerY = AppUtils.dip2px(40) + mSurfaceView.getHeight()/2 - AppUtils.dip2px(centerSize) / 2;
                     view_center.setX(centerW);
                     view_center.setY(centerY);
-                    SendHelp.sendRockerAngle(mDevice.getIpPort(), centerW, centerY, mSurfaceView.getWidth(), mSurfaceView.getHeight());
+                    SendHelp.sendRockerAngle(mDevice.getNumber(), mDevice.getIpPort(), centerW, centerY, mSurfaceView.getWidth(), mSurfaceView.getHeight());
                     break;
             }
             return true;

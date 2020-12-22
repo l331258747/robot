@@ -30,6 +30,7 @@ public class SettingInfo {
 
     public static String shapeMode;
     public static String shapeZkc;
+    public static String shapeZkcBH;
     public static List<String> shapeList;
 
 
@@ -53,6 +54,7 @@ public class SettingInfo {
 
         shapeMode = "";
         shapeZkc = "";
+        shapeZkcBH = "";
         shapeList = new ArrayList<>();
     }
 

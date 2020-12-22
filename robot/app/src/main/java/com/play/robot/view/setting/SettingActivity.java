@@ -25,6 +25,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     int pos;
 
     String ipPort;
+    String number;
 
     @Override
     public int getLayoutId() {
@@ -35,6 +36,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void initView() {
 
         ipPort = intent.getStringExtra("ipPort");
+        number = intent.getStringExtra("number");
 
         tv_title = $(R.id.tv_title);
         iv_close = $(R.id.iv_close);
@@ -49,8 +51,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
 
         List<Fragment> mFragments = new ArrayList<>();
-        mFragments.add(CameraFragment.newInstance(ipPort));
-        mFragments.add(RouteFragment.newInstance(ipPort));
+        mFragments.add(CameraFragment.newInstance(ipPort,number));
+        mFragments.add(RouteFragment.newInstance(ipPort,number));
         mFragments.add(SignalFragment.newInstance());
         mFragments.add(BatteryFragment.newInstance());
         mFragments.add(MoreFragment.newInstance());

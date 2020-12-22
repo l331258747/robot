@@ -53,8 +53,8 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
 
 
         List<Fragment> mFragments = new ArrayList<>();
-        mFragments.add(mCameraFragment = (CameraFragment) CameraFragment.newInstance(SettingInfo.shapeZkc));
-        mFragments.add(mRouteFragment = (RouteFragment) RouteFragment.newInstance(SettingInfo.shapeZkc));
+        mFragments.add(mCameraFragment = (CameraFragment) CameraFragment.newInstance(SettingInfo.shapeZkcBH,SettingInfo.shapeZkc));
+        mFragments.add(mRouteFragment = (RouteFragment) RouteFragment.newInstance(SettingInfo.shapeZkcBH,SettingInfo.shapeZkc));
         mFragments.add(ShapeFragment.newInstance());
         mFragments.add(SignalManyFragment.newInstance());
         mFragments.add(BatteryFragment.newInstance());
@@ -74,8 +74,8 @@ public class SettingManyActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void initData() {
         disposableZkc = RxBus2.getInstance().toObservable(ZkcEvent.class, event->{
-            mCameraFragment.setIpPort(SettingInfo.shapeZkc);
-            mRouteFragment.setIpPort(SettingInfo.shapeZkc);
+            mCameraFragment.setIpPort(SettingInfo.shapeZkcBH,SettingInfo.shapeZkc);
+            mRouteFragment.setIpPort(SettingInfo.shapeZkcBH,SettingInfo.shapeZkc);
 
         });
     }

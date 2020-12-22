@@ -15,11 +15,13 @@ public class CameraFragment extends BaseFragment {
 
     SwitchButton switch_qzsxt, switch_cssxt, switch_qztz, switch_hssxt, switch_qztzmbsb;
     String ipPort;
+    String number;
 
-    public static Fragment newInstance(String ipPort) {
+    public static Fragment newInstance(String ipPort,String number) {
         CameraFragment fragment = new CameraFragment();
         Bundle bundle = new Bundle();
         bundle.putString("ipPort", ipPort);
+        bundle.putString("number",number);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -30,11 +32,13 @@ public class CameraFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             ipPort = bundle.getString("ipPort");
+            number = bundle.getString("number");
         }
     }
 
-    public void setIpPort(String ipPort) {
+    public void setIpPort(String ipPort,String number) {
         this.ipPort = ipPort;
+        this.number = number;
     }
 
     @Override
@@ -62,14 +66,14 @@ public class CameraFragment extends BaseFragment {
             switch_qzsxt.setChecked(SettingInfo.isCameraUp = isChecked);
 
             if (isChecked)
-                SendHelp.sendCamera(ipPort, 1);
+                SendHelp.sendCamera(number, ipPort, 1);
 
         });
         switch_cssxt.setOnCheckedChangeListener((view, isChecked) -> {
             clear();
             switch_cssxt.setChecked(SettingInfo.isCameraSide = isChecked);
 
-            SendHelp.sendCamera(ipPort, 4);
+            SendHelp.sendCamera(number, ipPort, 4);
         });
         switch_hssxt.setOnCheckedChangeListener((view, isChecked) -> {
             clear();
@@ -77,21 +81,21 @@ public class CameraFragment extends BaseFragment {
 
 
             if (isChecked)
-                SendHelp.sendCamera(ipPort, 5);
+                SendHelp.sendCamera(number, ipPort, 5);
         });
         switch_qztz.setOnCheckedChangeListener((view, isChecked) -> {
             clear();
             switch_qztz.setChecked(SettingInfo.isCameraUpZt = isChecked);
 
             if (isChecked)
-                SendHelp.sendCamera(ipPort, 2);
+                SendHelp.sendCamera(number, ipPort, 2);
         });
         switch_qztzmbsb.setOnCheckedChangeListener((view, isChecked) -> {
             clear();
             switch_qztzmbsb.setChecked(SettingInfo.isCameraUpZtSb = isChecked);
 
             if (isChecked)
-                SendHelp.sendCamera(ipPort, 3);
+                SendHelp.sendCamera(number, ipPort, 3);
         });
     }
 

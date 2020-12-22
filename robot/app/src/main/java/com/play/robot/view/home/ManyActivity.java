@@ -305,7 +305,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     new Handler().postDelayed(() -> {
                         if (isDown) {
                             RxBus2.getInstance().post(new StopShowEvent());
-                            SendHelp.sendJS(mDeviceZkc.getIpPort());
+                            SendHelp.sendJS(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
                         }
                     }, 500);
                     break;
@@ -383,7 +383,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         clearCamera();
                         SettingInfo.isCameraSide = true;
 
-                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 4);
+                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 4);
 
                     }else if(leftCentreRight == 1){
                         //中间
@@ -393,7 +393,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         clearCamera();
                         SettingInfo.isCameraUp = true;
 
-                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 1);
+                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 1);
                     }
 
                 } else if(x2 - x1 > 100) {
@@ -406,7 +406,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         clearCamera();
                         SettingInfo.isCameraAfter = true;
 
-                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 5);
+                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 5);
 
                     }else if(leftCentreRight == 2){
                         //中间
@@ -416,7 +416,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         clearCamera();
                         SettingInfo.isCameraUp = true;
 
-                        SendHelp.sendCamera(mDevices.get(currentPos).getIpPort(), 1);
+                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 1);
                     }
 
                 }
@@ -775,7 +775,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     showShortToast("请先设置途径点");
                     return;
                 }
-                SendHelp.sendMarker(mDeviceZkc.getIpPort(), markers);
+                SendHelp.sendMarker(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort(), markers);
 
                 break;
             case R.id.tv_task_read:
@@ -791,9 +791,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             case R.id.iv_flameout://启动，熄火
                 new TextDialog(context).setContent(isFlameout ? "是否确认熄火" : "是否确认启动").setSubmitListener(v1 -> {
                     if (isFlameout) {
-                        SendHelp.sendXH(mDeviceZkc.getIpPort());
+                        SendHelp.sendXH(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
                     } else {
-                        SendHelp.sendQD(mDeviceZkc.getIpPort());
+                        SendHelp.sendQD(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
                     }
                     isFlameout = !isFlameout;
                 }).show();

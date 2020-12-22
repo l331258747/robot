@@ -13,10 +13,10 @@ public class SendHelp {
     static StringBuilder msg = new StringBuilder();
 
     //方向
-    public static void sendRocker(String ipPort, int upLevel, int turnLevel) {
+    public static void sendRocker(String number,String ipPort, int upLevel, int turnLevel) {
         msg.setLength(0);
-
-        msg.append("$1,1,1");
+        msg.append("$" + number);
+        msg.append(",1,1");
         msg.append("," + upLevel);
         msg.append("," + turnLevel);
 
@@ -24,25 +24,28 @@ public class SendHelp {
     }
 
     //急刹 $1,1,3
-    public static void sendJS(String ipPort) {
+    public static void sendJS(String number,String ipPort) {
         msg.setLength(0);
-        msg.append("$1,1,3");
+        msg.append("$" + number);
+        msg.append(",1,3");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),"急刹-发送成功");
     }
 
     //熄火 $1,1,6,0
-    public static void sendXH(String ipPort) {
+    public static void sendXH(String number,String ipPort) {
         msg.setLength(0);
-        msg.append("$1,1,6,0");
+        msg.append("$" + number);
+        msg.append(",1,6,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),"熄火-发送成功");
     }
 
     //启动 $1,1,6,1
-    public static void sendQD(String ipPort) {
+    public static void sendQD(String number,String ipPort) {
         msg.setLength(0);
-        msg.append("$1,1,6,1");
+        msg.append("$" + number);
+        msg.append(",1,6,1");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),"启动-发送成功");
     }
@@ -55,9 +58,10 @@ public class SendHelp {
     }
 
     //智能控车模式 摇杆
-    public static void sendRockerAngle(String ipPort, int x, int y, int w, int h) {
+    public static void sendRockerAngle(String number,String ipPort, int x, int y, int w, int h) {
         msg.setLength(0);
-        msg.append("$1,2,3");
+        msg.append("$" + number);
+        msg.append(",2,3");
         msg.append("," + x);
         msg.append("," + y);
         msg.append("," + w);
@@ -68,73 +72,82 @@ public class SendHelp {
 
     //跟随模式
     //初始化跟人
-    public static void sendTrackPeopleInit(String ipPort) {
+    public static void sendTrackPeopleInit(String number,String ipPort) {
         msg.setLength(0);
-        msg.append("$1,6,1,1,0,0");
+        msg.append("$" + number);
+        msg.append(",6,1,1,0,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
     //初始化跟车
-    public static void sendTrackCarInit(String ipPort) {
+    public static void sendTrackCarInit(String number,String ipPort) {
         msg.setLength(0);
-        msg.append("$1,6,1,2,0,0");
+        msg.append("$" + number);
+        msg.append(",6,1,2,0,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
     //开始跟人
-    public static void sendTrackPeopleStart(String ipPort) {
+    public static void sendTrackPeopleStart(String number,String ipPort) {
         msg.setLength(0);
-        msg.append("$1,6,1,3,0,0");
+        msg.append("$" + number);
+        msg.append(",6,1,3,0,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),"开始跟人");
     }
 
     //开始跟车
-    public static void sendTrackCarStart(String ipPort) {
+    public static void sendTrackCarStart(String number,String ipPort) {
         msg.setLength(0);
-        msg.append("$1,6,1,4,0,0");
+        msg.append("$" + number);
+        msg.append(",6,1,4,0,0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),"开始跟车");
     }
 
     //一键清除
-    public static void sendTrackQc(String ipPort, boolean isOK) {
+    public static void sendTrackQc(String number,String ipPort, boolean isOK) {
         msg.setLength(0);
-        msg.append("$1,6,2");
+        msg.append("$" + number);
+        msg.append(",6,2");
         msg.append(isOK ? ",1" : ",0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),isOK?"开启一键清除":"关闭一键清除");
     }
 
     //跟踪轨迹
-    public static void sendTrackGj(String ipPort, boolean isOK) {
+    public static void sendTrackGj(String number,String ipPort, boolean isOK) {
         msg.setLength(0);
-        msg.append("$1,6,6");
+        msg.append("$" + number);
+        msg.append(",6,6");
         msg.append(isOK ? ",1" : ",0");
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),isOK?"开启跟踪轨迹":"关闭跟踪轨迹");
     }
 
     //自主跟随模式下的加减速
-    public static void sendTrackSpeed(String ipPort, int num) {
+    public static void sendTrackSpeed(String number,String ipPort, int num) {
         msg.setLength(0);
-        msg.append("$1,6,3");
+        msg.append("$" + number);
+        msg.append(",6,3");
         msg.append("," + num);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
     //自主跟随模式下的跟随距离调节
-    public static void sendTrackSpace(String ipPort, int num) {
+    public static void sendTrackSpace(String number,String ipPort, int num) {
         msg.setLength(0);
-        msg.append("$1,6,4");
+        msg.append("$" + number);
+        msg.append(",6,4");
         msg.append("," + num);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
     }
 
     //marker点
-    public static void sendMarker(String ipPort, List<MarkerBean> markers) {
+    public static void sendMarker(String number,String ipPort, List<MarkerBean> markers) {
         msg.setLength(0);
-        msg.append("$1,8,1");
+        msg.append("$" + number);
+        msg.append(",8,1");
         msg.append("," + markers.size());
         for (int i = 0; i < markers.size(); i++) {
             msg.append("," + markers.get(i).getLongitude());
@@ -155,18 +168,20 @@ public class SendHelp {
     }
 
     //自主模式 - 一键返航
-    public static void sendFh(String ipPort,int type,String typeStr,int sort){
+    public static void sendFh(String number,String ipPort,int type,String typeStr,int sort){
         msg.setLength(0);
-        msg.append("$1,8,2");
+        msg.append("$" + number);
+        msg.append(",8,2");
         msg.append("," + type);
         msg.append("," + sort);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),typeStr);
     }
 
-    public static void sendCamera(String ipPort, int type){
+    public static void sendCamera(String number,String ipPort, int type){
         msg.setLength(0);
-        msg.append("$1,9,1");
+        msg.append("$" + number);
+        msg.append(",9,1");
         msg.append("," + type);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
         ToastUtil.showShortToast(AppUtils.getContext(),"摄像头切换-发送成功");

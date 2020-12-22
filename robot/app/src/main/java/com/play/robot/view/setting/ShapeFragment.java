@@ -83,7 +83,7 @@ public class ShapeFragment extends BaseFragment implements View.OnClickListener 
     public void initData() {
 
         btn_bdms.setText(SettingInfo.shapeMode);
-        btn_zkcxz.setText(SettingInfo.shapeZkc);
+        btn_zkcxz.setText(SettingInfo.shapeZkcBH);
         list = SettingInfo.shapeList;
         mAdapter.setData(list);
 
@@ -129,8 +129,8 @@ public class ShapeFragment extends BaseFragment implements View.OnClickListener 
             case R.id.btn_zkcxz:
                 new MyListDialog(context).setData(listDevice).setOnItemClickListener(position -> {
                     SettingInfo.shapeZkc = listDevice.get(position).getIpPort();
-                    btn_zkcxz.setText(listDevice.get(position).getContent());
-
+                    SettingInfo.shapeZkcBH = listDevice.get(position).getContent();
+                    btn_zkcxz.setText(SettingInfo.shapeZkcBH);
                     if(!TextUtils.isEmpty(SettingInfo.shapeMode) && !TextUtils.isEmpty(SettingInfo.shapeZkc)){
                         RxBus2.getInstance().post(new ZkcEvent());
                     }
