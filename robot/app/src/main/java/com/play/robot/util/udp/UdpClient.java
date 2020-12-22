@@ -2,6 +2,7 @@ package com.play.robot.util.udp;
 
 import android.text.TextUtils;
 
+import com.play.robot.util.LngLonUtil;
 import com.play.robot.util.LogUtil;
 import com.play.robot.util.rxbus.RxBus2;
 import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
@@ -281,8 +282,23 @@ public class UdpClient {
                     event.setN3(s[5]);
                     event.setN4(s[6]);
                     event.setN5(s[7]);
-                    event.setN6(s[8]);
-                    event.setN7(s[9]);
+
+                    double lng;
+                    double lat;
+                    try{
+                        lng = Double.parseDouble(s[8]);
+                        lat = Double.parseDouble(s[9]);
+                        double[] ds = LngLonUtil.gps84_To_bd09(lat,lng);
+                        lng = ds[1];
+                        lat = ds[0];
+                    }catch (Exception e){
+                        lng = 0;
+                        lat = 0;
+                    }
+
+                    event.setN6(lng + "");
+                    event.setN7(lat + "");
+
                     event.setN8(s[10]);
                     event.setN9(s[11]);
                     event.setN10(s[12]);

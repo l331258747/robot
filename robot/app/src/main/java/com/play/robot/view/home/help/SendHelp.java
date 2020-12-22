@@ -3,6 +3,7 @@ package com.play.robot.view.home.help;
 import com.play.robot.MyApplication;
 import com.play.robot.bean.MarkerBean;
 import com.play.robot.util.AppUtils;
+import com.play.robot.util.LngLonUtil;
 import com.play.robot.util.ToastUtil;
 
 import java.util.List;
@@ -141,6 +142,7 @@ public class SendHelp {
         msg.append(",6,4");
         msg.append("," + num);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
+
     }
 
     //marker点
@@ -150,8 +152,13 @@ public class SendHelp {
         msg.append(",8,1");
         msg.append("," + markers.size());
         for (int i = 0; i < markers.size(); i++) {
-            msg.append("," + markers.get(i).getLongitude());
-            msg.append("," + markers.get(i).getLatitude());
+
+            double[] ds = LngLonUtil.bd09_To_gps84(markers.get(i).getLatitude(),markers.get(i).getLongitude());
+
+            msg.append("," + ds[1]);
+            msg.append("," + ds[0]);
+//            msg.append("," + markers.get(i).getLongitude());
+//            msg.append("," + markers.get(i).getLatitude());
             int type = markers.get(i).getType();
             String typeStr = "3";//起点
             if(type == 1){//必经点
