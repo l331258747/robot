@@ -844,7 +844,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     upLevel = level;
-                    SendHelp.sendRocker(mDevice.getNumber(),mDevice.getIpPort(), upLevel, turnLevel);
+                    SendHelp.sendRocker(mDevice.getNumber(),mDevice.getIpPort(), turnLevel,upLevel);
                 }
             });
         }
@@ -858,7 +858,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void directionLevel(int level) {
                     turnLevel = level;
-                    SendHelp.sendRocker(mDevice.getNumber(),mDevice.getIpPort(), upLevel, turnLevel);
+                    SendHelp.sendRocker(mDevice.getNumber(),mDevice.getIpPort(), turnLevel, upLevel);
                 }
 
             });
