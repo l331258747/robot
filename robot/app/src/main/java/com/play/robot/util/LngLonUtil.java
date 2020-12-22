@@ -150,4 +150,15 @@ public class LngLonUtil {
         String result = String .format("%.6f", num);  
         return Double.valueOf(result);  
     }
+
+    public static void main(String[] args) {
+        double lon = 126.681437;
+        double lat = 45.773417;
+
+        double[] ds = gps84_To_bd09(lat,lon);
+
+        System.out.println("ds0:"+ds[0]);
+        System.out.println("ds1:"+ds[1]);
+
+    }
 }
