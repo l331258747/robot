@@ -177,7 +177,8 @@
         app:layout_constraintEnd_toEndOf="@+id/view_rtsp"
         app:layout_constraintStart_toStartOf="@+id/view_rtsp"
         app:layout_constraintTop_toTopOf="@+id/view_rtsp"
-        android:text="rtmp://58.200.131.2:1935/livetv/hunantv"/>
+        />
+<!--   android:text="rtmp://58.200.131.2:1935/livetv/hunantv" -->
 
     <TextView
         android:id="@+id/tv_btn"
