@@ -168,7 +168,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_eeeeeed_r40"
         android:hint="请输入视频流"
-        android:maxLength="50"
+        android:maxLength="100"
         android:textColor="@color/color_1e1e1e"
         android:layout_marginStart="@dimen/dp_56"
         android:minLines="2"

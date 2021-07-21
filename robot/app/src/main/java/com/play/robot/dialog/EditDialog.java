@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.play.robot.R;
+import com.play.robot.constant.Constant;
 import com.play.robot.util.ToastUtil;
 
 public class EditDialog extends Dialog {
@@ -70,7 +71,7 @@ public class EditDialog extends Dialog {
         et_account.setText("192.168.1.254");
         et_password.setText("8585");
         et_password2.setText("3");
-        et_rtsp.setText("rtmp://58.200.131.2:1935/livetv/hunantv");
+        et_rtsp.setText(Constant.RTSP_URL);
     }
 
 

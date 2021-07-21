@@ -38,8 +38,21 @@
 
     <!--    视屏-->
 
-    <cn.nodemedia.NodePlayerView
-        android:id="@+id/surfaceView"
+<!--    <cn.nodemedia.NodePlayerView-->
+<!--        android:id="@+id/surfaceView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="@dimen/dp_10"-->
+<!--        android:layout_marginTop="@dimen/dp_10"-->
+<!--        android:layout_marginEnd="@dimen/dp_120"-->
+<!--        android:layout_marginBottom="@dimen/dp_10"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/cl_title"/>-->
+
+    <TextureView
+        android:id="@+id/ttV"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/dp_10"
@@ -49,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_title"/>
+        app:layout_constraintTop_toBottomOf="@+id/cl_title" />
 
     <!--    尺标-->
     <com.play.robot.widget.scale.ViewScale
@@ -171,8 +184,8 @@
         android:orientation="horizontal"
         android:visibility="gone"
         tools:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/surfaceView"
-        app:layout_constraintEnd_toEndOf="@id/surfaceView"
+        app:layout_constraintBottom_toBottomOf="@id/ttV"
+        app:layout_constraintEnd_toEndOf="@id/ttV"
         app:layout_constraintStart_toEndOf="@id/view_left">
 
         <!--摇杆-->
@@ -271,12 +284,12 @@
         android:id="@+id/view_center"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        app:layout_constraintStart_toStartOf="@+id/surfaceView"
-        app:layout_constraintEnd_toEndOf="@+id/surfaceView"
-        app:layout_constraintTop_toTopOf="@+id/surfaceView"
+        app:layout_constraintStart_toStartOf="@+id/ttV"
+        app:layout_constraintEnd_toEndOf="@+id/ttV"
+        app:layout_constraintTop_toTopOf="@+id/ttV"
         android:visibility="gone"
         tools:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/surfaceView"
+        app:layout_constraintBottom_toBottomOf="@+id/ttV"
         android:src="@mipmap/ic_center"/>
 
     <include layout="@layout/layout_single_track"/>

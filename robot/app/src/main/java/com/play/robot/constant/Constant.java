@@ -41,4 +41,10 @@ public class Constant {
     public static final int SETTING_MANY_BATTERY = 4;
     public static final int SETTING_MANY_MORE = 5;
 
+    public static final String KEY = "6D75724D7A4A36526D343241654C56676E3071484A655A76636D63755A57467A65575268636E64706269356C59584E356347786865575679567778576F502B6C2F69426C59584E35";
+//    public static final String RTSP_URL= "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
+    public static final String RTSP_URL= "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
+    public static final String RTMP_URL= "rtmp://58.200.131.2:1935/livetv/hunantv";
+
+
 }

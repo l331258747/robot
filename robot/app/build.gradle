@@ -80,4 +80,6 @@ dependencies {
 
     implementation files('libs/BaiduLBS_Android.jar')
 
+    implementation project(':library')
+
 }

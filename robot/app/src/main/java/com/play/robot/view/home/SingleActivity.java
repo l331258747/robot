@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,7 +42,7 @@ import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ReceiveCarEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ReceiveStatusEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
-import com.play.robot.view.home.help.AnimatorHelp;
+import com.play.robot.view.home.help.AnimatorHelp2;
 import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.home.help.MyOnMarkerClickListener;
 import com.play.robot.view.home.help.MyOnMarkerDragListener;
@@ -55,12 +56,12 @@ import com.play.robot.widget.rocherView.MyRockerShakeListener;
 import com.play.robot.widget.rocherView.MyRockerView;
 import com.play.robot.widget.scale.ViewScale;
 
+import org.easydarwin.video.EasyPlayerClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import cn.nodemedia.NodePlayer;
-import cn.nodemedia.NodePlayerView;
 import io.reactivex.disposables.Disposable;
 
 public class SingleActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
@@ -82,9 +83,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
     BaiduHelper mBaiduHelper;
-    AnimatorHelp mAnimatorHelp;
+    AnimatorHelp2 mAnimatorHelp;
 
-    NodePlayerView mSurfaceView;
+    TextureView ttV;
 
     //链接的设备
     DeviceBean mDevice;
@@ -144,8 +145,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         initSurfaceView();
 
-        mSurfaceView.setPivotX(0);
-        mSurfaceView.setPivotY(0);
+        ttV.setPivotX(0);
+        ttV.setPivotY(0);
 
         mMapView.setPivotX(0);
         mMapView.setPivotY(0);
@@ -185,47 +186,32 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    private NodePlayer nodePlayer;
+    private EasyPlayerClient mStreamRender;
 
     //初始化视频SurfaceView控件
     private void initSurfaceView() {
-        mSurfaceView = $(R.id.surfaceView);
-        mSurfaceView.setOnClickListener(this);
+        ttV = findViewById(R.id.ttV);
+        /**
+         * 参数说明
+         * 第一个参数为Context,第二个参数为KEY
+         * 第三个参数为的textureView,用来显示视频画面
+         * 第四个参数为一个ResultReceiver,用来接收SDK层发上来的事件通知;
+         * 第五个参数为I420DataCallback,如果不为空,那底层会把YUV数据回调上来.
+         */
+        mStreamRender = new EasyPlayerClient(this, Constant.KEY, ttV, null, null);
 
-        //设置渲染器类型
-        mSurfaceView.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
-        //设置视频画面缩放模式
-        mSurfaceView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
-
-        nodePlayer = new NodePlayer(this);
-        //设置播放视图
-        nodePlayer.setPlayerView(mSurfaceView);
-        //设置RTSP流使用的传输协议,支持的模式有:
-        nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
-
+        ttV.setOnClickListener(this);
     }
 
     public void setStart(String rtsp) {
-        if(nodePlayer != null){
-            nodePlayer.setInputUrl(rtsp);
-            //设置视频是否开启
-            nodePlayer.setVideoEnable(true);
-            nodePlayer.start();
-        }
-    }
-
-    public void setPause() {
-        if (nodePlayer != null && nodePlayer.isPlaying()) {
-            nodePlayer.setVideoEnable(false);
-            nodePlayer.pause();
+        if(mStreamRender != null){
+            mStreamRender.play(rtsp);
         }
     }
 
     public void setStop() {
-        if (nodePlayer != null && nodePlayer.isPlaying()) {
-            nodePlayer.setVideoEnable(false);
-            nodePlayer.stop();
-            nodePlayer = null;
+        if (mStreamRender != null) {
+            mStreamRender.stop();
         }
     }
 
@@ -686,7 +672,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
 
         //------------------动画 start----------
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, isSufCenter -> {
+        mAnimatorHelp = new AnimatorHelp2(ttV, mMapView, small_view, isSufCenter -> {
             ll_loc.setVisibility(isSufCenter ? View.GONE : View.VISIBLE);
 
             setTaskView(isSufCenter);
@@ -734,6 +720,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.surfaceView:
+            case R.id.ttV:
                 if (mAnimatorHelp.getSurfaceViewCenter()) return;
                 LogUtil.e("surfaceView onClick");
                 mAnimatorHelp.setAnimator();
@@ -893,15 +880,15 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                     int msx1 = sx - AppUtils.dip2px(10);
                     int msy1 = sy - AppUtils.dip2px(40);
 
-                    SendHelp.sendRockerAngle(mDevice.getNumber(), mDevice.getIpPort(), msx1, msy1, mSurfaceView.getWidth(), mSurfaceView.getHeight());
+                    SendHelp.sendRockerAngle(mDevice.getNumber(), mDevice.getIpPort(), msx1, msy1, ttV.getWidth(), ttV.getHeight());
 
                     break;
                 case MotionEvent.ACTION_UP:// 手指离开屏幕对应事件
-                    int centerW = AppUtils.dip2px(10) + mSurfaceView.getWidth()/2 - AppUtils.dip2px(centerSize) / 2;
-                    int centerY = AppUtils.dip2px(40) + mSurfaceView.getHeight()/2 - AppUtils.dip2px(centerSize) / 2;
+                    int centerW = AppUtils.dip2px(10) + ttV.getWidth()/2 - AppUtils.dip2px(centerSize) / 2;
+                    int centerY = AppUtils.dip2px(40) + ttV.getHeight()/2 - AppUtils.dip2px(centerSize) / 2;
                     view_center.setX(centerW);
                     view_center.setY(centerY);
-                    SendHelp.sendRockerAngle(mDevice.getNumber(), mDevice.getIpPort(), centerW, centerY, mSurfaceView.getWidth(), mSurfaceView.getHeight());
+                    SendHelp.sendRockerAngle(mDevice.getNumber(), mDevice.getIpPort(), centerW, centerY, ttV.getWidth(), ttV.getHeight());
                     break;
             }
             return true;
@@ -921,7 +908,10 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
-        setStart(mDevice.getRtsp());
+        if (mStreamRender != null) {
+            mStreamRender.resume();
+        }
+//        setStart(mDevice.getRtsp());
     }
 
     @Override
@@ -929,7 +919,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
-        setPause();
+        if (mStreamRender != null) {
+            mStreamRender.pause();
+        }
     }
 
     @Override
@@ -951,6 +943,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         MyApplication.getInstance().deviceClear();
 
         setStop();
+        mStreamRender = null;
 
         super.onDestroy();
     }
