@@ -205,6 +205,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
     public void setStart(String rtsp) {
         if(mStreamRender != null){
+            mStreamRender.stop();
             mStreamRender.play(rtsp);
         }
     }
@@ -911,7 +912,6 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         if (mStreamRender != null) {
             mStreamRender.resume();
         }
-//        setStart(mDevice.getRtsp());
     }
 
     @Override

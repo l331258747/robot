@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +39,7 @@ import com.play.robot.util.rxbus.rxbusEvent.ConnectIpEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ReceiveCarEvent;
 import com.play.robot.util.rxbus.rxbusEvent.StopShowEvent;
 import com.play.robot.util.rxbus.rxbusEvent.ZkcEvent;
-import com.play.robot.view.home.help.AnimatorHelp;
+import com.play.robot.view.home.help.AnimatorHelp2;
 import com.play.robot.view.home.help.BaiduHelper;
 import com.play.robot.view.home.help.MyOnMarkerClickListener;
 import com.play.robot.view.home.help.MyOnMarkerDragListener;
@@ -51,11 +52,11 @@ import com.play.robot.widget.IvSignal;
 import com.play.robot.widget.TitleDeviceView;
 import com.play.robot.widget.scale.ViewScale;
 
+import org.easydarwin.video.EasyPlayerClient;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.nodemedia.NodePlayer;
-import cn.nodemedia.NodePlayerView;
 import io.reactivex.disposables.Disposable;
 
 public class ManyActivity extends BaseActivity implements View.OnClickListener {
@@ -80,9 +81,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
     BaiduHelper mBaiduHelper;
-    AnimatorHelp mAnimatorHelp;
+    AnimatorHelp2 mAnimatorHelp;
 
-    NodePlayerView mSurfaceView;
+    TextureView ttV;
 
     List<DeviceBean> mDevices = new ArrayList<>();
     DeviceBean mDeviceZkc;//主控车
@@ -146,8 +147,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         initBaiduMap();
         initSurfaceView();
 
-        mSurfaceView.setPivotX(0);
-        mSurfaceView.setPivotY(0);
+        ttV.setPivotX(0);
+        ttV.setPivotY(0);
 
         mMapView.setPivotX(0);
         mMapView.setPivotY(0);
@@ -322,25 +323,17 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-    private NodePlayer nodePlayer;
+//    private NodePlayer nodePlayer;
+    private EasyPlayerClient mStreamRender;
+
     //初始化视频SurfaceView控件
     @SuppressLint("ClickableViewAccessibility")
     private void initSurfaceView() {
-        mSurfaceView = $(R.id.surfaceView);
-        mSurfaceView.setOnClickListener(this);
+        ttV = findViewById(R.id.ttV);
+        mStreamRender = new EasyPlayerClient(this, Constant.KEY, ttV, null, null);
+        ttV.setOnClickListener(this);
 
-        //设置渲染器类型
-        mSurfaceView.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
-        //设置视频画面缩放模式
-        mSurfaceView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleToFill);
-
-        nodePlayer =new NodePlayer(this);
-        //设置播放视图
-        nodePlayer.setPlayerView(mSurfaceView);
-        //设置RTSP流使用的传输协议,支持的模式有:
-        nodePlayer.setRtspTransport(NodePlayer.RTSP_TRANSPORT_TCP);
-
-        mSurfaceView.setOnTouchListener((v, event) -> {
+        ttV.setOnTouchListener((v, event) -> {
             if(!mAnimatorHelp.getSurfaceViewCenter()) return false;
             //继承了Activity的onTouchEvent方法，直接监听点击事件
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -444,26 +437,15 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     float y2 = 0;
 
     public void setStart(String rtsp){
-        if(nodePlayer != null){
-            nodePlayer.setInputUrl(rtsp);
-            //设置视频是否开启
-            nodePlayer.setVideoEnable(true);
-            nodePlayer.start();
+        if(mStreamRender != null){
+            mStreamRender.stop();
+            mStreamRender.play(rtsp);
         }
     }
 
-    public void setPause(){
-        if(nodePlayer != null && nodePlayer.isPlaying()){
-            nodePlayer.setVideoEnable(false);
-            nodePlayer.pause();
-        }
-    }
-
-    public void setStop(){
-        if(nodePlayer != null && nodePlayer.isPlaying()){
-            nodePlayer.setVideoEnable(false);
-            nodePlayer.stop();
-            nodePlayer = null;
+    public void setStop() {
+        if (mStreamRender != null) {
+            mStreamRender.stop();
         }
     }
 
@@ -716,7 +698,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         //------------------地图 end----------
 
         //------------------动画 start----------
-        mAnimatorHelp = new AnimatorHelp(mSurfaceView, mMapView, small_view, isSufCenter -> {
+        mAnimatorHelp = new AnimatorHelp2(ttV, mMapView, small_view, isSufCenter -> {
             ll_loc.setVisibility(isSufCenter ? View.GONE : View.VISIBLE);
 
             setTaskView(isSufCenter);
@@ -806,8 +788,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
-        if(mDeviceZkc != null){
-            setStart(mDevices.get(currentPos).getRtsp());
+
+        if (mStreamRender != null) {
+            mStreamRender.resume();
         }
     }
 
@@ -816,7 +799,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
-        setPause();
+        if (mStreamRender != null) {
+            mStreamRender.pause();
+        }
     }
 
     @Override
@@ -836,6 +821,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         MyApplication.getInstance().deviceClear();
 
         setStop();
+        mStreamRender = null;
 
         super.onDestroy();
     }
