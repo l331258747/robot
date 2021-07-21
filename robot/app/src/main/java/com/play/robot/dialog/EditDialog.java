@@ -18,7 +18,7 @@ public class EditDialog extends Dialog {
 
     TextView tv_btn;
 
-    EditText et_account, et_password,et_rtsp,et_password2;
+    EditText et_account, et_password, et_rtsp, et_password2;
 
     public EditDialog(Context context) {
         super(context, R.style.mdialog);
@@ -58,15 +58,24 @@ public class EditDialog extends Dialog {
                     return;
                 }
 
-                submitListener.onClick(et_account.getText().toString(), Integer.parseInt(et_password.getText().toString()),et_password2.getText().toString(),et_rtsp.getText().toString());
+                submitListener.onClick(et_account.getText().toString(), Integer.parseInt(et_password.getText().toString()), et_password2.getText().toString(), et_rtsp.getText().toString());
             }
             dismiss();
         });
 
+        setDebug();
     }
 
+    private void setDebug() {
+        et_account.setText("192.168.1.254");
+        et_password.setText("8585");
+        et_password2.setText("3");
+        et_rtsp.setText("rtmp://58.200.131.2:1935/livetv/hunantv");
+    }
+
+
     public interface OnItemClickListener {
-        void onClick(String ip, int port,String number,String rtsp);
+        void onClick(String ip, int port, String number, String rtsp);
     }
 
     OnItemClickListener submitListener;
