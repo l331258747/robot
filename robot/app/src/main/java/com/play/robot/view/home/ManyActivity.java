@@ -430,6 +430,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         SettingInfo.isCameraAfter = false;
         SettingInfo.isCameraUpZt = false;
         SettingInfo.isCameraUpZtSb = false;
+        SettingInfo.isCamera6 = false;
+        SettingInfo.isCamera7 = false;
     }
 
 

@@ -16,6 +16,8 @@ public class SettingInfo {
     public static boolean isCameraAfter;
     public static boolean isCameraUpZt;
     public static boolean isCameraUpZtSb;
+    public static boolean isCamera6;
+    public static boolean isCamera7;
 
     public static boolean isRouteFh;
     public static boolean isRouteNxfh;
@@ -40,6 +42,8 @@ public class SettingInfo {
         isCameraAfter = false;
         isCameraUpZt = false;
         isCameraUpZtSb = false;
+        isCamera6 = false;
+        isCamera7 = false;
 
         isRouteFh =false;
         isRouteNxfh =false;

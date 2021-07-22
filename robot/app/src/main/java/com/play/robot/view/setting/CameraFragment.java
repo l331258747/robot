@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 public class CameraFragment extends BaseFragment {
 
-    SwitchButton switch_qzsxt, switch_cssxt, switch_qztz, switch_hssxt, switch_qztzmbsb;
+    SwitchButton switch_qzsxt, switch_cssxt, switch_qztz, switch_hssxt, switch_qztzmbsb,switch_sxt6,switch_sxt7;
     String ipPort;
     String number;
 
@@ -54,12 +54,16 @@ public class CameraFragment extends BaseFragment {
         switch_hssxt = $(R.id.switch_hssxt);
         switch_qztz = $(R.id.switch_qztz);
         switch_qztzmbsb = $(R.id.switch_qztzmbsb);
+        switch_sxt6 = $(R.id.switch_sxt6);
+        switch_sxt7 = $(R.id.switch_sxt7);
 
         switch_qzsxt.setChecked(SettingInfo.isCameraUp);
         switch_cssxt.setChecked(SettingInfo.isCameraSide);
         switch_hssxt.setChecked(SettingInfo.isCameraAfter);
         switch_qztz.setChecked(SettingInfo.isCameraUpZt);
         switch_qztzmbsb.setChecked(SettingInfo.isCameraUpZtSb);
+        switch_sxt6.setChecked(SettingInfo.isCamera6);
+        switch_sxt7.setChecked(SettingInfo.isCamera7);
 
         switch_qzsxt.setOnCheckedChangeListener((view, isChecked) -> {
             clear();
@@ -97,6 +101,20 @@ public class CameraFragment extends BaseFragment {
             if (isChecked)
                 SendHelp.sendCamera(number, ipPort, 3);
         });
+        switch_sxt6.setOnCheckedChangeListener((view, isChecked) -> {
+            clear();
+            switch_sxt6.setChecked(SettingInfo.isCamera6 = isChecked);
+
+            if (isChecked)
+                SendHelp.sendCamera(number, ipPort, 6);
+        });
+        switch_sxt7.setOnCheckedChangeListener((view, isChecked) -> {
+            clear();
+            switch_sxt7.setChecked(SettingInfo.isCamera7 = isChecked);
+
+            if (isChecked)
+                SendHelp.sendCamera(number, ipPort, 7);
+        });
     }
 
     public void clear(){
@@ -105,6 +123,8 @@ public class CameraFragment extends BaseFragment {
         switch_hssxt.setChecked(SettingInfo.isCameraAfter = false);
         switch_qztz.setChecked(SettingInfo.isCameraUpZt = false);
         switch_qztzmbsb.setChecked(SettingInfo.isCameraUpZtSb = false);
+        switch_sxt6.setChecked(SettingInfo.isCamera6 = false);
+        switch_sxt7.setChecked(SettingInfo.isCamera7 = false);
     }
 
     @Override
