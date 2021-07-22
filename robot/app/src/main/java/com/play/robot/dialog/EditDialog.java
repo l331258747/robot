@@ -17,7 +17,7 @@ public class EditDialog extends Dialog {
 
     Context mContext;
 
-    TextView tv_btn;
+    TextView tv_btn,tv_title;
 
     EditText et_account, et_password, et_rtsp, et_password2;
 
@@ -39,6 +39,7 @@ public class EditDialog extends Dialog {
         et_password = layout.findViewById(R.id.et_password);
         et_rtsp = layout.findViewById(R.id.et_rtsp);
         et_password2 = layout.findViewById(R.id.et_password2);
+        tv_title = layout.findViewById(R.id.tv_title);
 
         tv_btn.setOnClickListener(view -> {
             if (submitListener != null) {
@@ -64,7 +65,11 @@ public class EditDialog extends Dialog {
             dismiss();
         });
 
-        setDebug();
+        tv_title.setOnLongClickListener(v -> {
+            setDebug();
+            return false;
+        });
+
     }
 
     private void setDebug() {
