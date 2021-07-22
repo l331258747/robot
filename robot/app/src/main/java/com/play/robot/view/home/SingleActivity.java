@@ -474,6 +474,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         //无人车信息
         disposableCar = RxBus2.getInstance().toObservable(ReceiveCarEvent.class, event -> {
             if (!TextUtils.equals(mDevice.getIpPort(), event.getIpPort())) return;
+            if (!TextUtils.equals(mDevice.getNumber(), event.getCarNo())) return;
+
+            mInfoBean.setCarNo(event.getCarNo());
             mInfoBean.setSpeed(event.getN1());
             mInfoBean.setGear(event.getN2());
             mInfoBean.setLng(event.getN6());
@@ -508,7 +511,9 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
             event.getN10();//车体俯仰角
             event.getN11();//当前车辆模型名
 
-            tv_info.setText("速度:"+event.getN1()
+            tv_info.setText(
+                    "编号:"+event.getCarNo()
+                    +"\n速度:"+event.getN1()
                     +"\n档位:"+event.getN2()
                     +"\n错误:"+event.getN3()
                     +"\n电量:"+event.getN4()
@@ -524,6 +529,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
 
         disposableStatus = RxBus2.getInstance().toObservable(ReceiveStatusEvent.class, event -> {
             if (!TextUtils.equals(mDevice.getIpPort(), event.getIpPort())) return;
+            if (!TextUtils.equals(mDevice.getNumber(), event.getCarNo())) return;
 
             mInfoBean.setStatus(event.getN1());
             mInfoBean.setDistance(event.getN2());
@@ -720,7 +726,7 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
                 intent.putExtra("position", Constant.SETTING_SIGNAL);
                 startActivity(intent);
                 break;
-            case R.id.surfaceView:
+//            case R.id.surfaceView:
             case R.id.ttV:
                 if (mAnimatorHelp.getSurfaceViewCenter()) return;
                 LogUtil.e("surfaceView onClick");

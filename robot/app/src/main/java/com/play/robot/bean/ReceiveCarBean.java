@@ -16,8 +16,17 @@ public class ReceiveCarBean {
 
     String ip;
     int port;
+    String carNo;
 
     String info;//模块编号
+
+    public String getCarNo() {
+        return carNo;
+    }
+
+    public void setCarNo(String carNo) {
+        this.carNo = carNo;
+    }
 
     public String getIpPort() {
         return ip + ":" + port;

@@ -5,9 +5,9 @@
     android:layout_width="wrap_content"
     android:background="@color/color_1e1e1e"
     android:id="@+id/cl_track"
-    app:layout_constraintStart_toStartOf="@+id/surfaceView"
-    app:layout_constraintBottom_toBottomOf="@+id/surfaceView"
-    app:layout_constraintEnd_toEndOf="@+id/surfaceView"
+    app:layout_constraintStart_toStartOf="@+id/ttV"
+    app:layout_constraintBottom_toBottomOf="@+id/ttV"
+    app:layout_constraintEnd_toEndOf="@+id/ttV"
     android:paddingStart="@dimen/dp_10"
     android:paddingEnd="@dimen/dp_10"
     android:layout_height="wrap_content">

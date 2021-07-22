@@ -6,12 +6,17 @@ import androidx.annotation.NonNull;
 
 public class DeviceInfoBean {
 
+    String carNo;
     String speed;
     String gear;
     String lng;
     String lat;
     String status;
     String distance;
+
+    public void setCarNo(String carNo) {
+        this.carNo = carNo;
+    }
 
     public String getSpeed() {
         return speed;
@@ -72,8 +77,11 @@ public class DeviceInfoBean {
     @Override
     public String toString() {
         String str = "";
+        if(!TextUtils.isEmpty(carNo)){
+            str = str  + "编号:" + carNo;
+        }
         if(!TextUtils.isEmpty(speed)){
-            str = str  + "V:" + speed + "m/s";
+            str = str  + "\nV:" + speed + "m/s";
         }
         if(!TextUtils.isEmpty(gear)){
             str = str  + "\nD:" + gear + "m";

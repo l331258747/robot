@@ -266,6 +266,7 @@ public class UdpClient {
                 if(TextUtils.isEmpty(buffer)) return;
                 if(!buffer.startsWith("#")) return;
 
+                buffer = buffer.replace("#","");
                 String[] s = buffer.split(",");
                 if(s.length < 3) return;
 
@@ -275,6 +276,7 @@ public class UdpClient {
                     ReceiveCarEvent event = new ReceiveCarEvent();
                     event.setIp(ip);
                     event.setPort(port);
+                    event.setCarNo(s[0]);
                     event.setMode(s[1]);
                     event.setTask(s[2]);
                     event.setN1(s[3]);
@@ -309,6 +311,7 @@ public class UdpClient {
                     ReceiveStatusEvent event = new ReceiveStatusEvent();
                     event.setIp(ip);
                     event.setPort(port);
+                    event.setCarNo(s[0]);
                     event.setMode(s[1]);
                     event.setTask(s[2]);
                     event.setN1(s[3]);

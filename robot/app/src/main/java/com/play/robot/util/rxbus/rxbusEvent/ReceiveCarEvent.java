@@ -17,6 +17,7 @@ public class ReceiveCarEvent {
     String ip;
     int port;
 
+    String carNo;
     String mode;//模块编号
     String task;//任务编号
     String n1;//速度
@@ -49,6 +50,14 @@ public class ReceiveCarEvent {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public String getCarNo() {
+        return carNo;
+    }
+
+    public void setCarNo(String carNo) {
+        this.carNo = carNo;
     }
 
     public String getTask() {

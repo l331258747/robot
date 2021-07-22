@@ -16,11 +16,19 @@ public class ReceiveStatusEvent {
 
     String ip;
     int port;
-
+    String carNo;
     String mode;//模块编号
     String task;//任务编号
     String n1;//速度
     String n2;
+
+    public String getCarNo() {
+        return carNo;
+    }
+
+    public void setCarNo(String carNo) {
+        this.carNo = carNo;
+    }
 
     public String getIpPort() {
         return ip + ":" + port;

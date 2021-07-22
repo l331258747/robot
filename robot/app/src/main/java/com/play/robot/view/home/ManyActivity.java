@@ -119,6 +119,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 ReceiveCarBean bean = new ReceiveCarBean();
                 bean.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
                 bean.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
+                bean.setCarNo(MyApplication.getInstance().getDevices().get(i).getNumber());
                 infos.add(bean);
             }
         }
@@ -212,32 +213,36 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         //无人车信息
         disposableCar = RxBus2.getInstance().toObservable(ReceiveCarEvent.class, event -> {
             for (int i = 0;i<infos.size();i++){
-                if(infos.get(i).getIpPort().equals(event.getIpPort())){
+                if(infos.get(i).getIpPort().equals(event.getIpPort()) && infos.get(i).getCarNo().equals(event.getCarNo())){
                     infos.get(i).setInfo("V:" + event.getN1() + "m/s\nD:" + event.getN2() + "m\n经度:" + event.getN6() + "\n维度:" + event.getN7());
                 }
             }
 
-            for (int i=0;i<mDevices.size();i++){
-                if(mDevices.get(currentPos).getIpPort().equals(event.getIpPort())){
-                    tv_info.setText("速度:"+event.getN1()
-                            +"\n档位:"+event.getN2()
-                            +"\n错误:"+event.getN3()
-                            +"\n电量:"+event.getN4()
-                            +"\n油量:"+event.getN5()
-                            +"\n经度:"+event.getN6()
-                            +"\n纬度:"+event.getN7()
-                            +"\n方向:"+event.getN8()
-                            +"\n横滚角:"+event.getN9()
-                            +"\n俯仰角:"+event.getN10()
-                            +"\n车辆:"+event.getN11()
-                    );
-                }
+//            for (int i=0;i<mDevices.size();i++){
+            if(mDevices.get(currentPos).getIpPort().equals(event.getIpPort()) && infos.get(currentPos).getCarNo().equals(event.getCarNo())){
+                tv_info.setText(
+                        "编号:"+event.getCarNo()
+                        +"\n速度:"+event.getN1()
+                        +"\n档位:"+event.getN2()
+                        +"\n错误:"+event.getN3()
+                        +"\n电量:"+event.getN4()
+                        +"\n油量:"+event.getN5()
+                        +"\n经度:"+event.getN6()
+                        +"\n纬度:"+event.getN7()
+                        +"\n方向:"+event.getN8()
+                        +"\n横滚角:"+event.getN9()
+                        +"\n俯仰角:"+event.getN10()
+                        +"\n车辆:"+event.getN11()
+                );
             }
+//            }
+
 
             if(mDeviceZkc == null) return;
             if(TextUtils.isEmpty(mDeviceZkc.getIpPort())) return;
             if(TextUtils.isEmpty(event.getIpPort())) return;
             if (!TextUtils.equals(mDeviceZkc.getIpPort(), event.getIpPort())) return;
+            if (!TextUtils.equals(mDeviceZkc.getNumber(), event.getCarNo())) return;
 
             //定位
             mBaiduHelper.setLocation(event.getN6Int(), event.getN7Int(), event.getN8Float());
@@ -744,7 +749,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("position", Constant.SETTING_MANY_SHAPE);
                 startActivity(intent);
                 break;
-            case R.id.surfaceView:
+//            case R.id.surfaceView:
+            case R.id.ttV:
                 if (mAnimatorHelp.getSurfaceViewCenter()) return;
                 LogUtil.e("surfaceView onClick");
                 mAnimatorHelp.setAnimator();
