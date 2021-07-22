@@ -66,7 +66,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     IvSignal iv_signal;
     IvShape iv_shape;
     View small_view, view_stop;
-    TextView tv_task_send, tv_task_read,tv_info;
+    TextView tv_task_send, tv_task_read, tv_info;
     LinearLayout ll_loc, ll_task;
 
     TitleDeviceView iv_status;
@@ -76,7 +76,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
     ViewScale view_scale;
 
-    Disposable disposableAnim, disposableDevice, disposableStop,disposableZkc,disposableCar;
+    Disposable disposableAnim, disposableDevice, disposableStop, disposableZkc, disposableCar;
 
     private MapView mMapView = null;
     // 用于设置个性化地图的样式文件
@@ -88,6 +88,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     List<DeviceBean> mDevices = new ArrayList<>();
     DeviceBean mDeviceZkc;//主控车
     int currentPos = 0;
+    int cameraCurrentPos = 1;
 
     double meLongitude;
     double meLatitude;
@@ -107,7 +108,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         meLatitude = intent.getDoubleExtra("meLatitude", 0);
 
         for (int i = 0; i < MyApplication.getInstance().getDevices().size(); i++) {
-            if(MyApplication.getInstance().getDevices().get(i).getType() == 1){
+            if (MyApplication.getInstance().getDevices().get(i).getType() == 1) {
                 DeviceBean item = new DeviceBean();
                 item.setIp(MyApplication.getInstance().getDevices().get(i).getIp());
                 item.setPort(MyApplication.getInstance().getDevices().get(i).getPort());
@@ -143,7 +144,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         view_scale = $(R.id.view_scale);
         ll_loc = $(R.id.ll_loc);
 
-        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_flameout,tv_task_send,tv_task_read,iv_shape);
+        setOnClick(ll_loc, iv_more, iv_route, iv_camera, iv_battery, iv_signal, iv_flameout, tv_task_send, tv_task_read, iv_shape);
 
         initBaiduMap();
         initSurfaceView();
@@ -185,7 +186,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 }
             }
 
-            if(mDeviceZkc != null && TextUtils.equals(event.getIpPort(),mDeviceZkc.getIpPort())){
+            if (mDeviceZkc != null && TextUtils.equals(event.getIpPort(), mDeviceZkc.getIpPort())) {
                 setStop();
             }
         });
@@ -201,46 +202,46 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         });
 
         //主控车
-        disposableZkc = RxBus2.getInstance().toObservable(ZkcEvent.class, event->{
+        disposableZkc = RxBus2.getInstance().toObservable(ZkcEvent.class, event -> {
             getDeviceZkc();
-            if(isInitData){
+            if (isInitData) {
                 setZkcChange();
-            }else{
+            } else {
                 initData();
             }
         });
 
         //无人车信息
         disposableCar = RxBus2.getInstance().toObservable(ReceiveCarEvent.class, event -> {
-            for (int i = 0;i<infos.size();i++){
-                if(infos.get(i).getIpPort().equals(event.getIpPort()) && infos.get(i).getCarNo().equals(event.getCarNo())){
+            for (int i = 0; i < infos.size(); i++) {
+                if (infos.get(i).getIpPort().equals(event.getIpPort()) && infos.get(i).getCarNo().equals(event.getCarNo())) {
                     infos.get(i).setInfo("V:" + event.getN1() + "m/s\nD:" + event.getN2() + "m\n经度:" + event.getN6() + "\n维度:" + event.getN7());
                 }
             }
 
 //            for (int i=0;i<mDevices.size();i++){
-            if(mDevices.get(currentPos).getIpPort().equals(event.getIpPort()) && infos.get(currentPos).getCarNo().equals(event.getCarNo())){
+            if (mDevices.get(currentPos).getIpPort().equals(event.getIpPort()) && infos.get(currentPos).getCarNo().equals(event.getCarNo())) {
                 tv_info.setText(
-                        "编号:"+event.getCarNo()
-                        +"\n速度:"+event.getN1()
-                        +"\n档位:"+event.getN2()
-                        +"\n错误:"+event.getN3()
-                        +"\n电量:"+event.getN4()
-                        +"\n油量:"+event.getN5()
-                        +"\n经度:"+event.getN6()
-                        +"\n纬度:"+event.getN7()
-                        +"\n方向:"+event.getN8()
-                        +"\n横滚角:"+event.getN9()
-                        +"\n俯仰角:"+event.getN10()
-                        +"\n车辆:"+event.getN11()
+                        "编号:" + event.getCarNo()
+                                + "\n速度:" + event.getN1()
+                                + "\n档位:" + event.getN2()
+                                + "\n错误:" + event.getN3()
+                                + "\n电量:" + event.getN4()
+                                + "\n油量:" + event.getN5()
+                                + "\n经度:" + event.getN6()
+                                + "\n纬度:" + event.getN7()
+                                + "\n方向:" + event.getN8()
+                                + "\n横滚角:" + event.getN9()
+                                + "\n俯仰角:" + event.getN10()
+                                + "\n车辆:" + event.getN11()
                 );
             }
 //            }
 
 
-            if(mDeviceZkc == null) return;
-            if(TextUtils.isEmpty(mDeviceZkc.getIpPort())) return;
-            if(TextUtils.isEmpty(event.getIpPort())) return;
+            if (mDeviceZkc == null) return;
+            if (TextUtils.isEmpty(mDeviceZkc.getIpPort())) return;
+            if (TextUtils.isEmpty(event.getIpPort())) return;
             if (!TextUtils.equals(mDeviceZkc.getIpPort(), event.getIpPort())) return;
             if (!TextUtils.equals(mDeviceZkc.getNumber(), event.getCarNo())) return;
 
@@ -282,10 +283,10 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         view_device.setOnItemClickListener(new ContentDeviceView.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                for (int i=0;i<infos.size();i++){
-                    if(mDevices.get(position).getIpPort().equals(infos.get(i).getIpPort())){
-                        if(!TextUtils.isEmpty(infos.get(i).getInfo()))
-                        new DeviceInfoDialog(context).setTitle(mDevices.get(position).getIpPort()).setContent(infos.get(i).getInfo()).show();
+                for (int i = 0; i < infos.size(); i++) {
+                    if (mDevices.get(position).getIpPort().equals(infos.get(i).getIpPort())) {
+                        if (!TextUtils.isEmpty(infos.get(i).getInfo()))
+                            new DeviceInfoDialog(context).setTitle(mDevices.get(position).getIpPort()).setContent(infos.get(i).getInfo()).show();
                     }
                 }
             }
@@ -328,7 +329,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-//    private NodePlayer nodePlayer;
+    //    private NodePlayer nodePlayer;
     private EasyPlayerClient mStreamRender;
 
     //初始化视频SurfaceView控件
@@ -339,20 +340,20 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         ttV.setOnClickListener(this);
 
         ttV.setOnTouchListener((v, event) -> {
-            if(!mAnimatorHelp.getSurfaceViewCenter()) return false;
+            if (!mAnimatorHelp.getSurfaceViewCenter()) return false;
             //继承了Activity的onTouchEvent方法，直接监听点击事件
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //当手指按下的时候
                 x1 = event.getX();
                 y1 = event.getY();
             }
-            if(event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
                 //当手指离开的时候
                 x2 = event.getX();
                 y2 = event.getY();
-                if(y1 - y2 > 100) {
-                    LogUtil.e( "向上滑" );
-                    if(currentPos < mDevices.size() - 1){
+                if (y1 - y2 > 100) {
+                    LogUtil.e("向上滑");
+                    if (currentPos < mDevices.size() - 1) {
                         currentPos = currentPos + 1;
                         setStatusView();
                         tv_info.setText("");
@@ -361,9 +362,9 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                         setStart(mDevices.get(currentPos).getRtsp());
 
                     }
-                } else if(y2 - y1 > 100) {
+                } else if (y2 - y1 > 100) {
                     LogUtil.e("向下滑");
-                    if(currentPos > 0){
+                    if (currentPos > 0) {
                         currentPos = currentPos - 1;
                         tv_info.setText("");
                         setStatusView();
@@ -371,51 +372,27 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
                         setStart(mDevices.get(currentPos).getRtsp());
                     }
-                } else if(x1 - x2 > 100) {
+                } else if (x1 - x2 > 100) {
                     LogUtil.e("向左滑");
-                    if(leftCentreRight == 0){
-                        //左边
-                        leftCentreRight = 1;
-                        mAnimatorHelp.moveLeft();
+                    mAnimatorHelp.moveLeft();
 
-                        clearCamera();
-                        SettingInfo.isCameraSide = true;
+                    if (cameraCurrentPos <= 1) cameraCurrentPos = 7;
+                    else cameraCurrentPos = cameraCurrentPos - 1;
 
-                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 4);
+                    clearCamera();
+                    setCamera(cameraCurrentPos);
+                    SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), cameraCurrentPos);
 
-                    }else if(leftCentreRight == 1){
-                        //中间
-                        leftCentreRight = 2;
-                        mAnimatorHelp.moveLeft();
+                } else if (x2 - x1 > 100) {
+                    LogUtil.e("向右滑");
+                    mAnimatorHelp.moveRight();
 
-                        clearCamera();
-                        SettingInfo.isCameraUp = true;
+                    if (cameraCurrentPos >= 7) cameraCurrentPos = 1;
+                    else cameraCurrentPos = cameraCurrentPos + 1;
 
-                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 1);
-                    }
-
-                } else if(x2 - x1 > 100) {
-                    LogUtil.e( "向右滑");
-                    if(leftCentreRight == 1){
-                        //右边
-                        leftCentreRight = 0;
-                        mAnimatorHelp.moveRight();
-
-                        clearCamera();
-                        SettingInfo.isCameraAfter = true;
-
-                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 5);
-
-                    }else if(leftCentreRight == 2){
-                        //中间
-                        leftCentreRight = 1;
-                        mAnimatorHelp.moveRight();
-
-                        clearCamera();
-                        SettingInfo.isCameraUp = true;
-
-                        SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), 1);
-                    }
+                    clearCamera();
+                    setCamera(cameraCurrentPos);
+                    SendHelp.sendCamera(mDevices.get(currentPos).getNumber(), mDevices.get(currentPos).getIpPort(), cameraCurrentPos);
 
                 }
             }
@@ -423,8 +400,18 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    public void setCamera(int type){
+        if(type == 1) SettingInfo.isCameraUp = true;
+        if(type == 2) SettingInfo.isCameraUpZt = true;
+        if(type == 3) SettingInfo.isCameraUpZtSb = true;
+        if(type == 4) SettingInfo.isCameraSide = true;
+        if(type == 5) SettingInfo.isCameraAfter = true;
+        if(type == 6) SettingInfo.isCamera6 = true;
+        if(type == 7) SettingInfo.isCamera7 = true;
+    }
 
-    public void clearCamera(){
+
+    public void clearCamera() {
         SettingInfo.isCameraUp = false;
         SettingInfo.isCameraSide = false;
         SettingInfo.isCameraAfter = false;
@@ -435,7 +422,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    int leftCentreRight = 1;
+//    int leftCentreRight = 1;
 
     //手指按下的点为(x1, y1)手指离开屏幕的点为(x2, y2)
     float x1 = 0;
@@ -443,8 +430,8 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     float y1 = 0;
     float y2 = 0;
 
-    public void setStart(String rtsp){
-        if(mStreamRender != null){
+    public void setStart(String rtsp) {
+        if (mStreamRender != null) {
             mStreamRender.stop();
             mStreamRender.play(rtsp);
         }
@@ -488,7 +475,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                                 mBean.setType(type);
                                 mBean.setNum((type == 1 || type == 2) ? markers.size() : 0);
                                 markers.add(mBean);
-                                mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr(),type, markers.size() - 1);
+                                mBaiduHelper.onMapClick(new LatLng(latitude, longitude), mBean.getNumStr(), type, markers.size() - 1);
 
                                 if (type == -1) {
                                     mBaiduHelper.showMarkerLine(markers);
@@ -534,12 +521,12 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     //设备状态
     private void setStatusView() {
         iv_status.setDevice(mDevices);
-        view_device.setDevice(mDevices,currentPos);
+        view_device.setDevice(mDevices, currentPos);
     }
 
-    public void getDeviceZkc(){
-        for (int i=0;i<mDevices.size();i++){
-            if(mDevices.get(i).getIpPort().equals(SettingInfo.shapeZkc)){
+    public void getDeviceZkc() {
+        for (int i = 0; i < mDevices.size(); i++) {
+            if (mDevices.get(i).getIpPort().equals(SettingInfo.shapeZkc)) {
                 mDeviceZkc = mDevices.get(i);
                 currentPos = i;
             }
@@ -547,16 +534,17 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    public void setZkcChange(){
+    public void setZkcChange() {
         setStatusView();
-        if(mDeviceZkc != null)
+        if (mDeviceZkc != null)
             setStart(mDeviceZkc.getRtsp());
     }
 
     boolean isInitData = false;
+
     @Override
     public void initData() {
-        if(TextUtils.isEmpty(SettingInfo.shapeZkc)){
+        if (TextUtils.isEmpty(SettingInfo.shapeZkc)) {
             intent = new Intent(context, SettingManyActivity.class);
             intent.putExtra("position", Constant.SETTING_MANY_SHAPE);
             startActivity(intent);
@@ -568,7 +556,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
         setStatusView();
         setTaskView(isSufCenter);
 
-        if(mDeviceZkc != null)
+        if (mDeviceZkc != null)
             setStart(mDeviceZkc.getRtsp());
 
         markers = new ArrayList<>();
@@ -581,7 +569,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                 int pos = marker.getExtraInfo().getInt("markerPos");
 
                 new MarkerModifyDialog(context)
-                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude,markers.get(pos).getType())
+                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude, markers.get(pos).getType())
                         .setSubmitListener(new MarkerModifyDialog.OnItemClickListener() {
                             @Override
                             public void onClick(double latitude, double longitude, int type) {
@@ -646,7 +634,7 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 //                    //拖拽
 //                }
                 new MarkerModifyDialog(context)
-                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude,markers.get(pos).getType())
+                        .setLatLng(marker.getPosition().latitude, marker.getPosition().longitude, markers.get(pos).getType())
                         .setSubmitListener(new MarkerModifyDialog.OnItemClickListener() {
                             @Override
                             public void onClick(double latitude, double longitude, int type) {
@@ -769,13 +757,14 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.tv_task_read:
-                if(TextUtils.isEmpty(SPUtils.getInstance().getString("markers"))){
+                if (TextUtils.isEmpty(SPUtils.getInstance().getString("markers"))) {
                     showShortToast("获取任务点失败");
                     return;
                 }
                 showShortToast("获取任务点成功");
                 markers.clear();
-                markers = GsonUtil.convertString2Collection(SPUtils.getInstance().getString("markers"),new TypeToken<List<MarkerBean>>(){});
+                markers = GsonUtil.convertString2Collection(SPUtils.getInstance().getString("markers"), new TypeToken<List<MarkerBean>>() {
+                });
                 mBaiduHelper.showMarkerLine(markers);
                 break;
             case R.id.iv_flameout://启动，熄火

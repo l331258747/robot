@@ -81,7 +81,7 @@ public class AnimatorHelp2 {
         AnimatorSet set = new AnimatorSet();
         set.play(moveIn);
 
-        set.setDuration(500);
+        set.setDuration(300);
         set.start();
     }
 
@@ -91,7 +91,7 @@ public class AnimatorHelp2 {
         AnimatorSet set = new AnimatorSet();
         set.play(moveIn);
 
-        set.setDuration(500);
+        set.setDuration(300);
         set.start();
     }
 
@@ -101,7 +101,7 @@ public class AnimatorHelp2 {
         AnimatorSet set = new AnimatorSet();
         set.play(moveIn);
 
-        set.setDuration(500);
+        set.setDuration(300);
         set.start();
     }
 
@@ -111,7 +111,7 @@ public class AnimatorHelp2 {
         AnimatorSet set = new AnimatorSet();
         set.play(moveIn);
 
-        set.setDuration(500);
+        set.setDuration(300);
         set.start();
     }
 

@@ -191,7 +191,27 @@ public class SendHelp {
         msg.append(",9,1");
         msg.append("," + type);
         MyApplication.getInstance().sendMsg(ipPort, msg.toString());
-        ToastUtil.showShortToast(AppUtils.getContext(),"摄像头切换-发送成功");
+        ToastUtil.showShortToast(AppUtils.getContext(),getCameraStr(type));
     }
 
+
+    public static String getCameraStr(int type){
+        switch (type){
+            case 1:
+                return "切换摄像头:前置摄像头";
+            case 2:
+                return "切换摄像头:前置+态资";
+            case 3:
+                return "切换摄像头:前置+态资+目标识别";
+            case 4:
+                return "切换摄像头:侧视摄像头";
+            case 5:
+                return "切换摄像头:后视摄像头";
+            case 6:
+                return "切换摄像头:摄像头6";
+            case 7:
+                return "切换摄像头:摄像头7";
+        }
+        return "切换摄像头成功";
+    }
 }
