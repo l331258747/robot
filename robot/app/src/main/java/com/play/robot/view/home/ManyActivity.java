@@ -312,7 +312,12 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     new Handler().postDelayed(() -> {
                         if (isDown) {
                             RxBus2.getInstance().post(new StopShowEvent());
-                            SendHelp.sendJS(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
+
+//                            SendHelp.sendJS(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
+                            for (int i=0;i<mDevices.size();i++){
+                                SendHelp.sendJS(mDevices.get(i).getNumber(), mDevices.get(i).getIpPort());
+                            }
+
                         }
                     }, 500);
                     break;
@@ -753,7 +758,11 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
                     showShortToast("请先设置途径点");
                     return;
                 }
-                SendHelp.sendMarker(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort(), markers);
+
+//                SendHelp.sendMarker(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort(), markers);
+                for (int i=0;i<mDevices.size();i++){
+                    SendHelp.sendMarker(mDevices.get(i).getNumber(), mDevices.get(i).getIpPort(), markers);
+                }
 
                 break;
             case R.id.tv_task_read:
@@ -770,9 +779,15 @@ public class ManyActivity extends BaseActivity implements View.OnClickListener {
             case R.id.iv_flameout://启动，熄火
                 new TextDialog(context).setContent(isFlameout ? "是否确认熄火" : "是否确认启动").setSubmitListener(v1 -> {
                     if (isFlameout) {
-                        SendHelp.sendXH(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
+//                        SendHelp.sendXH(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
+                        for (int i=0;i<mDevices.size();i++){
+                            SendHelp.sendXH(mDevices.get(i).getNumber(), mDevices.get(i).getIpPort());
+                        }
                     } else {
-                        SendHelp.sendQD(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
+//                        SendHelp.sendQD(mDeviceZkc.getNumber(), mDeviceZkc.getIpPort());
+                        for (int i=0;i<mDevices.size();i++){
+                            SendHelp.sendQD(mDevices.get(i).getNumber(), mDevices.get(i).getIpPort());
+                        }
                     }
                     isFlameout = !isFlameout;
                 }).show();
