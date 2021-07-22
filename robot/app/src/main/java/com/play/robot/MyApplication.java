@@ -126,7 +126,8 @@ public class MyApplication extends Application {
                 mDeviceBeans.get(i).setType(type);
 
                 if (type == 2 || type == 0) {
-                    mDeviceBeans.get(i).getUdpClient().disconnect();
+                    if(mDeviceBeans.get(i).getUdpClient()!=null)
+                        mDeviceBeans.get(i).getUdpClient().disconnect();
                 } else if (type == 1) {
                     UdpClient mUdpClient = new UdpClient();
                     mUdpClient.connect(ip, port);
