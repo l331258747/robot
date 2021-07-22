@@ -66,6 +66,7 @@ import io.reactivex.disposables.Disposable;
 
 public class SingleActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
 
+    TextView tv_status_car,tv_sign_car;
     ImageView iv_more, iv_route, iv_camera, iv_status, iv_sign, iv_flameout, iv_rocker, iv_stop;
     IvBattery iv_battery;
     IvSignal iv_signal;
@@ -119,6 +120,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
         tv_info = $(R.id.tv_info);
         cl_rocker = $(R.id.cl_rocker);
         iv_status = $(R.id.iv_status);
+        tv_status_car = $(R.id.tv_status_car);
+        tv_sign_car = $(R.id.tv_sign_car);
         iv_more = $(R.id.iv_more);
         iv_route = $(R.id.iv_route);
         iv_camera = $(R.id.iv_camera);
@@ -289,6 +292,8 @@ public class SingleActivity extends BaseActivity implements View.OnClickListener
     //设置状态
     public void setStatusView() {
         iv_status.setImageResource(mDevice.getType() == 1 ? R.mipmap.ic_ugv_in : R.mipmap.ic_ugv_un);
+        tv_status_car.setText(mDevice.getNumber());
+        tv_sign_car.setText(mDevice.getNumber());
     }
 
     //设置mode显示

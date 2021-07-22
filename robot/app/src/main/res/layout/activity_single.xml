@@ -176,6 +176,17 @@
         app:layout_constraintEnd_toEndOf="@+id/view_left"
         app:layout_constraintStart_toStartOf="@+id/view_left" />
 
+    <TextView
+        android:id="@+id/tv_sign_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/iv_sign"
+        android:layout_marginStart="@dimen/dp_3"
+        app:layout_constraintBottom_toBottomOf="@id/iv_sign"
+        android:textSize="@dimen/sp_10"
+        tools:text="10"/>
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_rocker"

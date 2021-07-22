@@ -39,6 +39,16 @@
         app:layout_constraintStart_toEndOf="@+id/tv_UGV"
         app:layout_constraintTop_toTopOf="@+id/view_track" />
 
+    <TextView
+        android:id="@+id/tv_status_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/iv_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_status"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_10"
+        tools:text="10"/>
+
     <ImageView
         android:id="@+id/iv_more"
         android:layout_width="@dimen/dp_30"

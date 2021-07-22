@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/dp_30"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 
     android:orientation="horizontal">
 
@@ -9,40 +11,100 @@
         android:id="@+id/iv_status_0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:gravity="center"
         android:padding="@dimen/dp_5"
         android:src="@mipmap/ic_ugv" />
+
+    <TextView
+        android:id="@+id/tv_status_car_0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/iv_status_0"
+        app:layout_constraintBottom_toBottomOf="@id/iv_status_0"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_10"
+        tools:text="10"/>
 
     <ImageView
         android:id="@+id/iv_status_1"
         android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_status_0"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp_5"
         android:src="@mipmap/ic_ugv" />
+
+    <TextView
+        android:id="@+id/tv_status_car_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/iv_status_1"
+        app:layout_constraintBottom_toBottomOf="@id/iv_status_1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_10"
+        tools:text="10"/>
 
     <ImageView
         android:id="@+id/iv_status_2"
         android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/iv_status_1"
         android:gravity="center"
         android:padding="@dimen/dp_5"
         android:src="@mipmap/ic_ugv" />
+
+    <TextView
+        android:id="@+id/tv_status_car_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/iv_status_2"
+        app:layout_constraintBottom_toBottomOf="@id/iv_status_2"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_10"
+        tools:text="10"/>
 
     <ImageView
         android:id="@+id/iv_status_3"
         android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_status_2"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp_5"
         android:src="@mipmap/ic_ugv" />
+
+    <TextView
+        android:id="@+id/tv_status_car_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/iv_status_3"
+        app:layout_constraintBottom_toBottomOf="@id/iv_status_3"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_10"
+        tools:text="10"/>
 
     <ImageView
         android:id="@+id/iv_status_4"
         android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_status_3"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp_5"
         android:src="@mipmap/ic_ugv" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_status_car_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/iv_status_4"
+        app:layout_constraintBottom_toBottomOf="@id/iv_status_4"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_10"
+        tools:text="10"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
