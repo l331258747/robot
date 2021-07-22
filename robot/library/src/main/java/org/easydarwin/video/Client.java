@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.util.SparseArray;
+import android.widget.Toast;
 
 import java.io.Closeable;
 import java.io.FileNotFoundException;
@@ -216,7 +217,9 @@ public class Client implements Closeable {
         }
 
         if (mCtx == 0) {
-            throw new IllegalStateException("初始化失败，KEY不合法");
+//            throw new IllegalStateException("初始化失败，KEY不合法");
+            Toast.makeText(mContext,"初始化失败，KEY不合法",Toast.LENGTH_LONG).show();
+            return -1;
         }
 
         return openStream(mCtx, _channel, _url, _type, _mediaType, _user, _pwd, 1000, 0, _sendOption);
